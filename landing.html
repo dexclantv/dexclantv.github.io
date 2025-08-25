@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DexTracker — Smarter YouTube Growth</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#000; --bg2:#0b140b; --fg:#e7ffe7; --acid:#12ff6d; --grid:#083108; --muted:#9cf5c9; --card:#0c160d; --line:#124b22; --glass:rgba(0,0,0,.55)
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0; color:var(--fg);
+      font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      background: radial-gradient(1200px 800px at 10% -10%, #051505 0%, var(--bg) 55%),
+                  radial-gradient(1200px 800px at 90% 110%, #051505 0%, var(--bg) 55%);
+    }
+    /* ===== NAV ===== */
+    .nav{
+      position:sticky; top:0; z-index:1000; inset-inline:0;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:14px clamp(16px,4vw,28px);
+      background:linear-gradient(to bottom, rgba(0,0,0,.85), rgba(0,0,0,.55));
+      backdrop-filter:saturate(140%) blur(10px);
+      border-bottom:1px solid var(--line);
+    }
+    .brand{display:flex; gap:10px; align-items:center; font-family:Orbitron, sans-serif; letter-spacing:.5px}
+    .logo{width:28px; aspect-ratio:1; border-radius:6px; background:conic-gradient(from 90deg, #00ff95, #00c853, #00ff95); box-shadow:0 0 20px #00ff95aa inset, 0 0 20px #00ff95aa}
+    .brand b{color:var(--acid)}
+    .nav a{color:var(--muted); text-decoration:none; font-weight:600; margin:0 10px; padding:8px 10px; border-radius:8px; transition:color .15s, background .15s}
+    .nav a:hover{color:var(--fg); background:rgba(18,255,109,.08)}
+    .nav a.active{color:#001a0e; background:var(--acid)}
+
+    .burger{display:none; flex-direction:column; gap:4px; cursor:pointer}
+    .burger span{width:24px; height:2px; background:var(--fg);}
+    .links{display:flex; align-items:center}
+    @media (max-width:860px){
+      .burger{display:flex}
+      .links{position:fixed; right:16px; top:64px; background:var(--glass); backdrop-filter:blur(16px); padding:12px; border:1px solid var(--line); border-radius:12px; display:none; flex-direction:column}
+      .links a{display:block; width:100%; text-align:left; margin:4px 0}
+      .links.open{display:flex}
+    }
+
+    /* ===== HERO ===== */
+    .hero{
+      min-height:96svh; display:grid; place-items:center; text-align:center; position:relative; overflow:hidden;
+      background: linear-gradient(to bottom, rgba(0,0,0,.6), rgba(0,0,0,.9)), url('https://images.unsplash.com/photo-1527443154391-507e9dc6c5cc?q=80&w=1600&auto=format&fit=crop') center/cover no-repeat fixed;
+      border-bottom:1px solid var(--line);
+    }
+    .hero h1{font-family:Orbitron, sans-serif; font-size: clamp(32px, 5vw, 68px); margin:0 0 12px; color:var(--acid); text-shadow:0 0 30px #00ff95aa}
+    .hero p{max-width:min(780px, 90vw); margin:0 auto 24px; font-size:clamp(16px, 1.6vw, 20px); color:#c9ffd6}
+    .cta{display:inline-flex; align-items:center; gap:10px; padding:12px 18px; border-radius:12px; font-weight:800; text-decoration:none; color:#001a0e; background:var(--acid); box-shadow:0 0 24px #00ff9580; border:1px solid #7bffc1}
+    .subcta{display:inline-flex; margin-left:10px; color:var(--muted)}
+
+    /* ===== MARQUEE (thin) ===== */
+    .ticker{position:relative; overflow:hidden; border-block:1px solid var(--line); background:#031a0b}
+    .ticker__row{display:flex; gap:40px; white-space:nowrap; padding:8px 0; animation:ticker 28s linear infinite}
+    .chip{border:1px solid var(--line); background:#061e10; color:var(--muted); padding:6px 10px; border-radius:999px}
+    @keyframes ticker{from{transform:translateX(0)} to{transform:translateX(-50%)}}
+
+    /* ===== SECTIONS ===== */
+    section{padding: clamp(48px, 9vw, 110px) clamp(16px, 5vw, 28px); max-width:1200px; margin-inline:auto}
+    .eyebrow{color:var(--muted); letter-spacing:.18em; text-transform:uppercase; font-weight:800; font-size:12px}
+    h2{font-family:Orbitron, sans-serif; color:var(--acid); margin:.25rem 0 1rem; font-size: clamp(26px, 3.2vw, 42px)}
+    .lead{color:#c7f6dd; max-width:880px}
+
+    .grid{display:grid; gap:18px}
+    .grid.cols-3{grid-template-columns:repeat(3, 1fr)}
+    .grid.cols-2{grid-template-columns:repeat(2, 1fr)}
+    @media (max-width:980px){.grid.cols-3{grid-template-columns:1fr 1fr}}
+    @media (max-width:680px){.grid.cols-3,.grid.cols-2{grid-template-columns:1fr}}
+
+    .card{
+      background: linear-gradient(180deg, rgba(10,18,12,.9), rgba(6,12,8,.9));
+      border:1px solid var(--line);
+      padding:20px; border-radius:14px; position:relative; overflow:hidden
+    }
+    .card:before{content:""; position:absolute; inset:-1px; border-radius:14px; background:radial-gradient(500px 140px at var(--x, 10%) var(--y, 0%), #0bff8a22, transparent 40%); pointer-events:none}
+    .card h3{margin:.3rem 0 .6rem; color:#b9ffd8}
+    .card p{color:#cdeedb}
+
+    /* Pricing */
+    .pricing{display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:18px}
+    .price{font-size:32px; font-weight:800; color:var(--acid)}
+
+    /* Gallery (Hielo vibe) */
+    .gallery{display:grid; grid-template-columns:repeat(3,1fr); gap:12px}
+    .tile{position:relative; border-radius:14px; overflow:hidden; border:1px solid var(--line)}
+    .tile img{display:block; width:100%; height:100%; object-fit:cover; aspect-ratio:4/3; filter:saturate(0.8) contrast(1.05)}
+    .tile .overlay{position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.75), transparent 60%); display:flex; align-items:flex-end; padding:12px; font-weight:700}
+
+    /* FAQ */
+    details{border:1px solid var(--line); border-radius:12px; padding:14px 16px; background:#07140a}
+    details+details{margin-top:10px}
+    summary{cursor:pointer; font-weight:700; color:#b8ffd7}
+    details p{color:#dff7ea}
+
+    /* Footer */
+    footer{border-top:1px solid var(--line); background:#030a06; padding:28px; text-align:center; color:var(--muted)}
+    footer a{color:var(--acid); text-decoration:none}
+
+    /* Reveal animations */
+    .reveal{opacity:0; transform:translateY(16px); transition:opacity .6s ease, transform .6s ease}
+    .reveal.in{opacity:1; transform:none}
+  </style>
+</head>
+<body>
+  <!-- NAV -->
+  <nav class="nav" id="nav">
+    <div class="brand"><span class="logo"></span><span>DexTracker <b>PRO</b></span></div>
+    <div class="burger" id="burger" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navlinks">
+      <span></span><span></span><span></span>
+    </div>
+    <div class="links" id="navlinks">
+      <a href="#home" data-link>Home</a>
+      <a href="#features" data-link>Features</a>
+      <a href="#how" data-link>How It Works</a>
+      <a href="#gallery" data-link>Gallery</a>
+      <a href="#pricing" data-link>Pricing</a>
+      <a href="#faq" data-link>FAQ</a>
+    </div>
+  </nav>
+
+  <!-- HERO / HOME -->
+  <header class="hero" id="home">
+    <div>
+      <h1>Unlock Ridiculous YouTube Momentum</h1>
+      <p>Hacker‑clean analytics, CTR heatmaps, and retention‑spike auto‑clips. DexTracker blends AI + ruthless clarity so you post smarter and grow faster.</p>
+      <a class="cta" href="#pricing">Start Free Trial →</a>
+      <a class="subcta" href="#features">See how it works</a>
+    </div>
+  </header>
+
+  <!-- TICKER -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker__row">
+      <span class="chip">Live CTR titles</span>
+      <span class="chip">Retention spike alerts</span>
+      <span class="chip">Script Brainstormer</span>
+      <span class="chip">AI reply queue</span>
+      <span class="chip">Hacker UI</span>
+      <span class="chip">DexClanTv verified</span>
+      <!-- duplicate for smooth loop -->
+      <span class="chip">Live CTR titles</span>
+      <span class="chip">Retention spike alerts</span>
+      <span class="chip">Script Brainstormer</span>
+      <span class="chip">AI reply queue</span>
+      <span class="chip">Hacker UI</span>
+      <span class="chip">DexClanTv verified</span>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <section id="features">
+    <span class="eyebrow">Capabilities</span>
+    <h2>Everything you need to win the upload war</h2>
+    <p class="lead">Inspired by Hielo’s airy hero + tiled visuals, reimagined with DexTracker’s jet‑black + neon‑green aesthetic.</p>
+
+    <div class="grid cols-3">
+      <div class="card reveal">
+        <h3>🔁 High‑Retention Detector</h3>
+        <p>Surface spike windows and one‑tap auto‑clip for Shorts, Reels, and TikTok. Export with timestamps and notes.</p>
+      </div>
+      <div class="card reveal">
+        <h3>🧠 Script Brainstormer</h3>
+        <p>Full script drafts tuned to <em>your</em> tone + SEO‑aware title ideas with CTR heatmap comparisons.</p>
+      </div>
+      <div class="card reveal">
+        <h3>📈 Live Analytics</h3>
+        <p>CTR, impressions, and retention in one glance. Tap points to see title, date, views, and engagement.</p>
+      </div>
+      <div class="card reveal">
+        <h3>🤖 Reply Queue</h3>
+        <p>Pull recent comments (30–60 days), propose replies, and send after manual approval.</p>
+      </div>
+      <div class="card reveal">
+        <h3>🔔 Smart Alerts</h3>
+        <p>Notify on CTR dips, subscriber spikes, and stale uploads. Suggest title rotations when momentum fades.</p>
+      </div>
+      <div class="card reveal">
+        <h3>🛡️ Privacy‑First</h3>
+        <p>Local secrets, transparent scopes, and selective Discord posting you control.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how">
+    <span class="eyebrow">Workflow</span>
+    <h2>Three steps. All gas, no brakes.</h2>
+    <div class="grid cols-3">
+      <div class="card reveal"><h3>1) Set Intent</h3><p>Answer quick onboarding to tailor dashboards and alerts to your goals.</p></div>
+      <div class="card reveal"><h3>2) Leverage AI</h3><p>Brainstorm scripts, simulate titles, and queue clips from high‑retention ranges.</p></div>
+      <div class="card reveal"><h3>3) React Fast</h3><p>Push notifications flag dips/spikes so you iterate before the algorithm does.</p></div>
+    </div>
+  </section>
+
+  <!-- GALLERY (Hielo-inspired tiles) -->
+  <section id="gallery">
+    <span class="eyebrow">Interface</span>
+    <h2>Looks cold. Works hot.</h2>
+    <p class="lead">A lightweight gallery that nods to Hielo’s masonry style using neon‑glass tiles.</p>
+    <div class="gallery">
+      <div class="tile reveal"><img alt="CTR Heatmap" src="https://images.unsplash.com/photo-1551281044-8b4c1b7e4d5f?q=80&w=1200&auto=format&fit=crop"><div class="overlay">CTR Heatmaps</div></div>
+      <div class="tile reveal"><img alt="Retention Chart" src="https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?q=80&w=1200&auto=format&fit=crop"><div class="overlay">Retention Curves</div></div>
+      <div class="tile reveal"><img alt="AI Brainstorm" src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=1200&auto=format&fit=crop"><div class="overlay">AI Brainstorm</div></div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pricing">
+    <span class="eyebrow">Plans</span>
+    <h2>Simple pricing. 7‑day free trial.</h2>
+    <div class="pricing">
+      <div class="card reveal">
+        <h3>Pro</h3>
+        <p class="price">$9.99<span style="font-size:16px">/mo</span></p>
+        <p>All premium features • Daily analytics • Spike alerts • AI replies • Priority fixes</p>
+        <p><a class="cta" href="#" onclick="alert('Coming soon • App Store connect')">Get Pro</a></p>
+      </div>
+      <div class="card reveal">
+        <h3>Elite</h3>
+        <p class="price">$49.99<span style="font-size:16px">/yr</span></p>
+        <p>Everything in Pro • Annual savings • Early access experiments • Creator concierge</p>
+        <p><a class="cta" href="#" onclick="alert('Coming soon • App Store connect')">Go Elite</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <span class="eyebrow">FAQ</span>
+    <h2>Quick answers</h2>
+    <details class="reveal"><summary>What is DexTracker?</summary><p>An AI‑assisted toolkit for YouTubers to ideate faster, analyze smarter, and ship more.</p></details>
+    <details class="reveal"><summary>How do spike alerts work?</summary><p>We scan watch‑time + CTR trends, highlight momentum windows, and nudge you when to rotate titles or clip.</p></details>
+    <details class="reveal"><summary>Will it keep my data private?</summary><p>Yes. Google scopes are explicit, replies require manual approval, and Discord posting is opt‑in.</p></details>
+  </section>
+
+  <footer>
+    <div>© 2025 DexTracker • <a href="https://dexclantv.github.io/landing" target="_blank" rel="noopener">GitHub Pages</a></div>
+    <div style="margin-top:6px">Follow: <a href="https://www.instagram.com/Perry.Glo" target="_blank" rel="noopener">Instagram</a> • <a href="https://twitter.com/DexClanTv" target="_blank" rel="noopener">Twitter</a> • <a href="https://www.youtube.com/@DexClanTv" target="_blank" rel="noopener">YouTube</a></div>
+  </footer>
+
+  <script>
+    // Mobile nav toggle
+    const burger = document.getElementById('burger');
+    const links = document.getElementById('navlinks');
+    burger?.addEventListener('click', () => {
+      const open = links.classList.toggle('open');
+      burger.setAttribute('aria-expanded', open ? 'true':'false');
+    });
+
+    // Smooth scroll with offset accounting for sticky nav height
+    function scrollToWithOffset(id){
+      const el = document.querySelector(id);
+      const nav = document.getElementById('nav');
+      if(!el || !nav) return;
+      const y = el.getBoundingClientRect().top + window.scrollY - (nav.offsetHeight + 8);
+      window.scrollTo({top:y, behavior:'smooth'});
+    }
+
+    document.querySelectorAll('[data-link]')?.forEach(a=>{
+      a.addEventListener('click', (e)=>{
+        e.preventDefault();
+        scrollToWithOffset(a.getAttribute('href'));
+        links.classList.remove('open');
+      });
+    });
+
+    // Scrollspy (active nav link)
+    const sections = [...document.querySelectorAll('header[id], section[id]')];
+    const navLinks = [...document.querySelectorAll('.links a[data-link]')];
+    const byId = id => navLinks.find(a=>a.getAttribute('href')==="#"+id);
+    const spy = new IntersectionObserver(entries=>{
+      entries.forEach(({isIntersecting, target})=>{
+        if(isIntersecting){
+          navLinks.forEach(n=>n.classList.remove('active'));
+          byId(target.id)?.classList.add('active');
+        }
+      })
+    },{rootMargin:'-40% 0px -55% 0px', threshold:[0, .2, .6, 1]});
+    sections.forEach(s=>spy.observe(s));
+
+    // Card hover glow follows pointer
+    document.querySelectorAll('.card').forEach(card=>{
+      card.addEventListener('pointermove', e=>{
+        const rect = card.getBoundingClientRect();
+        card.style.setProperty('--x', ((e.clientX-rect.left)/rect.width*100)+'%');
+        card.style.setProperty('--y', ((e.clientY-rect.top)/rect.height*100)+'%');
+      })
+    })
+
+    // Reveal on scroll
+    const revealer = new IntersectionObserver((entries)=>{
+      entries.forEach(({isIntersecting, target})=>{
+        if(isIntersecting){ target.classList.add('in'); revealer.unobserve(target); }
+      })
+    },{threshold:.12});
+    document.querySelectorAll('.reveal').forEach(n=>revealer.observe(n));
+  </script>
+</body>
+</html>
