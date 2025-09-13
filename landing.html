@@ -54,6 +54,8 @@
     .hero p{max-width:min(780px, 90vw); margin:0 auto 24px; font-size:clamp(16px, 1.6vw, 20px); color:#c9ffd6}
     .cta{display:inline-flex; align-items:center; gap:10px; padding:12px 18px; border-radius:12px; font-weight:800; text-decoration:none; color:#001a0e; background:var(--acid); box-shadow:0 0 24px #00ff9580; border:1px solid #7bffc1}
     .subcta{display:inline-flex; margin-left:10px; color:var(--muted)}
+    .tools-btn{display:inline-flex; margin-left:10px; color:#001a0e; background:transparent; border:1px solid #7bffc1; padding:12px 18px; border-radius:12px; font-weight:800; text-decoration:none; background:rgba(18,255,109,.15)}
+    .tools-btn:hover{background:rgba(18,255,109,.25)}
 
     /* ===== MARQUEE (thin) ===== */
     .ticker{position:relative; overflow:hidden; border-block:1px solid var(--line); background:#031a0b}
@@ -105,6 +107,30 @@
     /* Reveal animations */
     .reveal{opacity:0; transform:translateY(16px); transition:opacity .6s ease, transform .6s ease}
     .reveal.in{opacity:1; transform:none}
+
+    /* ===== TOOLS SECTION ===== */
+    .tools{
+      background:linear-gradient(180deg, rgba(6,12,8,.85), rgba(3,10,6,.85));
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:20px;
+    }
+    .tools-row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+    .tools input{
+      flex:1; min-width:260px;
+      background:#0b140b; color:var(--fg);
+      border:1px solid var(--line); border-radius:10px;
+      padding:12px 14px; outline:none;
+    }
+    .btn{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:12px 14px; border-radius:10px; border:1px solid #7bffc1;
+      background:var(--acid); color:#001a0e; font-weight:800; text-decoration:none; cursor:pointer;
+    }
+    .btn.secondary{
+      background:transparent; color:var(--muted);
+      border-color:var(--line);
+    }
   </style>
 </head>
 <body>
@@ -120,6 +146,7 @@
       <a href="#how" data-link>How It Works</a>
       <a href="#gallery" data-link>Gallery</a>
       <a href="#pricing" data-link>Pricing</a>
+      <a href="#tools" data-link>Tools</a>
       <a href="#faq" data-link>FAQ</a>
     </div>
   </nav>
@@ -128,9 +155,10 @@
   <header class="hero" id="home">
     <div>
       <h1>Unlock Ridiculous YouTube Momentum</h1>
-      <p>Hacker‑clean analytics, CTR heatmaps, and retention‑spike auto‑clips. DexTracker blends AI + ruthless clarity so you post smarter and grow faster.</p>
-      <a class="cta" href="#pricing">Start Free Trial →</a>
-      <a class="subcta" href="#features">See how it works</a>
+      <p>Hacker-clean analytics, CTR heatmaps, and retention-spike auto-clips. DexTracker blends AI + ruthless clarity so you post smarter and grow faster.</p>
+      <a class="cta" href="#pricing" data-link>Start Free Trial →</a>
+      <a class="subcta" href="#features" data-link>See how it works</a>
+      <a class="tools-btn" href="#tools" data-link>Tools</a>
     </div>
   </header>
 
@@ -157,16 +185,16 @@
   <section id="features">
     <span class="eyebrow">Capabilities</span>
     <h2>Everything you need to win the upload war</h2>
-    <p class="lead">Inspired by Hielo’s airy hero + tiled visuals, reimagined with DexTracker’s jet‑black + neon‑green aesthetic.</p>
+    <p class="lead">Inspired by Hielo’s airy hero + tiled visuals, reimagined with DexTracker’s jet-black + neon-green aesthetic.</p>
 
     <div class="grid cols-3">
       <div class="card reveal">
-        <h3>🔁 High‑Retention Detector</h3>
-        <p>Surface spike windows and one‑tap auto‑clip for Shorts, Reels, and TikTok. Export with timestamps and notes.</p>
+        <h3>🔁 High-Retention Detector</h3>
+        <p>Surface spike windows and one-tap auto-clip for Shorts, Reels, and TikTok. Export with timestamps and notes.</p>
       </div>
       <div class="card reveal">
         <h3>🧠 Script Brainstormer</h3>
-        <p>Full script drafts tuned to <em>your</em> tone + SEO‑aware title ideas with CTR heatmap comparisons.</p>
+        <p>Full script drafts tuned to <em>your</em> tone + SEO-aware title ideas with CTR heatmap comparisons.</p>
       </div>
       <div class="card reveal">
         <h3>📈 Live Analytics</h3>
@@ -181,7 +209,7 @@
         <p>Notify on CTR dips, subscriber spikes, and stale uploads. Suggest title rotations when momentum fades.</p>
       </div>
       <div class="card reveal">
-        <h3>🛡️ Privacy‑First</h3>
+        <h3>🛡️ Privacy-First</h3>
         <p>Local secrets, transparent scopes, and selective Discord posting you control.</p>
       </div>
     </div>
@@ -193,16 +221,16 @@
     <h2>Three steps. All gas, no brakes.</h2>
     <div class="grid cols-3">
       <div class="card reveal"><h3>1) Set Intent</h3><p>Answer quick onboarding to tailor dashboards and alerts to your goals.</p></div>
-      <div class="card reveal"><h3>2) Leverage AI</h3><p>Brainstorm scripts, simulate titles, and queue clips from high‑retention ranges.</p></div>
+      <div class="card reveal"><h3>2) Leverage AI</h3><p>Brainstorm scripts, simulate titles, and queue clips from high-retention ranges.</p></div>
       <div class="card reveal"><h3>3) React Fast</h3><p>Push notifications flag dips/spikes so you iterate before the algorithm does.</p></div>
     </div>
   </section>
 
-  <!-- GALLERY (Hielo-inspired tiles) -->
+  <!-- GALLERY -->
   <section id="gallery">
     <span class="eyebrow">Interface</span>
     <h2>Looks cold. Works hot.</h2>
-    <p class="lead">A lightweight gallery that nods to Hielo’s masonry style using neon‑glass tiles.</p>
+    <p class="lead">A lightweight gallery that nods to Hielo’s masonry style using neon-glass tiles.</p>
     <div class="gallery">
       <div class="tile reveal"><img alt="CTR Heatmap" src="https://images.unsplash.com/photo-1551281044-8b4c1b7e4d5f?q=80&w=1200&auto=format&fit=crop"><div class="overlay">CTR Heatmaps</div></div>
       <div class="tile reveal"><img alt="Retention Chart" src="https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?q=80&w=1200&auto=format&fit=crop"><div class="overlay">Retention Curves</div></div>
@@ -213,7 +241,7 @@
   <!-- PRICING -->
   <section id="pricing">
     <span class="eyebrow">Plans</span>
-    <h2>Simple pricing. 7‑day free trial.</h2>
+    <h2>Simple pricing. 7-day free trial.</h2>
     <div class="pricing">
       <div class="card reveal">
         <h3>Pro</h3>
@@ -230,17 +258,37 @@
     </div>
   </section>
 
+  <!-- TOOLS -->
+  <section id="tools">
+    <span class="eyebrow">Utilities</span>
+    <h2>Tools</h2>
+    <p class="lead">Auto-detect highlights and generate clip candidates. Paste a YouTube link or direct video URL.</p>
+
+    <div class="tools">
+      <div class="tools-row" style="margin-bottom:10px">
+        <input id="repurpose-input" type="url" placeholder="Paste YouTube link or direct .mp4 / .m3u8 URL" />
+        <button id="repurpose-run" class="btn">Generate Clips</button>
+        <button id="clear-input" class="btn secondary">Clear</button>
+      </div>
+      <p style="color:#9cf5c9; margin:6px 0 0; font-size:13px">
+        Tip: Opening from the app passes your video here automatically.
+      </p>
+      <!-- Optional results area -->
+      <div id="tool-result" style="margin-top:16px; display:none"></div>
+    </div>
+  </section>
+
   <!-- FAQ -->
   <section id="faq">
     <span class="eyebrow">FAQ</span>
     <h2>Quick answers</h2>
-    <details class="reveal"><summary>What is DexTracker?</summary><p>An AI‑assisted toolkit for YouTubers to ideate faster, analyze smarter, and ship more.</p></details>
-    <details class="reveal"><summary>How do spike alerts work?</summary><p>We scan watch‑time + CTR trends, highlight momentum windows, and nudge you when to rotate titles or clip.</p></details>
-    <details class="reveal"><summary>Will it keep my data private?</summary><p>Yes. Google scopes are explicit, replies require manual approval, and Discord posting is opt‑in.</p></details>
+    <details class="reveal"><summary>What is DexTracker?</summary><p>An AI-assisted toolkit for YouTubers to ideate faster, analyze smarter, and ship more.</p></details>
+    <details class="reveal"><summary>How do spike alerts work?</summary><p>We scan watch-time + CTR trends, highlight momentum windows, and nudge you when to rotate titles or clip.</p></details>
+    <details class="reveal"><summary>Will it keep my data private?</summary><p>Yes. Google scopes are explicit, replies require manual approval, and Discord posting is opt-in.</p></details>
   </section>
 
   <footer>
-    <div>© 2025 DexTracker • <a href="https://dexclantv.github.io/landing" target="_blank" rel="noopener">GitHub Pages</a></div>
+    <div>© 2025 DexTracker • <a href="https://dexclantv.github.io/landing.html" target="_blank" rel="noopener">GitHub Pages</a></div>
     <div style="margin-top:6px">Follow: <a href="https://www.instagram.com/Perry.Glo" target="_blank" rel="noopener">Instagram</a> • <a href="https://twitter.com/DexClanTv" target="_blank" rel="noopener">Twitter</a> • <a href="https://www.youtube.com/@DexClanTv" target="_blank" rel="noopener">YouTube</a></div>
   </footer>
 
@@ -262,6 +310,7 @@
       window.scrollTo({top:y, behavior:'smooth'});
     }
 
+    // Anchor links that should smooth-scroll
     document.querySelectorAll('[data-link]')?.forEach(a=>{
       a.addEventListener('click', (e)=>{
         e.preventDefault();
@@ -300,6 +349,55 @@
       })
     },{threshold:.12});
     document.querySelectorAll('.reveal').forEach(n=>revealer.observe(n));
+
+    // Query param handling: ?url= or ?v= (YouTube id)
+    (function(){
+      const params = new URLSearchParams(location.search);
+      const fullUrl = params.get('url');
+      const v = params.get('v');
+
+      const yt = v ? `https://www.youtube.com/watch?v=${encodeURIComponent(v)}` : null;
+      const value = fullUrl || yt;
+      if (!value) return;
+
+      const input = document.querySelector('#repurpose-input');
+      if (input) {
+        input.value = value;
+      }
+
+      // Auto-scroll to Tools when a value is provided
+      scrollToWithOffset('#tools');
+
+      // Optional auto-run (uncomment to enable)
+      // document.querySelector('#repurpose-run')?.click();
+    })();
+
+    // Tool actions (stub)
+    document.getElementById('repurpose-run')?.addEventListener('click', ()=>{
+      const input = document.getElementById('repurpose-input');
+      const val = input?.value?.trim();
+      if(!val){
+        alert('Paste a YouTube link or a direct .mp4/.m3u8 URL to continue.');
+        return;
+      }
+      // TODO: wire your backend/tool call here
+      const result = document.getElementById('tool-result');
+      if(result){
+        result.style.display = 'block';
+        result.innerHTML = `<div class="card" style="margin-top:8px">
+          <h3>Processing…</h3>
+          <p>Received: <code style="color:#9cf5c9">${val.replace(/</g,'&lt;')}</code></p>
+          <p>This is a stub. Hook this button up to your clip generator.</p>
+        </div>`;
+      }
+    });
+
+    document.getElementById('clear-input')?.addEventListener('click', ()=>{
+      const input = document.getElementById('repurpose-input');
+      const result = document.getElementById('tool-result');
+      if(input) input.value = '';
+      if(result){ result.style.display = 'none'; result.innerHTML = ''; }
+    });
   </script>
 </body>
 </html>
