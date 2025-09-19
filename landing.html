@@ -60,7 +60,7 @@
     /* ===== MARQUEE (thin) ===== */
     .ticker{position:relative; overflow:hidden; border-block:1px solid var(--line); background:#031a0b}
     .ticker__row{display:flex; gap:40px; white-space:nowrap; padding:8px 0; animation:ticker 28s linear infinite}
-    .chip{border:1px solid var(--line); background:#061e10; color:var(--muted); padding:6px 10px; border-radius:999px}
+    .chip{border:1px solid var(--line); background:#061e10; color:#9cf5c9; padding:6px 10px; border-radius:999px}
     @keyframes ticker{from{transform:translateX(0)} to{transform:translateX(-50%)}}
 
     /* ===== SECTIONS ===== */
@@ -131,12 +131,23 @@
       background:transparent; color:var(--muted);
       border-color:var(--line);
     }
+
+    /* Tool Progress UI */
+    .progress-wrap{margin-top:12px}
+    .progress-bar{
+      width:100%; height:10px; border-radius:999px; background:#06210f; border:1px solid var(--line); overflow:hidden
+    }
+    .progress-fill{
+      height:100%; width:0%; background:var(--acid);
+      transition:width .25s ease;
+    }
+    .status{color:#cdeedb; font-size:13px; margin-top:6px}
   </style>
 </head>
 <body>
   <!-- NAV -->
   <nav class="nav" id="nav">
-    <div class="brand"><span class="logo"></span><span>DexTracker <b>PRO</b></span></div>
+    <div class="brand"><span class="logo"></span><span>DexTracker <b>Ai</b></span></div>
     <div class="burger" id="burger" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navlinks">
       <span></span><span></span><span></span>
     </div>
@@ -269,10 +280,15 @@
         <input id="repurpose-input" type="url" placeholder="Paste YouTube link or direct .mp4 / .m3u8 URL" />
         <button id="repurpose-run" class="btn">Generate Clips</button>
         <button id="clear-input" class="btn secondary">Clear</button>
+        <button id="simulate-progress" class="btn secondary">Simulate Progress</button>
+        <button id="simulate-result" class="btn secondary">Simulate Result</button>
       </div>
-      <p style="color:#9cf5c9; margin:6px 0 0; font-size:13px">
-        Tip: Opening from the app passes your video here automatically.
-      </p>
+
+      <div class="progress-wrap" id="progress-wrap" style="display:none">
+        <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
+        <div id="status" class="status"></div>
+      </div>
+
       <!-- Optional results area -->
       <div id="tool-result" style="margin-top:16px; display:none"></div>
     </div>
@@ -350,29 +366,48 @@
     },{threshold:.12});
     document.querySelectorAll('.reveal').forEach(n=>revealer.observe(n));
 
-    // Query param handling: ?url= or ?v= (YouTube id)
+    // ---------- In-app bridge helpers ----------
+    function postToApp(msg){
+      try {
+        window.webkit?.messageHandlers?.clipper?.postMessage(msg);
+      } catch(e) { /* not in WKWebView */ }
+    }
+
+    function showProgressUI(show){
+      const wrap = document.getElementById('progress-wrap');
+      if(!wrap) return;
+      wrap.style.display = show ? 'block' : 'none';
+    }
+    function setProgress(pct, text){
+      const fill = document.getElementById('progress-fill');
+      const status = document.getElementById('status');
+      if(fill){ fill.style.width = Math.max(0, Math.min(100, pct)) + '%'; }
+      if(status){ status.textContent = text || ''; }
+    }
+
+    // ---------- Query param handling: ?url= or ?v= (YouTube id) ----------
     (function(){
       const params = new URLSearchParams(location.search);
       const fullUrl = params.get('url');
       const v = params.get('v');
-
       const yt = v ? `https://www.youtube.com/watch?v=${encodeURIComponent(v)}` : null;
       const value = fullUrl || yt;
+
       if (!value) return;
 
       const input = document.querySelector('#repurpose-input');
-      if (input) {
-        input.value = value;
-      }
+      if (input) input.value = value;
 
       // Auto-scroll to Tools when a value is provided
       scrollToWithOffset('#tools');
 
-      // Optional auto-run (uncomment to enable)
-      // document.querySelector('#repurpose-run')?.click();
+      // Notify app we have an input; set progress to 0
+      showProgressUI(true);
+      setProgress(0, 'Ready to process…');
+      postToApp({ type: 'progress', value: 0.0 });
     })();
 
-    // Tool actions (stub)
+    // ---------- Tool actions ----------
     document.getElementById('repurpose-run')?.addEventListener('click', ()=>{
       const input = document.getElementById('repurpose-input');
       const val = input?.value?.trim();
@@ -380,14 +415,30 @@
         alert('Paste a YouTube link or a direct .mp4/.m3u8 URL to continue.');
         return;
       }
-      // TODO: wire your backend/tool call here
+
+      // Start local visual progress + inform the app
+      showProgressUI(true);
+      setProgress(2, 'Initializing…');
+      postToApp({ type: 'progress', value: 0.02 });
+
+      // TODO: call your backend / worker here.
+      // Demo progress ramp (remove once wired to backend events):
+      let p = 2;
+      const id = setInterval(()=>{
+        p = Math.min(99, p + Math.round(Math.random()*7));
+        setProgress(p, `Processing… ${p}%`);
+        postToApp({ type: 'progress', value: p/100 });
+        if (p >= 99) clearInterval(id);
+      }, 450);
+
+      // Show stub result area
       const result = document.getElementById('tool-result');
       if(result){
         result.style.display = 'block';
         result.innerHTML = `<div class="card" style="margin-top:8px">
-          <h3>Processing…</h3>
+          <h3>Processing</h3>
           <p>Received: <code style="color:#9cf5c9">${val.replace(/</g,'&lt;')}</code></p>
-          <p>This is a stub. Hook this button up to your clip generator.</p>
+          <p>We’ll notify the app when the final clip is ready.</p>
         </div>`;
       }
     });
@@ -397,6 +448,37 @@
       const result = document.getElementById('tool-result');
       if(input) input.value = '';
       if(result){ result.style.display = 'none'; result.innerHTML = ''; }
+      showProgressUI(false);
+      setProgress(0, '');
+      postToApp({ type: 'progress', value: 0.0 });
+    });
+
+    // ---------- Simulation buttons (for testing the app bridge) ----------
+    document.getElementById('simulate-progress')?.addEventListener('click', ()=>{
+      showProgressUI(true);
+      let p = 0;
+      const id = setInterval(()=>{
+        p = Math.min(1, p + 0.06);
+        setProgress(Math.round(p*100), `Analyzing / clipping… ${Math.round(p*100)}%`);
+        postToApp({ type: 'progress', value: p });
+        if (p >= 1) clearInterval(id);
+      }, 300);
+    });
+
+    document.getElementById('simulate-result')?.addEventListener('click', ()=>{
+      // Replace with your hosted result when ready
+      const demo = 'https://files.catbox.moe/7yq2o9.mp4';
+      postToApp({ type: 'result', url: demo });
+
+      const result = document.getElementById('tool-result');
+      if(result){
+        result.style.display = 'block';
+        result.innerHTML = `<div class="card" style="margin-top:8px">
+          <h3>Result</h3>
+          <p>Sent final clip URL to the app. Fallback link: <a href="${demo}" target="_blank" rel="noopener">open</a></p>
+        </div>`;
+      }
+      setProgress(100, 'Finished!');
     });
   </script>
 </body>
