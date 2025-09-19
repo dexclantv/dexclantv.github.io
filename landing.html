@@ -3,22 +3,24 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#000000" />
   <title>DexTracker — Smarter YouTube Growth</title>
+
+  <!-- fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
   <style>
-    :root{
-      --bg:#000; --bg2:#0b140b; --fg:#e7ffe7; --acid:#12ff6d; --grid:#083108; --muted:#9cf5c9; --card:#0c160d; --line:#124b22; --glass:rgba(0,0,0,.55)
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    html{scroll-behavior:smooth}
+    :root{ --bg:#000; --bg2:#0b140b; --fg:#e7ffe7; --acid:#12ff6d; --grid:#083108; --muted:#9cf5c9; --card:#0c160d; --line:#124b22; --glass:rgba(0,0,0,.55) }
+    *{box-sizing:border-box} html,body{height:100%} html{scroll-behavior:smooth}
     body{
       margin:0; color:var(--fg);
       font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
-      background: radial-gradient(1200px 800px at 10% -10%, #051505 0%, var(--bg) 55%),
-                  radial-gradient(1200px 800px at 90% 110%, #051505 0%, var(--bg) 55%);
+      background:
+        radial-gradient(1200px 800px at 10% -10%, #051505 0%, var(--bg) 55%),
+        radial-gradient(1200px 800px at 90% 110%, #051505 0%, var(--bg) 55%);
     }
-    /* ===== NAV ===== */
+
+    /* NAV */
     .nav{
       position:sticky; top:0; z-index:1000; inset-inline:0;
       display:flex; align-items:center; justify-content:space-between;
@@ -33,7 +35,6 @@
     .nav a{color:var(--muted); text-decoration:none; font-weight:600; margin:0 10px; padding:8px 10px; border-radius:8px; transition:color .15s, background .15s}
     .nav a:hover{color:var(--fg); background:rgba(18,255,109,.08)}
     .nav a.active{color:#001a0e; background:var(--acid)}
-
     .burger{display:none; flex-direction:column; gap:4px; cursor:pointer}
     .burger span{width:24px; height:2px; background:var(--fg);}
     .links{display:flex; align-items:center}
@@ -44,7 +45,7 @@
       .links.open{display:flex}
     }
 
-    /* ===== HERO ===== */
+    /* HERO */
     .hero{
       min-height:96svh; display:grid; place-items:center; text-align:center; position:relative; overflow:hidden;
       background: linear-gradient(to bottom, rgba(0,0,0,.6), rgba(0,0,0,.9)), url('https://images.unsplash.com/photo-1527443154391-507e9dc6c5cc?q=80&w=1600&auto=format&fit=crop') center/cover no-repeat fixed;
@@ -57,18 +58,17 @@
     .tools-btn{display:inline-flex; margin-left:10px; color:#001a0e; background:transparent; border:1px solid #7bffc1; padding:12px 18px; border-radius:12px; font-weight:800; text-decoration:none; background:rgba(18,255,109,.15)}
     .tools-btn:hover{background:rgba(18,255,109,.25)}
 
-    /* ===== MARQUEE (thin) ===== */
+    /* TICKER */
     .ticker{position:relative; overflow:hidden; border-block:1px solid var(--line); background:#031a0b}
     .ticker__row{display:flex; gap:40px; white-space:nowrap; padding:8px 0; animation:ticker 28s linear infinite}
     .chip{border:1px solid var(--line); background:#061e10; color:#9cf5c9; padding:6px 10px; border-radius:999px}
     @keyframes ticker{from{transform:translateX(0)} to{transform:translateX(-50%)}}
 
-    /* ===== SECTIONS ===== */
+    /* SECTIONS */
     section{padding: clamp(48px, 9vw, 110px) clamp(16px, 5vw, 28px); max-width:1200px; margin-inline:auto}
     .eyebrow{color:var(--muted); letter-spacing:.18em; text-transform:uppercase; font-weight:800; font-size:12px}
     h2{font-family:Orbitron, sans-serif; color:var(--acid); margin:.25rem 0 1rem; font-size: clamp(26px, 3.2vw, 42px)}
     .lead{color:#c7f6dd; max-width:880px}
-
     .grid{display:grid; gap:18px}
     .grid.cols-3{grid-template-columns:repeat(3, 1fr)}
     .grid.cols-2{grid-template-columns:repeat(2, 1fr)}
@@ -88,7 +88,7 @@
     .pricing{display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:18px}
     .price{font-size:32px; font-weight:800; color:var(--acid)}
 
-    /* Gallery (Hielo vibe) */
+    /* Gallery */
     .gallery{display:grid; grid-template-columns:repeat(3,1fr); gap:12px}
     .tile{position:relative; border-radius:14px; overflow:hidden; border:1px solid var(--line)}
     .tile img{display:block; width:100%; height:100%; object-fit:cover; aspect-ratio:4/3; filter:saturate(0.8) contrast(1.05)}
@@ -108,39 +108,20 @@
     .reveal{opacity:0; transform:translateY(16px); transition:opacity .6s ease, transform .6s ease}
     .reveal.in{opacity:1; transform:none}
 
-    /* ===== TOOLS SECTION ===== */
-    .tools{
-      background:linear-gradient(180deg, rgba(6,12,8,.85), rgba(3,10,6,.85));
-      border:1px solid var(--line);
-      border-radius:14px;
-      padding:20px;
-    }
+    /* TOOLS SECTION */
+    .tools{ background:linear-gradient(180deg, rgba(6,12,8,.85), rgba(3,10,6,.85)); border:1px solid var(--line); border-radius:14px; padding:20px; }
     .tools-row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
     .tools input{
-      flex:1; min-width:260px;
-      background:#0b140b; color:var(--fg);
-      border:1px solid var(--line); border-radius:10px;
-      padding:12px 14px; outline:none;
+      flex:1; min-width:260px; background:#0b140b; color:var(--fg);
+      border:1px solid var(--line); border-radius:10px; padding:12px 14px; outline:none;
     }
-    .btn{
-      display:inline-flex; align-items:center; gap:8px;
-      padding:12px 14px; border-radius:10px; border:1px solid #7bffc1;
-      background:var(--acid); color:#001a0e; font-weight:800; text-decoration:none; cursor:pointer;
-    }
-    .btn.secondary{
-      background:transparent; color:var(--muted);
-      border-color:var(--line);
-    }
+    .btn{display:inline-flex; align-items:center; gap:8px; padding:12px 14px; border-radius:10px; border:1px solid #7bffc1; background:var(--acid); color:#001a0e; font-weight:800; text-decoration:none; cursor:pointer;}
+    .btn.secondary{background:transparent; color:var(--muted); border-color:var(--line);}
 
     /* Tool Progress UI */
     .progress-wrap{margin-top:12px}
-    .progress-bar{
-      width:100%; height:10px; border-radius:999px; background:#06210f; border:1px solid var(--line); overflow:hidden
-    }
-    .progress-fill{
-      height:100%; width:0%; background:var(--acid);
-      transition:width .25s ease;
-    }
+    .progress-bar{ width:100%; height:10px; border-radius:999px; background:#06210f; border:1px solid var(--line); overflow:hidden }
+    .progress-fill{ height:100%; width:0%; background:var(--acid); transition:width .25s ease; }
     .status{color:#cdeedb; font-size:13px; margin-top:6px}
   </style>
 </head>
@@ -162,7 +143,7 @@
     </div>
   </nav>
 
-  <!-- HERO / HOME -->
+  <!-- HERO -->
   <header class="hero" id="home">
     <div>
       <h1>Unlock Ridiculous YouTube Momentum</h1>
@@ -182,7 +163,6 @@
       <span class="chip">AI reply queue</span>
       <span class="chip">Hacker UI</span>
       <span class="chip">DexClanTv verified</span>
-      <!-- duplicate for smooth loop -->
       <span class="chip">Live CTR titles</span>
       <span class="chip">Retention spike alerts</span>
       <span class="chip">Script Brainstormer</span>
@@ -197,36 +177,17 @@
     <span class="eyebrow">Capabilities</span>
     <h2>Everything you need to win the upload war</h2>
     <p class="lead">Inspired by Hielo’s airy hero + tiled visuals, reimagined with DexTracker’s jet-black + neon-green aesthetic.</p>
-
     <div class="grid cols-3">
-      <div class="card reveal">
-        <h3>🔁 High-Retention Detector</h3>
-        <p>Surface spike windows and one-tap auto-clip for Shorts, Reels, and TikTok. Export with timestamps and notes.</p>
-      </div>
-      <div class="card reveal">
-        <h3>🧠 Script Brainstormer</h3>
-        <p>Full script drafts tuned to <em>your</em> tone + SEO-aware title ideas with CTR heatmap comparisons.</p>
-      </div>
-      <div class="card reveal">
-        <h3>📈 Live Analytics</h3>
-        <p>CTR, impressions, and retention in one glance. Tap points to see title, date, views, and engagement.</p>
-      </div>
-      <div class="card reveal">
-        <h3>🤖 Reply Queue</h3>
-        <p>Pull recent comments (30–60 days), propose replies, and send after manual approval.</p>
-      </div>
-      <div class="card reveal">
-        <h3>🔔 Smart Alerts</h3>
-        <p>Notify on CTR dips, subscriber spikes, and stale uploads. Suggest title rotations when momentum fades.</p>
-      </div>
-      <div class="card reveal">
-        <h3>🛡️ Privacy-First</h3>
-        <p>Local secrets, transparent scopes, and selective Discord posting you control.</p>
-      </div>
+      <div class="card reveal"><h3>🔁 High-Retention Detector</h3><p>Surface spike windows and one-tap auto-clip for Shorts, Reels, and TikTok. Export with timestamps and notes.</p></div>
+      <div class="card reveal"><h3>🧠 Script Brainstormer</h3><p>Full script drafts tuned to <em>your</em> tone + SEO-aware title ideas with CTR heatmap comparisons.</p></div>
+      <div class="card reveal"><h3>📈 Live Analytics</h3><p>CTR, impressions, and retention in one glance. Tap points to see title, date, views, and engagement.</p></div>
+      <div class="card reveal"><h3>🤖 Reply Queue</h3><p>Pull recent comments (30–60 days), propose replies, and send after manual approval.</p></div>
+      <div class="card reveal"><h3>🔔 Smart Alerts</h3><p>Notify on CTR dips, subscriber spikes, and stale uploads. Suggest title rotations when momentum fades.</p></div>
+      <div class="card reveal"><h3>🛡️ Privacy-First</h3><p>Local secrets, transparent scopes, and selective Discord posting you control.</p></div>
     </div>
   </section>
 
-  <!-- HOW IT WORKS -->
+  <!-- HOW -->
   <section id="how">
     <span class="eyebrow">Workflow</span>
     <h2>Three steps. All gas, no brakes.</h2>
@@ -254,18 +215,8 @@
     <span class="eyebrow">Plans</span>
     <h2>Simple pricing. 7-day free trial.</h2>
     <div class="pricing">
-      <div class="card reveal">
-        <h3>Pro</h3>
-        <p class="price">$9.99<span style="font-size:16px">/mo</span></p>
-        <p>All premium features • Daily analytics • Spike alerts • AI replies • Priority fixes</p>
-        <p><a class="cta" href="#" onclick="alert('Coming soon • App Store connect')">Get Pro</a></p>
-      </div>
-      <div class="card reveal">
-        <h3>Elite</h3>
-        <p class="price">$49.99<span style="font-size:16px">/yr</span></p>
-        <p>Everything in Pro • Annual savings • Early access experiments • Creator concierge</p>
-        <p><a class="cta" href="#" onclick="alert('Coming soon • App Store connect')">Go Elite</a></p>
-      </div>
+      <div class="card reveal"><h3>Pro</h3><p class="price">$9.99<span style="font-size:16px">/mo</span></p><p>All premium features • Daily analytics • Spike alerts • AI replies • Priority fixes</p><p><a class="cta" href="#" onclick="alert('Coming soon • App Store connect')">Get Pro</a></p></div>
+      <div class="card reveal"><h3>Elite</h3><p class="price">$49.99<span style="font-size:16px">/yr</span></p><p>Everything in Pro • Annual savings • Early access experiments • Creator concierge</p><p><a class="cta" href="#" onclick="alert('Coming soon • App Store connect')">Go Elite</a></p></div>
     </div>
   </section>
 
@@ -280,8 +231,8 @@
         <input id="repurpose-input" type="url" placeholder="Paste YouTube link or direct .mp4 / .m3u8 URL" />
         <button id="repurpose-run" class="btn">Generate Clips</button>
         <button id="clear-input" class="btn secondary">Clear</button>
-        <button id="simulate-progress" class="btn secondary">Simulate Progress</button>
-        <button id="simulate-result" class="btn secondary">Simulate Result</button>
+        <button id="simulate-progress" class="btn secondary" title="Test app progress bridge">Simulate Progress</button>
+        <button id="simulate-result" class="btn secondary" title="Test app result bridge">Simulate Result</button>
       </div>
 
       <div class="progress-wrap" id="progress-wrap" style="display:none">
@@ -289,7 +240,6 @@
         <div id="status" class="status"></div>
       </div>
 
-      <!-- Optional results area -->
       <div id="tool-result" style="margin-top:16px; display:none"></div>
     </div>
   </section>
@@ -308,6 +258,10 @@
     <div style="margin-top:6px">Follow: <a href="https://www.instagram.com/Perry.Glo" target="_blank" rel="noopener">Instagram</a> • <a href="https://twitter.com/DexClanTv" target="_blank" rel="noopener">Twitter</a> • <a href="https://www.youtube.com/@DexClanTv" target="_blank" rel="noopener">YouTube</a></div>
   </footer>
 
+  <!-- Bridge helpers (always available) -->
+  <script src="minimal.js" defer></script>
+
+  <!-- Page logic -->
   <script>
     // Mobile nav toggle
     const burger = document.getElementById('burger');
@@ -317,7 +271,7 @@
       burger.setAttribute('aria-expanded', open ? 'true':'false');
     });
 
-    // Smooth scroll with offset accounting for sticky nav height
+    // Smooth scroll offset for sticky nav
     function scrollToWithOffset(id){
       const el = document.querySelector(id);
       const nav = document.getElementById('nav');
@@ -326,7 +280,7 @@
       window.scrollTo({top:y, behavior:'smooth'});
     }
 
-    // Anchor links that should smooth-scroll
+    // Anchors
     document.querySelectorAll('[data-link]')?.forEach(a=>{
       a.addEventListener('click', (e)=>{
         e.preventDefault();
@@ -335,7 +289,7 @@
       });
     });
 
-    // Scrollspy (active nav link)
+    // Scrollspy
     const sections = [...document.querySelectorAll('header[id], section[id]')];
     const navLinks = [...document.querySelectorAll('.links a[data-link]')];
     const byId = id => navLinks.find(a=>a.getAttribute('href')==="#"+id);
@@ -349,14 +303,14 @@
     },{rootMargin:'-40% 0px -55% 0px', threshold:[0, .2, .6, 1]});
     sections.forEach(s=>spy.observe(s));
 
-    // Card hover glow follows pointer
+    // Card hover glow
     document.querySelectorAll('.card').forEach(card=>{
       card.addEventListener('pointermove', e=>{
-        const rect = card.getBoundingClientRect();
-        card.style.setProperty('--x', ((e.clientX-rect.left)/rect.width*100)+'%');
-        card.style.setProperty('--y', ((e.clientY-rect.top)/rect.height*100)+'%');
+        const r = card.getBoundingClientRect();
+        card.style.setProperty('--x', ((e.clientX-r.left)/r.width*100)+'%');
+        card.style.setProperty('--y', ((e.clientY-r.top)/r.height*100)+'%');
       })
-    })
+    });
 
     // Reveal on scroll
     const revealer = new IntersectionObserver((entries)=>{
@@ -366,13 +320,7 @@
     },{threshold:.12});
     document.querySelectorAll('.reveal').forEach(n=>revealer.observe(n));
 
-    // ---------- In-app bridge helpers ----------
-    function postToApp(msg){
-      try {
-        window.webkit?.messageHandlers?.clipper?.postMessage(msg);
-      } catch(e) { /* not in WKWebView */ }
-    }
-
+    // ---------- Helpers for in-page progress UI ----------
     function showProgressUI(show){
       const wrap = document.getElementById('progress-wrap');
       if(!wrap) return;
@@ -385,53 +333,60 @@
       if(status){ status.textContent = text || ''; }
     }
 
-    // ---------- Query param handling: ?url= or ?v= (YouTube id) ----------
+    // ---------- Query params: ?url= or ?v= ----------
     (function(){
       const params = new URLSearchParams(location.search);
       const fullUrl = params.get('url');
       const v = params.get('v');
+      const demo = params.get('demo') === '1';
       const yt = v ? `https://www.youtube.com/watch?v=${encodeURIComponent(v)}` : null;
       const value = fullUrl || yt;
 
-      if (!value) return;
+      if (value) {
+        const input = document.querySelector('#repurpose-input');
+        if (input) input.value = value;
+        scrollToWithOffset('#tools');
+        showProgressUI(true);
+        setProgress(0, 'Ready to process…');
+        // Notify iOS app we have initial state
+        sendProgress(0.0);
+      }
 
-      const input = document.querySelector('#repurpose-input');
-      if (input) input.value = value;
-
-      // Auto-scroll to Tools when a value is provided
-      scrollToWithOffset('#tools');
-
-      // Notify app we have an input; set progress to 0
-      showProgressUI(true);
-      setProgress(0, 'Ready to process…');
-      postToApp({ type: 'progress', value: 0.0 });
+      // Optional demo harness (browser-only): ?demo=1
+      if (demo) {
+        let pct = 0;
+        const timer = setInterval(()=>{
+          pct = Math.min(1, pct + 0.1);
+          setProgress(Math.round(pct*100), `Analyzing / clipping… ${Math.round(pct*100)}%`);
+          sendProgress(pct);
+          if (pct >= 1) {
+            clearInterval(timer);
+            sendResult('https://files.catbox.moe/7yq2o9.mp4');
+            setProgress(100, 'Finished!');
+          }
+        }, 500);
+      }
     })();
 
     // ---------- Tool actions ----------
     document.getElementById('repurpose-run')?.addEventListener('click', ()=>{
       const input = document.getElementById('repurpose-input');
       const val = input?.value?.trim();
-      if(!val){
-        alert('Paste a YouTube link or a direct .mp4/.m3u8 URL to continue.');
-        return;
-      }
+      if(!val){ alert('Paste a YouTube link or a direct .mp4/.m3u8 URL to continue.'); return; }
 
-      // Start local visual progress + inform the app
       showProgressUI(true);
       setProgress(2, 'Initializing…');
-      postToApp({ type: 'progress', value: 0.02 });
+      sendProgress(0.02);
 
-      // TODO: call your backend / worker here.
-      // Demo progress ramp (remove once wired to backend events):
+      // TODO: call your backend here and pipe real progress to sendProgress(pct)
       let p = 2;
       const id = setInterval(()=>{
         p = Math.min(99, p + Math.round(Math.random()*7));
         setProgress(p, `Processing… ${p}%`);
-        postToApp({ type: 'progress', value: p/100 });
+        sendProgress(p/100);
         if (p >= 99) clearInterval(id);
       }, 450);
 
-      // Show stub result area
       const result = document.getElementById('tool-result');
       if(result){
         result.style.display = 'block';
@@ -450,26 +405,23 @@
       if(result){ result.style.display = 'none'; result.innerHTML = ''; }
       showProgressUI(false);
       setProgress(0, '');
-      postToApp({ type: 'progress', value: 0.0 });
+      sendProgress(0.0);
     });
 
-    // ---------- Simulation buttons (for testing the app bridge) ----------
+    // Simulation buttons for quick manual testing
     document.getElementById('simulate-progress')?.addEventListener('click', ()=>{
       showProgressUI(true);
       let p = 0;
       const id = setInterval(()=>{
         p = Math.min(1, p + 0.06);
         setProgress(Math.round(p*100), `Analyzing / clipping… ${Math.round(p*100)}%`);
-        postToApp({ type: 'progress', value: p });
+        sendProgress(p);
         if (p >= 1) clearInterval(id);
       }, 300);
     });
-
     document.getElementById('simulate-result')?.addEventListener('click', ()=>{
-      // Replace with your hosted result when ready
       const demo = 'https://files.catbox.moe/7yq2o9.mp4';
-      postToApp({ type: 'result', url: demo });
-
+      sendResult(demo);
       const result = document.getElementById('tool-result');
       if(result){
         result.style.display = 'block';
