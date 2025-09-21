@@ -114,8 +114,13 @@
     .tools input{
       flex:1; min-width:260px; background:#0b140b; color:var(--fg);
       border:1px solid var(--line); border-radius:10px; padding:12px 14px; outline:none;
+      pointer-events:auto; -webkit-tap-highlight-color: transparent;
     }
-    .btn{display:inline-flex; align-items:center; gap:8px; padding:12px 14px; border-radius:10px; border:1px solid #7bffc1; background:var(--acid); color:#001a0e; font-weight:800; text-decoration:none; cursor:pointer;}
+    .btn{
+      display:inline-flex; align-items:center; gap:8px; padding:12px 14px; border-radius:10px;
+      border:1px solid #7bffc1; background:var(--acid); color:#001a0e; font-weight:800; text-decoration:none;
+      cursor:pointer; pointer-events:auto; -webkit-tap-highlight-color: transparent;
+    }
     .btn.secondary{background:transparent; color:var(--muted); border-color:var(--line);}
 
     /* Tool Progress UI */
@@ -229,10 +234,10 @@
     <div class="tools">
       <div class="tools-row" style="margin-bottom:10px">
         <input id="repurpose-input" type="url" placeholder="Paste YouTube link or direct .mp4 / .m3u8 URL" />
-        <button id="repurpose-run" class="btn">Generate Clips</button>
-        <button id="clear-input" class="btn secondary">Clear</button>
-        <button id="simulate-progress" class="btn secondary" title="Test app progress bridge">Simulate Progress</button>
-        <button id="simulate-result" class="btn secondary" title="Test app result bridge">Simulate Result</button>
+        <button id="repurpose-run" class="btn" type="button">Generate Clips</button>
+        <button id="clear-input" class="btn secondary" type="button">Clear</button>
+        <button id="simulate-progress" class="btn secondary" type="button" title="Test app progress bridge">Simulate Progress</button>
+        <button id="simulate-result" class="btn secondary" type="button" title="Test app result bridge">Simulate Result</button>
       </div>
 
       <div class="progress-wrap" id="progress-wrap" style="display:none">
@@ -258,10 +263,40 @@
     <div style="margin-top:6px">Follow: <a href="https://www.instagram.com/Perry.Glo" target="_blank" rel="noopener">Instagram</a> • <a href="https://twitter.com/DexClanTv" target="_blank" rel="noopener">Twitter</a> • <a href="https://www.youtube.com/@DexClanTv" target="_blank" rel="noopener">YouTube</a></div>
   </footer>
 
-  <!-- Bridge helpers (always available) -->
+  <!-- 1) Try to load your real bridge (overrides shims if present) -->
   <script src="minimal.js" defer></script>
 
-  <!-- Page logic -->
+  <!-- 2) Safe shims: define sendProgress/sendResult if minimal.js is missing -->
+  <script>
+    window.sendProgress = window.sendProgress || function(pct){
+      try {
+        const v = Math.max(0, Math.min(1, Number(pct)));
+        window.webkit?.messageHandlers?.clipper?.postMessage({ type: 'progress', value: v });
+      } catch(e) { /* no-op outside WKWebView */ }
+    };
+    window.sendResult = window.sendResult || function(url){
+      try {
+        if (!url || typeof url !== 'string') return;
+        window.webkit?.messageHandlers?.clipper?.postMessage({ type: 'result', url });
+      } catch(e) { /* no-op */ }
+    };
+
+    // Touch-safe binder (click + touchend)
+    function bindTap(id, handler){
+      const el = document.getElementById(id);
+      if(!el) return;
+      let fired = false;
+      const wrap = (e) => {
+        if (fired) return;
+        fired = true;
+        try { handler(e); } finally { setTimeout(()=>fired=false, 120); }
+      };
+      el.addEventListener('click', wrap, { passive: true });
+      el.addEventListener('touchend', wrap, { passive: true });
+    }
+  </script>
+
+  <!-- 3) Page logic -->
   <script>
     // Mobile nav toggle
     const burger = document.getElementById('burger');
@@ -320,7 +355,7 @@
     },{threshold:.12});
     document.querySelectorAll('.reveal').forEach(n=>revealer.observe(n));
 
-    // ---------- Helpers for in-page progress UI ----------
+    // Helpers for progress UI
     function showProgressUI(show){
       const wrap = document.getElementById('progress-wrap');
       if(!wrap) return;
@@ -333,7 +368,7 @@
       if(status){ status.textContent = text || ''; }
     }
 
-    // ---------- Query params: ?url= or ?v= ----------
+    // Query params: ?url= or ?v=
     (function(){
       const params = new URLSearchParams(location.search);
       const fullUrl = params.get('url');
@@ -348,11 +383,10 @@
         scrollToWithOffset('#tools');
         showProgressUI(true);
         setProgress(0, 'Ready to process…');
-        // Notify iOS app we have initial state
+        // Safe even if minimal.js didn’t load
         sendProgress(0.0);
       }
 
-      // Optional demo harness (browser-only): ?demo=1
       if (demo) {
         let pct = 0;
         const timer = setInterval(()=>{
@@ -368,8 +402,8 @@
       }
     })();
 
-    // ---------- Tool actions ----------
-    document.getElementById('repurpose-run')?.addEventListener('click', ()=>{
+    // Bind buttons (touch-safe)
+    bindTap('repurpose-run', () => {
       const input = document.getElementById('repurpose-input');
       const val = input?.value?.trim();
       if(!val){ alert('Paste a YouTube link or a direct .mp4/.m3u8 URL to continue.'); return; }
@@ -378,7 +412,7 @@
       setProgress(2, 'Initializing…');
       sendProgress(0.02);
 
-      // TODO: call your backend here and pipe real progress to sendProgress(pct)
+      // TODO: replace with real backend progress → call sendProgress(0..1)
       let p = 2;
       const id = setInterval(()=>{
         p = Math.min(99, p + Math.round(Math.random()*7));
@@ -398,7 +432,7 @@
       }
     });
 
-    document.getElementById('clear-input')?.addEventListener('click', ()=>{
+    bindTap('clear-input', () => {
       const input = document.getElementById('repurpose-input');
       const result = document.getElementById('tool-result');
       if(input) input.value = '';
@@ -408,8 +442,7 @@
       sendProgress(0.0);
     });
 
-    // Simulation buttons for quick manual testing
-    document.getElementById('simulate-progress')?.addEventListener('click', ()=>{
+    bindTap('simulate-progress', () => {
       showProgressUI(true);
       let p = 0;
       const id = setInterval(()=>{
@@ -419,7 +452,8 @@
         if (p >= 1) clearInterval(id);
       }, 300);
     });
-    document.getElementById('simulate-result')?.addEventListener('click', ()=>{
+
+    bindTap('simulate-result', () => {
       const demo = 'https://files.catbox.moe/7yq2o9.mp4';
       sendResult(demo);
       const result = document.getElementById('tool-result');
