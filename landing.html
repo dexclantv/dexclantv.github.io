@@ -182,7 +182,6 @@
     <span class="eyebrow">Capabilities</span>
     <h2>Everything you need to win the upload war</h2>
     <p class="lead">Inspired by Hielo’s airy hero + tiled visuals, reimagined with DexTracker’s jet-black + neon-green aesthetic.</p>
-
     <div class="grid cols-3">
       <div class="card reveal"><h3>🔁 High-Retention Detector</h3><p>Surface spike windows and one-tap auto-clip for Shorts, Reels, and TikTok. Export with timestamps and notes.</p></div>
       <div class="card reveal"><h3>🧠 Script Brainstormer</h3><p>Full script drafts tuned to <em>your</em> tone + SEO-aware title ideas with CTR heatmap comparisons.</p></div>
@@ -273,13 +272,13 @@
       try {
         const v = Math.max(0, Math.min(1, Number(pct)));
         window.webkit?.messageHandlers?.clipper?.postMessage({ type: 'progress', value: v });
-      } catch(e) { /* no-op outside WKWebView */ }
+      } catch(e) {}
     };
     window.sendResult = window.sendResult || function(url){
       try {
         if (!url || typeof url !== 'string') return;
         window.webkit?.messageHandlers?.clipper?.postMessage({ type: 'result', url });
-      } catch(e) { /* no-op */ }
+      } catch(e) {}
     };
 
     // Touch-safe binder (click + touchend)
@@ -299,6 +298,8 @@
 
   <!-- 3) Page logic -->
   <script>
+    const API_BASE = "https://dextracker-clips.fly.dev";
+
     // Mobile nav toggle
     const burger = document.getElementById('burger');
     const links = document.getElementById('navlinks');
@@ -307,7 +308,6 @@
       burger.setAttribute('aria-expanded', open ? 'true':'false');
     });
 
-    // Smooth scroll offset for sticky nav
     function scrollToWithOffset(id){
       const el = document.querySelector(id);
       const nav = document.getElementById('nav');
@@ -316,7 +316,6 @@
       window.scrollTo({top:y, behavior:'smooth'});
     }
 
-    // Anchors
     document.querySelectorAll('[data-link]')?.forEach(a=>{
       a.addEventListener('click', (e)=>{
         e.preventDefault();
@@ -325,7 +324,6 @@
       });
     });
 
-    // Scrollspy
     const sections = [...document.querySelectorAll('header[id], section[id]')];
     const navLinks = [...document.querySelectorAll('.links a[data-link]')];
     const byId = id => navLinks.find(a=>a.getAttribute('href')==="#"+id);
@@ -339,7 +337,6 @@
     },{rootMargin:'-40% 0px -55% 0px', threshold:[0, .2, .6, 1]});
     sections.forEach(s=>spy.observe(s));
 
-    // Card hover glow
     document.querySelectorAll('.card').forEach(card=>{
       card.addEventListener('pointermove', e=>{
         const r = card.getBoundingClientRect();
@@ -348,7 +345,6 @@
       })
     });
 
-    // Reveal on scroll
     const revealer = new IntersectionObserver((entries)=>{
       entries.forEach(({isIntersecting, target})=>{
         if(isIntersecting){ target.classList.add('in'); revealer.unobserve(target); }
@@ -356,7 +352,7 @@
     },{threshold:.12});
     document.querySelectorAll('.reveal').forEach(n=>revealer.observe(n));
 
-    // Helpers for progress UI
+    // Progress UI helpers
     function showProgressUI(show){
       const wrap = document.getElementById('progress-wrap');
       if(!wrap) return;
@@ -369,7 +365,7 @@
       if(status){ status.textContent = text || ''; }
     }
 
-    // Query params: ?url= or ?v=
+    // Pre-fill via ?url= or ?v=  (demo via ?demo=1)
     (function(){
       const params = new URLSearchParams(location.search);
       const fullUrl = params.get('url');
@@ -384,11 +380,9 @@
         scrollToWithOffset('#tools');
         showProgressUI(true);
         setProgress(0, 'Ready to process…');
-        // Safe even if minimal.js didn’t load
         sendProgress(0.0);
       }
 
-      // Browser-only demo: ramp to 100 then send known-good MP4
       if (demo) {
         let pct = 0;
         const timer = setInterval(()=>{
@@ -405,36 +399,56 @@
       }
     })();
 
-    // Bind buttons (touch-safe)
-    bindTap('repurpose-run', () => {
+    // ---- REAL backend hookup on "Generate Clips"
+    bindTap('repurpose-run', async () => {
       const input = document.getElementById('repurpose-input');
       const val = input?.value?.trim();
-      if(!val){ alert('Paste a YouTube link or a direct .mp4/.m3u8 URL to continue.'); return; }
+      if (!val) { alert('Paste a YouTube link or a direct .mp4/.m3u8 URL to continue.'); return; }
 
       showProgressUI(true);
-      setProgress(2, 'Initializing…');
-      sendProgress(0.02);
+      setProgress(5, 'Contacting clip API…');
+      sendProgress(0.05);
 
-      // TODO: replace with real backend progress → call sendProgress(0..1)
-      let p = 2;
-      const id = setInterval(()=>{
-        p = Math.min(99, p + Math.round(Math.random()*7));
-        setProgress(p, `Processing… ${p}%`);
-        sendProgress(p/100);
-        if (p >= 99) clearInterval(id);
-      }, 450);
+      try {
+        const r = await fetch(`${API_BASE}/api/clip`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: val })
+        });
 
-      const result = document.getElementById('tool-result');
-      if(result){
-        result.style.display = 'block';
-        result.innerHTML = `<div class="card" style="margin-top:8px">
-          <h3>Processing</h3>
-          <p>Received: <code style="color:#9cf5c9">${val.replace(/</g,'&lt;')}</code></p>
-          <p>We’ll notify the app when the final clip is ready.</p>
-        </div>`;
+        if (!r.ok) {
+          const t = await r.text();
+          throw new Error(`API ${r.status}: ${t || 'unknown error'}`);
+        }
+
+        const data = await r.json();
+        if (!data.directUrl) throw new Error('No directUrl returned from API');
+
+        setProgress(20, 'Fetching media…');
+        sendProgress(0.2);
+        sendResult(data.directUrl); // iOS app will start native download
+
+        const result = document.getElementById('tool-result');
+        if (result) {
+          result.style.display = 'block';
+          result.innerHTML = `<div class="card" style="margin-top:8px">
+            <h3>Result</h3>
+            <p>Sent final clip URL to the app.</p>
+            <p>Fallback link: <a href="${data.directUrl}" target="_blank" rel="noopener">open</a></p>
+          </div>`;
+        }
+
+        setProgress(100, 'Finished!');
+        sendProgress(1.0);
+      } catch (e) {
+        console.error(e);
+        setProgress(0, 'Error: ' + (e?.message || e));
+        alert('Clip API failed: ' + (e?.message || e));
+        sendProgress(0.0);
       }
     });
 
+    // Clear
     bindTap('clear-input', () => {
       const input = document.getElementById('repurpose-input');
       const result = document.getElementById('tool-result');
@@ -445,6 +459,7 @@
       sendProgress(0.0);
     });
 
+    // Demo buttons
     bindTap('simulate-progress', () => {
       showProgressUI(true);
       let p = 0;
@@ -455,9 +470,7 @@
         if (p >= 1) clearInterval(id);
       }, 300);
     });
-
     bindTap('simulate-result', () => {
-      // Known-good iOS-friendly MP4
       const demo = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
       sendResult(demo);
       const result = document.getElementById('tool-result');
