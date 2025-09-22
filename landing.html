@@ -101,7 +101,7 @@
     details p{color:#dff7ea}
 
     /* Footer */
-    footer{border-top:1px solid var(--line); background:#030a06; padding:28px; text-align:center; color:var(--muted)}
+    footer{border-top:1px solid var(--line); background:#030a06; padding:28px; text-align:center; color:#muted}
     footer a{color:var(--acid); text-decoration:none}
 
     /* Reveal animations */
@@ -229,10 +229,10 @@
     <div class="tools">
       <div class="tools-row" style="margin-bottom:10px">
         <input id="repurpose-input" type="url" placeholder="Paste YouTube link or direct .mp4 / .m3u8 URL" />
-        <button id="repurpose-run" class="btn">Generate Clips</button>
-        <button id="clear-input" class="btn secondary">Clear</button>
-        <button id="simulate-progress" class="btn secondary" title="Test app progress bridge">Simulate Progress</button>
-        <button id="simulate-result" class="btn secondary" title="Test app result bridge">Simulate Result</button>
+        <button id="repurpose-run" class="btn" type="button">Generate Clips</button>
+        <button id="clear-input" class="btn secondary" type="button">Clear</button>
+        <button id="simulate-progress" class="btn secondary" type="button" title="Test app progress bridge">Simulate Progress</button>
+        <button id="simulate-result" class="btn secondary" type="button" title="Test app result bridge">Simulate Result</button>
       </div>
 
       <div class="progress-wrap" id="progress-wrap" style="display:none">
@@ -263,6 +263,9 @@
 
   <!-- Page logic -->
   <script>
+    // --- DexTracker API base ---
+    const API_BASE = "https://dextracker-clips.fly.dev";
+
     // Mobile nav toggle
     const burger = document.getElementById('burger');
     const links = document.getElementById('navlinks');
@@ -369,32 +372,52 @@
     })();
 
     // ---------- Tool actions ----------
-    document.getElementById('repurpose-run')?.addEventListener('click', ()=>{
+    document.getElementById('repurpose-run')?.addEventListener('click', async ()=>{
       const input = document.getElementById('repurpose-input');
       const val = input?.value?.trim();
       if(!val){ alert('Paste a YouTube link or a direct .mp4/.m3u8 URL to continue.'); return; }
 
       showProgressUI(true);
-      setProgress(2, 'Initializing…');
-      sendProgress(0.02);
+      setProgress(5, 'Contacting clip API…');
+      sendProgress(0.05);
 
-      // TODO: call your backend here and pipe real progress to sendProgress(pct)
-      let p = 2;
-      const id = setInterval(()=>{
-        p = Math.min(99, p + Math.round(Math.random()*7));
-        setProgress(p, `Processing… ${p}%`);
-        sendProgress(p/100);
-        if (p >= 99) clearInterval(id);
-      }, 450);
+      try {
+        const r = await fetch(`${API_BASE}/api/clip`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: val })
+        });
+        if (!r.ok) {
+          const t = await r.text();
+          throw new Error(`API ${r.status}: ${t || 'unknown error'}`);
+        }
+        const data = await r.json();
+        if (!data.directUrl) throw new Error('No directUrl returned from API');
 
-      const result = document.getElementById('tool-result');
-      if(result){
-        result.style.display = 'block';
-        result.innerHTML = `<div class="card" style="margin-top:8px">
-          <h3>Processing</h3>
-          <p>Received: <code style="color:#9cf5c9">${val.replace(/</g,'&lt;')}</code></p>
-          <p>We’ll notify the app when the final clip is ready.</p>
-        </div>`;
+        setProgress(20, 'Fetching media…');
+        sendProgress(0.2);
+
+        // Tell the iOS app to start native download
+        sendResult(data.directUrl);
+
+        // Fallback UI in case user opens page in Safari
+        const result = document.getElementById('tool-result');
+        if(result){
+          result.style.display = 'block';
+          result.innerHTML = `<div class="card" style="margin-top:8px">
+            <h3>Result</h3>
+            <p>Sent final clip URL to the app.</p>
+            <p>Fallback link: <a href="${data.directUrl}" target="_blank" rel="noopener">open</a></p>
+          </div>`;
+        }
+
+        setProgress(100, 'Finished!');
+        sendProgress(1.0);
+      } catch (e) {
+        console.error(e);
+        setProgress(0, 'Error: ' + (e?.message || e));
+        alert('Clip API failed: ' + (e?.message || e));
+        sendProgress(0.0);
       }
     });
 
