@@ -97,7 +97,7 @@
     details p{color:#dff7ea}
 
     /* Footer */
-    footer{border-top:1px solid var(--line); background:#030a06; padding:28px; text-align:center; color:#muted}
+    footer{border-top:1px solid var(--line); background:#030a06; padding:28px; text-align:center; color:var(--muted)}
     footer a{color:var(--acid); text-decoration:none}
 
     /* Reveal animations */
@@ -267,13 +267,13 @@
       </div>
 
       <div class="cookies-wrap" id="cookies-wrap">
-        <textarea id="cookies-text" placeholder="Paste cookies.txt here (Netscape format) or paste a Cookie header (e.g., VISITOR_INFO1_LIVE=...; YSC=...; SID=...)"></textarea>
+        <textarea id="cookies-text" placeholder="Paste cookies.txt here (Netscape format) — or paste a single Cookie header like: VISITOR_INFO1_LIVE=...; YSC=...; SID=..."></textarea>
         <div class="row" style="margin-top:8px">
           <button id="save-cookies" class="btn secondary" type="button">Save locally</button>
           <button id="clear-cookies" class="btn secondary" type="button">Clear</button>
-          <span class="small">Saved only on your device (localStorage). Sent to the server only for the clip you request.</span>
+          <span class="small">Saved only on your device (localStorage). Sent only when you request a clip.</span>
         </div>
-        <div class="warn">Security: Don’t share your cookies. We don’t store them on our servers in this MVP.</div>
+        <div class="warn">Security: Don’t share your cookies. We don’t persist them on our servers in this MVP.</div>
       </div>
 
       <div class="progress-wrap" id="progress-wrap" style="display:none">
@@ -299,7 +299,7 @@
     <div style="margin-top:6px">Follow: <a href="https://www.instagram.com/Perry.Glo" target="_blank" rel="noopener">Instagram</a> • <a href="https://twitter.com/DexClanTv" target="_blank" rel="noopener">Twitter</a> • <a href="https://www.youtube.com/@DexClanTv" target="_blank" rel="noopener">YouTube</a></div>
   </footer>
 
-  <!-- Bridge (your existing file) -->
+  <!-- Bridge helpers (always available) -->
   <script src="minimal.js" defer></script>
 
   <!-- Help Modal -->
@@ -310,7 +310,7 @@
         <li>On your computer, open Chrome (or Firefox) and sign in at <b>youtube.com</b>.</li>
         <li>Install a cookies exporter:
           <ul>
-            <li>Chrome: <a href="https://chromewebstore.google.com/detail/get-cookiestxt/hdlodbllpgbmmffjaonccjibkdmnjfam" target="_blank" rel="noopener">Get cookies.txt</a></li>
+            <li>Chrome: <a href="https://chromewebstore.google.com/detail/get-cookiestxt-locally/cclelndahbckbenkjhflpdbgdldlbecc" target="_blank" rel="noopener">Get cookies.txt</a></li>
             <li>Firefox: <a href="https://addons.mozilla.org/en-US/firefox/addon/cookies-txt/" target="_blank" rel="noopener">cookies.txt</a></li>
           </ul>
         </li>
@@ -486,27 +486,6 @@
       alert('Cleared local cookies.');
     });
 
-    // Accept raw Cookie header OR Netscape cookies.txt
-    function cookiesTxtToHeader(txt){
-      if (!txt) return "";
-      if (txt.includes(';') && !txt.includes('\t')) return txt.trim(); // already a header
-      const lines = txt.split(/\r?\n/);
-      const pairs = [];
-      for (const line of lines) {
-        const s = line.trim();
-        if (!s || s.startsWith('#')) continue;
-        const parts = s.split('\t');
-        if (parts.length < 7) continue;
-        const domain = parts[0];
-        const name = parts[5];
-        const value = parts[6];
-        if (/\.(youtube|google)\./i.test(domain) || /youtube\.com$/i.test(domain)) {
-          pairs.push(`${name}=${value}`);
-        }
-      }
-      return pairs.join('; ');
-    }
-
     // ---- Help modal ----
     const modal = document.getElementById('cookie-modal');
     bindTap('open-cookie-help', () => { modal.classList.add('open'); modal.setAttribute('aria-hidden', 'false'); });
@@ -523,16 +502,14 @@
       setProgress(5, 'Contacting clip API…');
       sendProgress(0.05);
 
-      let cookieHeader = "";
-      if (useCookiesChk.checked && cookiesText.value.trim()) {
-        cookieHeader = cookiesTxtToHeader(cookiesText.value.trim());
-      }
+      // Send raw cookies text (either Netscape cookies.txt OR a single Cookie header).
+      const cookiesTxt = (useCookiesChk.checked ? (cookiesText.value || "").trim() : "");
 
       try {
         const r = await fetch(`${API_BASE}/api/clip`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ url: val, cookies: cookieHeader })
+          body: JSON.stringify({ url: val, cookiesTxt })
         });
 
         if (!r.ok) {
