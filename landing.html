@@ -492,6 +492,39 @@
     bindTap('close-cookie-help', () => { modal.classList.remove('open'); modal.setAttribute('aria-hidden', 'true'); });
     modal?.addEventListener('click', (e)=>{ if(e.target===modal){ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); } });
 
+    // ======== NEW: job polling helper for 409 fallback ========
+    async function startJobPoll(jobId){
+      let lastPct = 10;
+      const resultEl = document.getElementById('tool-result');
+      resultEl.style.display = 'block';
+      resultEl.innerHTML = `<div class="card"><h3>Merging streams…</h3><p>This can take a minute.</p></div>`;
+
+      async function poll(){
+        try{
+          const r = await fetch(`${API_BASE}/api/jobs/${jobId}`);
+          const data = await r.json();
+          if (data.status === 'running'){
+            const pct = Math.max(lastPct, Math.round((data.progress||0)*100));
+            lastPct = pct;
+            setProgress(pct, `Processing… ${pct}%`);
+            setTimeout(poll, 1000);
+          } else if (data.status === 'done' && data.url){
+            const fileUrl = `${API_BASE}${data.url}`;
+            setProgress(100, 'Finished!');
+            resultEl.innerHTML = `<div class="card"><h3>Result</h3><p><a href="${fileUrl}" target="_blank" rel="noopener">Download MP4</a></p></div>`;
+          } else if (data.status === 'error'){
+            setProgress(0, 'Error');
+            alert('Clip merge failed: ' + (data.error || 'unknown error'));
+          } else {
+            setTimeout(poll, 1200);
+          }
+        }catch(e){
+          setTimeout(poll, 1500);
+        }
+      }
+      poll();
+    }
+
     // ---- REAL backend hookup on "Generate Clips" ----
     bindTap('repurpose-run', async () => {
       const input = document.getElementById('repurpose-input');
@@ -506,12 +539,31 @@
       const cookiesTxt = (useCookiesChk.checked ? (cookiesText.value || "").trim() : "");
 
       try {
+        // First attempt: try to get a direct progressive URL
         const r = await fetch(`${API_BASE}/api/clip`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ url: val, cookiesTxt })
         });
 
+        // NEW: if server says 409 → no progressive stream, fall back to merge job
+        if (r.status === 409) {
+          setProgress(10, 'No single stream available. Merging audio+video…');
+          const r2 = await fetch(`${API_BASE}/api/jobs`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url: val, cookiesTxt })
+          });
+          if (!r2.ok) {
+            const t2 = await r2.text();
+            throw new Error(`API ${r2.status}: ${t2 || 'job create failed'}`);
+          }
+          const { jobId } = await r2.json();
+          if (!jobId) throw new Error('No jobId returned by API');
+          return startJobPoll(jobId);
+        }
+
+        // Normal flow: must be OK or error
         if (!r.ok) {
           const t = await r.text();
           throw new Error(`API ${r.status}: ${t || 'unknown error'}`);
