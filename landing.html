@@ -107,8 +107,8 @@
     /* TOOLS SECTION */
     .tools{ background:linear-gradient(180deg, rgba(6,12,8,.85), rgba(3,10,6,.85)); border:1px solid var(--line); border-radius:14px; padding:20px; }
     .tools-row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
-    .tools input{
-      flex:1; min-width:260px; background:#0b140b; color:#e7ffe7;
+    .tools input, .tools select{
+      flex:1; min-width:200px; background:#0b140b; color:#e7ffe7;
       border:1px solid var(--line); border-radius:10px; padding:12px 14px; outline:none;
       pointer-events:auto; -webkit-tap-highlight-color: transparent;
     }
@@ -248,8 +248,13 @@
     <p class="lead">Auto-detect highlights and generate clip candidates. Paste a YouTube link or direct video URL.</p>
 
     <div class="tools">
-      <div class="tools-row" style="margin-bottom:10px">
+      <div class="tools-row" style="margin-bottom:10px; gap:10px">
         <input id="repurpose-input" type="url" placeholder="Paste YouTube link or direct .mp4 / .m3u8 URL" />
+        <select id="quality">
+          <option value="720p" selected>Prefer 720p</option>
+          <option value="1080p">Prefer 1080p</option>
+          <option value="best">Best available</option>
+        </select>
         <button id="repurpose-run" class="btn" type="button">Generate Clips</button>
         <button id="clear-input" class="btn secondary" type="button">Clear</button>
         <button id="simulate-progress" class="btn secondary" type="button" title="Test app progress bridge">Simulate Progress</button>
@@ -438,7 +443,7 @@
         sendProgress(0.0);
       }
 
-      // Browser-only demo: ramp to 100 then send known-good MP4
+      // Browser-only demo
       if (demo) {
         let pct = 0;
         const timer = setInterval(()=>{
@@ -447,7 +452,6 @@
           sendProgress(pct);
           if (pct >= 1) {
             clearInterval(timer);
-            // iOS-friendly H.264/AAC MP4
             sendResult('https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4');
             setProgress(100, 'Finished!');
           }
@@ -462,7 +466,6 @@
     const saveCookiesBtn = document.getElementById('save-cookies');
     const clearCookiesBtn = document.getElementById('clear-cookies');
 
-    // Load saved cookies
     (function(){
       const saved = localStorage.getItem('dex.cookies.txt') || '';
       if (saved) {
@@ -492,7 +495,7 @@
     bindTap('close-cookie-help', () => { modal.classList.remove('open'); modal.setAttribute('aria-hidden', 'true'); });
     modal?.addEventListener('click', (e)=>{ if(e.target===modal){ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); } });
 
-    // ======== NEW: job polling helper for 409 fallback ========
+    // ======== Job polling helper for 409 fallback ========
     async function startJobPoll(jobId){
       let lastPct = 10;
       const resultEl = document.getElementById('tool-result');
@@ -507,16 +510,17 @@
             const pct = Math.max(lastPct, Math.round((data.progress||0)*100));
             lastPct = pct;
             setProgress(pct, `Processing… ${pct}%`);
-            setTimeout(poll, 1000);
+            setTimeout(poll, 1100);
           } else if (data.status === 'done' && data.url){
             const fileUrl = `${API_BASE}${data.url}`;
             setProgress(100, 'Finished!');
             resultEl.innerHTML = `<div class="card"><h3>Result</h3><p><a href="${fileUrl}" target="_blank" rel="noopener">Download MP4</a></p></div>`;
+            sendResult(fileUrl);
           } else if (data.status === 'error'){
             setProgress(0, 'Error');
             alert('Clip merge failed: ' + (data.error || 'unknown error'));
           } else {
-            setTimeout(poll, 1200);
+            setTimeout(poll, 1300);
           }
         }catch(e){
           setTimeout(poll, 1500);
@@ -528,8 +532,12 @@
     // ---- REAL backend hookup on "Generate Clips" ----
     bindTap('repurpose-run', async () => {
       const input = document.getElementById('repurpose-input');
+      const quality = document.getElementById('quality')?.value || '720p';
       const val = input?.value?.trim();
       if(!val){ alert('Paste a YouTube link or a direct .mp4/.m3u8 URL to continue.'); return; }
+
+      // Basic URL check to avoid trivial typos
+      try { new URL(val); } catch { alert('That link looks invalid. Try again.'); return; }
 
       showProgressUI(true);
       setProgress(5, 'Contacting clip API…');
@@ -543,16 +551,18 @@
         const r = await fetch(`${API_BASE}/api/clip`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ url: val, cookiesTxt })
+          body: JSON.stringify({ url: val, cookiesTxt, prefer: quality })
         });
 
-        // NEW: if server says 409 → no progressive stream, fall back to merge job
+        // If server says 409 → no progressive stream, fall back to merge job
         if (r.status === 409) {
-          setProgress(10, 'No single stream available. Merging audio+video…');
+          const j = await r.json().catch(()=>({}));
+          const why = j?.reason ? ` (${j.reason})` : '';
+          setProgress(10, 'No single stream available. Merging audio+video…' + why);
           const r2 = await fetch(`${API_BASE}/api/jobs`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ url: val, cookiesTxt })
+            body: JSON.stringify({ url: val, cookiesTxt, prefer: quality })
           });
           if (!r2.ok) {
             const t2 = await r2.text();
