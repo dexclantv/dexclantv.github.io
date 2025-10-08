@@ -107,8 +107,8 @@
     /* TOOLS SECTION */
     .tools{ background:linear-gradient(180deg, rgba(6,12,8,.85), rgba(3,10,6,.85)); border:1px solid var(--line); border-radius:14px; padding:20px; }
     .tools-row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
-    .tools input, .tools select{
-      flex:1; min-width:200px; background:#0b140b; color:#e7ffe7;
+    .tools input{
+      flex:1; min-width:260px; background:#0b140b; color:#e7ffe7;
       border:1px solid var(--line); border-radius:10px; padding:12px 14px; outline:none;
       pointer-events:auto; -webkit-tap-highlight-color: transparent;
     }
@@ -167,8 +167,8 @@
   <!-- HERO -->
   <header class="hero" id="home">
     <div>
-      <h1>Unlock Ridiculous YouTube Momentum</h1>
-      <p>Hacker-clean analytics, CTR heatmaps, and retention-spike auto-clips. DexTracker blends AI + ruthless clarity so you post smarter and grow faster.</p>
+      <h1>Unlock Ridiculous Momentum</h1>
+      <p id="hero-copy">Hacker-clean analytics, clip candidates, and retention-spike helpers so you post smarter and grow faster.</p>
       <a class="cta" href="#pricing" data-link>Start Free Trial →</a>
       <a class="subcta" href="#features" data-link>See how it works</a>
       <a class="tools-btn" href="#tools" data-link>Tools</a>
@@ -197,14 +197,14 @@
   <section id="features">
     <span class="eyebrow">Capabilities</span>
     <h2>Everything you need to win the upload war</h2>
-    <p class="lead">Inspired by Hielo’s airy hero + tiled visuals, reimagined with DexTracker’s jet-black + neon-green aesthetic.</p>
+    <p class="lead">Jet-black UI + neon clarity for creators who ship.</p>
     <div class="grid cols-3">
-      <div class="card reveal"><h3>🔁 High-Retention Detector</h3><p>Surface spike windows and one-tap auto-clip for Shorts, Reels, and TikTok. Export with timestamps and notes.</p></div>
-      <div class="card reveal"><h3>🧠 Script Brainstormer</h3><p>Full script drafts tuned to <em>your</em> tone + SEO-aware title ideas with CTR heatmap comparisons.</p></div>
-      <div class="card reveal"><h3>📈 Live Analytics</h3><p>CTR, impressions, and retention in one glance. Tap points to see title, date, views, and engagement.</p></div>
-      <div class="card reveal"><h3>🤖 Reply Queue</h3><p>Pull recent comments (30–60 days), propose replies, and send after manual approval.</p></div>
-      <div class="card reveal"><h3>🔔 Smart Alerts</h3><p>Notify on CTR dips, subscriber spikes, and stale uploads. Suggest title rotations when momentum fades.</p></div>
-      <div class="card reveal"><h3>🛡️ Privacy-First</h3><p>Local secrets, transparent scopes, and selective Discord posting you control.</p></div>
+      <div class="card reveal"><h3>🔁 Clip Candidates</h3><p>Surface spike windows and one-tap exports for Shorts/Reels/TikTok.</p></div>
+      <div class="card reveal"><h3>🧠 Script Brainstormer</h3><p>Full script drafts tuned to <em>your</em> tone + SEO-aware title ideas.</p></div>
+      <div class="card reveal"><h3>📈 Live Analytics</h3><p>CTR, impressions, and retention in one glance.</p></div>
+      <div class="card reveal"><h3>🤖 Reply Queue</h3><p>Pull recent comments, propose replies; you approve.</p></div>
+      <div class="card reveal"><h3>🔔 Smart Alerts</h3><p>Notify on dips/spikes and suggest iterations.</p></div>
+      <div class="card reveal"><h3>🛡️ Privacy-First</h3><p>Local secrets + transparent scopes. You’re in control.</p></div>
     </div>
   </section>
 
@@ -213,9 +213,9 @@
     <span class="eyebrow">Workflow</span>
     <h2>Three steps. All gas, no brakes.</h2>
     <div class="grid cols-3">
-      <div class="card reveal"><h3>1) Set Intent</h3><p>Answer quick onboarding to tailor dashboards and alerts to your goals.</p></div>
-      <div class="card reveal"><h3>2) Leverage AI</h3><p>Brainstorm scripts, simulate titles, and queue clips from high-retention ranges.</p></div>
-      <div class="card reveal"><h3>3) React Fast</h3><p>Push notifications flag dips/spikes so you iterate before the algorithm does.</p></div>
+      <div class="card reveal"><h3>1) Set Intent</h3><p>Tailor dashboards and alerts to your goals.</p></div>
+      <div class="card reveal"><h3>2) Leverage AI</h3><p>Brainstorm scripts, simulate titles, and queue clips.</p></div>
+      <div class="card reveal"><h3>3) React Fast</h3><p>Push notifications flag dips/spikes so you iterate faster.</p></div>
     </div>
   </section>
 
@@ -223,7 +223,7 @@
   <section id="gallery">
     <span class="eyebrow">Interface</span>
     <h2>Looks cold. Works hot.</h2>
-    <p class="lead">A lightweight gallery that nods to Hielo’s masonry style using neon-glass tiles.</p>
+    <p class="lead">Neon-glass tiles meet hacker-clean signal.</p>
     <div class="gallery">
       <div class="tile reveal"><img alt="CTR Heatmap" src="https://images.unsplash.com/photo-1551281044-8b4c1b7e4d5f?q=80&w=1200&auto=format&fit=crop"><div class="overlay">CTR Heatmaps</div></div>
       <div class="tile reveal"><img alt="Retention Chart" src="https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?q=80&w=1200&auto=format&fit=crop"><div class="overlay">Retention Curves</div></div>
@@ -236,8 +236,8 @@
     <span class="eyebrow">Plans</span>
     <h2>Simple pricing. 7-day free trial.</h2>
     <div class="pricing">
-      <div class="card reveal"><h3>Pro</h3><p class="price">$9.99<span style="font-size:16px">/mo</span></p><p>All premium features • Daily analytics • Spike alerts • AI replies • Priority fixes</p><p><a class="cta" href="#" onclick="alert('Coming soon • App Store connect')">Get Pro</a></p></div>
-      <div class="card reveal"><h3>Elite</h3><p class="price">$49.99<span style="font-size:16px">/yr</span></p><p>Everything in Pro • Annual savings • Early access experiments • Creator concierge</p><p><a class="cta" href="#" onclick="alert('Coming soon • App Store connect')">Go Elite</a></p></div>
+      <div class="card reveal"><h3>Pro</h3><p class="price">$9.99<span style="font-size:16px">/mo</span></p><p>All premium features • Daily analytics • Alerts • AI replies</p><p><a class="cta" href="#" onclick="alert('Coming soon • App Store connect')">Get Pro</a></p></div>
+      <div class="card reveal"><h3>Elite</h3><p class="price">$49.99<span style="font-size:16px">/yr</span></p><p>Everything in Pro • Annual savings • Early access experiments</p><p><a class="cta" href="#" onclick="alert('Coming soon • App Store connect')">Go Elite</a></p></div>
     </div>
   </section>
 
@@ -245,34 +245,29 @@
   <section id="tools">
     <span class="eyebrow">Utilities</span>
     <h2>Tools</h2>
-    <p class="lead">Auto-detect highlights and generate clip candidates. Paste a YouTube link or direct video URL.</p>
+    <p class="lead" id="tools-copy">Paste a direct MP4 / M3U8 link you own and we’ll generate clip candidates.</p>
 
     <div class="tools">
-      <div class="tools-row" style="margin-bottom:10px; gap:10px">
-        <input id="repurpose-input" type="url" placeholder="Paste YouTube link or direct .mp4 / .m3u8 URL" />
-        <select id="quality">
-          <option value="720p" selected>Prefer 720p</option>
-          <option value="1080p">Prefer 1080p</option>
-          <option value="best">Best available</option>
-        </select>
+      <div class="tools-row" style="margin-bottom:10px">
+        <input id="repurpose-input" type="url" placeholder="Paste direct .mp4 / .m3u8 URL you own" />
         <button id="repurpose-run" class="btn" type="button">Generate Clips</button>
         <button id="clear-input" class="btn secondary" type="button">Clear</button>
         <button id="simulate-progress" class="btn secondary" type="button" title="Test app progress bridge">Simulate Progress</button>
         <button id="simulate-result" class="btn secondary" type="button" title="Test app result bridge">Simulate Result</button>
       </div>
 
-      <!-- Cookies toggle + textarea -->
+      <!-- Cookies toggle + textarea (hidden on iOS) -->
       <div class="banner" id="mobile-banner" style="display:none">
-        On mobile? Exporting cookies is easiest on a desktop once. You can paste them here afterwards and keep going on your phone.
+        Exporting cookies is easiest on desktop. Paste them here afterwards if needed (desktop/testing only).
       </div>
 
-      <div class="row" style="margin-top:10px">
-        <label class="small"><input type="checkbox" id="use-cookies" /> Use my YouTube cookies (desktop export)</label>
+      <div class="row" id="cookies-row" style="margin-top:10px; display:none">
+        <label class="small"><input type="checkbox" id="use-cookies" /> Use my site cookies (desktop export)</label>
         <button id="open-cookie-help" class="btn secondary" type="button">How do I get cookies?</button>
       </div>
 
-      <div class="cookies-wrap" id="cookies-wrap">
-        <textarea id="cookies-text" placeholder="Paste cookies.txt here (Netscape format) — or paste a single Cookie header like: VISITOR_INFO1_LIVE=...; YSC=...; SID=..."></textarea>
+      <div class="cookies-wrap" id="cookies-wrap" style="display:none">
+        <textarea id="cookies-text" placeholder="Paste cookies.txt here (Netscape format) — or paste a single Cookie header like: NAME=VALUE; SID=..."></textarea>
         <div class="row" style="margin-top:8px">
           <button id="save-cookies" class="btn secondary" type="button">Save locally</button>
           <button id="clear-cookies" class="btn secondary" type="button">Clear</button>
@@ -294,14 +289,16 @@
   <section id="faq">
     <span class="eyebrow">FAQ</span>
     <h2>Quick answers</h2>
-    <details class="reveal"><summary>What is DexTracker?</summary><p>An AI-assisted toolkit for YouTubers to ideate faster, analyze smarter, and ship more.</p></details>
-    <details class="reveal"><summary>How do spike alerts work?</summary><p>We scan watch-time + CTR trends, highlight momentum windows, and nudge you when to rotate titles or clip.</p></details>
-    <details class="reveal"><summary>Will it keep my data private?</summary><p>Yes. Your cookies are stored locally in your browser and are only sent when you request a clip. We don’t store them on our servers.</p></details>
+    <details class="reveal"><summary>What is DexTracker?</summary><p>An AI-assisted toolkit for ideation, analysis, and faster shipping—privacy-first.</p></details>
+    <details class="reveal"><summary>Do you track me?</summary><p>No. We don’t use tracking beacons. Cookies you paste (desktop/testing) are stored only on your device and only sent when you request a clip.</p></details>
   </section>
 
   <footer>
     <div>© 2025 DexTracker • <a href="https://dexclantv.github.io/landing.html" target="_blank" rel="noopener">GitHub Pages</a></div>
     <div style="margin-top:6px">Follow: <a href="https://www.instagram.com/Perry.Glo" target="_blank" rel="noopener">Instagram</a> • <a href="https://twitter.com/DexClanTv" target="_blank" rel="noopener">Twitter</a> • <a href="https://www.youtube.com/@DexClanTv" target="_blank" rel="noopener">YouTube</a></div>
+    <div style="margin-top:10px; font-size:12px; color:#9cf5c9">
+      Privacy: No tracking pixels. Optional cookies (desktop/testing only) are stored locally and sent only per request. In the App Store build, only direct links you own are allowed.
+    </div>
   </footer>
 
   <!-- Bridge helpers (always available) -->
@@ -310,17 +307,17 @@
   <!-- Help Modal -->
   <div class="modal" id="cookie-modal" aria-hidden="true">
     <div class="modal-card">
-      <h3>How to export YouTube cookies (fast)</h3>
+      <h3>How to export cookies (desktop)</h3>
       <ol>
-        <li>On your computer, open Chrome (or Firefox) and sign in at <b>youtube.com</b>.</li>
+        <li>On your computer, sign in to the site in Chrome or Firefox.</li>
         <li>Install a cookies exporter:
           <ul>
-            <li>Chrome: <a href="https://chromewebstore.google.com/detail/get-cookiestxt-locally/cclelndahbckbenkjhflpdbgdldlbecc" target="_blank" rel="noopener">Get cookies.txt</a></li>
+            <li>Chrome: <a href="https://chromewebstore.google.com/detail/get-cookiestxt-locally/cclelndahbckbenkjhflpdbgdldlbecc" target="_blank" rel="noopener">Get cookies.txt locally</a></li>
             <li>Firefox: <a href="https://addons.mozilla.org/en-US/firefox/addon/cookies-txt/" target="_blank" rel="noopener">cookies.txt</a></li>
           </ul>
         </li>
-        <li>While on <b>youtube.com</b>, open the extension and click <b>Export</b>. Copy the text.</li>
-        <li>Return here, check <b>“Use my YouTube cookies”</b>, paste into the box, hit <b>Save</b>, then <b>Generate Clips</b>.</li>
+        <li>While on the site, open the extension and click <b>Export</b>. Copy the text.</li>
+        <li>Return here, check <b>“Use my site cookies”</b>, paste, hit <b>Save</b>, then <b>Generate Clips</b>.</li>
       </ol>
       <p class="small">Tip: Cookies expire. If it stops working later, export again.</p>
       <div class="modal-actions">
@@ -333,11 +330,27 @@
   <script>
     const API_BASE = "https://dextracker-clips.fly.dev";
 
-    // ---- Mobile banner (simple heuristic) ----
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    if (isMobile) {
-      const b = document.getElementById('mobile-banner');
-      if (b) b.style.display = 'block';
+    // ---- Detect iOS; hide cookie UI + adjust copy for App Store safety ----
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    if (isIOS) {
+      const heroCopy = document.getElementById('hero-copy');
+      const toolsCopy = document.getElementById('tools-copy');
+      const input = document.getElementById('repurpose-input');
+
+      heroCopy && (heroCopy.textContent = "Import your video, find highlight candidates, and export clean MP4s.");
+      toolsCopy && (toolsCopy.textContent = "Paste a direct MP4 / M3U8 link you own or use the demo to preview the flow.");
+      input && input.setAttribute("placeholder", "Paste direct .mp4 / .m3u8 URL you own");
+
+      // Hide cookie UI on iOS
+      document.getElementById('cookies-row')?.remove();
+      document.getElementById('cookies-wrap')?.remove();
+
+      // Banner not needed on iOS
+      document.getElementById('mobile-banner')?.remove();
+    } else {
+      // Non-iOS: allow cookie helpers for desktop/testing
+      const b = document.getElementById('mobile-banner'); if (b) b.style.display = 'block';
+      const row = document.getElementById('cookies-row'); if (row) row.style.display = 'flex';
     }
 
     // ---- Mobile nav toggle ----
@@ -348,7 +361,6 @@
       burger.setAttribute('aria-expanded', open ? 'true':'false');
     });
 
-    // Smooth scroll offset for sticky nav
     function scrollToWithOffset(id){
       const el = document.querySelector(id);
       const nav = document.getElementById('nav');
@@ -357,7 +369,6 @@
       window.scrollTo({top:y, behavior:'smooth'});
     }
 
-    // Anchors
     document.querySelectorAll('[data-link]')?.forEach(a=>{
       a.addEventListener('click', (e)=>{
         e.preventDefault();
@@ -366,7 +377,6 @@
       });
     });
 
-    // Scrollspy
     const sections = [...document.querySelectorAll('header[id], section[id]')];
     const navLinks = [...document.querySelectorAll('.links a[data-link]')];
     const byId = id => navLinks.find(a=>a.getAttribute('href')==="#"+id);
@@ -380,7 +390,6 @@
     },{rootMargin:'-40% 0px -55% 0px', threshold:[0, .2, .6, 1]});
     sections.forEach(s=>spy.observe(s));
 
-    // Card hover glow
     document.querySelectorAll('.card').forEach(card=>{
       card.addEventListener('pointermove', e=>{
         const r = card.getBoundingClientRect();
@@ -389,7 +398,6 @@
       })
     });
 
-    // Reveal on scroll
     const revealer = new IntersectionObserver((entries)=>{
       entries.forEach(({isIntersecting, target})=>{
         if(isIntersecting){ target.classList.add('in'); revealer.unobserve(target); }
@@ -397,7 +405,6 @@
     },{threshold:.12});
     document.querySelectorAll('.reveal').forEach(n=>revealer.observe(n));
 
-    // Helpers for progress UI
     function showProgressUI(show){
       const wrap = document.getElementById('progress-wrap');
       if(!wrap) return;
@@ -410,7 +417,6 @@
       if(status){ status.textContent = text || ''; }
     }
 
-    // Touch-safe binder (click + touchend)
     function bindTap(id, handler){
       const el = document.getElementById(id);
       if(!el) return;
@@ -424,42 +430,7 @@
       el.addEventListener('touchend', wrap, { passive: true });
     }
 
-    // Query params: ?url= or ?v=
-    (function(){
-      const params = new URLSearchParams(location.search);
-      const fullUrl = params.get('url');
-      const v = params.get('v');
-      const demo = params.get('demo') === '1';
-      const yt = v ? `https://www.youtube.com/watch?v=${encodeURIComponent(v)}` : null;
-      const value = fullUrl || yt;
-
-      if (value) {
-        const input = document.querySelector('#repurpose-input');
-        if (input) input.value = value;
-        scrollToWithOffset('#tools');
-        showProgressUI(true);
-        setProgress(0, 'Ready to process…');
-        // Safe even if minimal.js didn’t load
-        sendProgress(0.0);
-      }
-
-      // Browser-only demo
-      if (demo) {
-        let pct = 0;
-        const timer = setInterval(()=>{
-          pct = Math.min(1, pct + 0.1);
-          setProgress(Math.round(pct*100), `Analyzing / clipping… ${Math.round(pct*100)}%`);
-          sendProgress(pct);
-          if (pct >= 1) {
-            clearInterval(timer);
-            sendResult('https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4');
-            setProgress(100, 'Finished!');
-          }
-        }, 500);
-      }
-    })();
-
-    // ===== Cookies helpers =====
+    // ===== Cookies helpers (desktop/testing only) =====
     const useCookiesChk = document.getElementById('use-cookies');
     const cookiesWrap = document.getElementById('cookies-wrap');
     const cookiesText = document.getElementById('cookies-text');
@@ -468,14 +439,15 @@
 
     (function(){
       const saved = localStorage.getItem('dex.cookies.txt') || '';
-      if (saved) {
+      if (saved && !isIOS && cookiesText) {
         cookiesText.value = saved;
-        useCookiesChk.checked = true;
-        cookiesWrap.style.display = 'block';
+        if (useCookiesChk) useCookiesChk.checked = true;
+        if (cookiesWrap) cookiesWrap.style.display = 'block';
       }
     })();
 
     useCookiesChk?.addEventListener('change', () => {
+      if (!cookiesWrap) return;
       cookiesWrap.style.display = useCookiesChk.checked ? 'block' : 'none';
     });
 
@@ -485,17 +457,17 @@
     });
     clearCookiesBtn?.addEventListener('click', () => {
       localStorage.removeItem('dex.cookies.txt');
-      cookiesText.value = '';
+      if (cookiesText) cookiesText.value = '';
       alert('Cleared local cookies.');
     });
 
     // ---- Help modal ----
     const modal = document.getElementById('cookie-modal');
-    bindTap('open-cookie-help', () => { modal.classList.add('open'); modal.setAttribute('aria-hidden', 'false'); });
-    bindTap('close-cookie-help', () => { modal.classList.remove('open'); modal.setAttribute('aria-hidden', 'true'); });
+    bindTap('open-cookie-help', () => { modal?.classList.add('open'); modal?.setAttribute('aria-hidden', 'false'); });
+    bindTap('close-cookie-help', () => { modal?.classList.remove('open'); modal?.setAttribute('aria-hidden', 'true'); });
     modal?.addEventListener('click', (e)=>{ if(e.target===modal){ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); } });
 
-    // ======== Job polling helper for 409 fallback ========
+    // ======== NEW: job polling helper for 409 fallback ========
     async function startJobPoll(jobId){
       let lastPct = 10;
       const resultEl = document.getElementById('tool-result');
@@ -510,17 +482,16 @@
             const pct = Math.max(lastPct, Math.round((data.progress||0)*100));
             lastPct = pct;
             setProgress(pct, `Processing… ${pct}%`);
-            setTimeout(poll, 1100);
+            setTimeout(poll, 1000);
           } else if (data.status === 'done' && data.url){
             const fileUrl = `${API_BASE}${data.url}`;
             setProgress(100, 'Finished!');
             resultEl.innerHTML = `<div class="card"><h3>Result</h3><p><a href="${fileUrl}" target="_blank" rel="noopener">Download MP4</a></p></div>`;
-            sendResult(fileUrl);
           } else if (data.status === 'error'){
             setProgress(0, 'Error');
-            alert('Clip merge failed: ' + (data.error || 'unknown error'));
+            alert('Clip merge failed: ' + (data.error || 'unknown error') + (data.detail ? '\n\n' + data.detail : ''));
           } else {
-            setTimeout(poll, 1300);
+            setTimeout(poll, 1200);
           }
         }catch(e){
           setTimeout(poll, 1500);
@@ -532,37 +503,38 @@
     // ---- REAL backend hookup on "Generate Clips" ----
     bindTap('repurpose-run', async () => {
       const input = document.getElementById('repurpose-input');
-      const quality = document.getElementById('quality')?.value || '720p';
       const val = input?.value?.trim();
-      if(!val){ alert('Paste a YouTube link or a direct .mp4/.m3u8 URL to continue.'); return; }
-
-      // Basic URL check to avoid trivial typos
-      try { new URL(val); } catch { alert('That link looks invalid. Try again.'); return; }
+      if(!val){ alert('Paste a direct .mp4/.m3u8 URL you own.'); return; }
 
       showProgressUI(true);
-      setProgress(5, 'Contacting clip API…');
+      setProgress(5, 'Contacting Clip API…');
       sendProgress(0.05);
 
-      // Send raw cookies text (either Netscape cookies.txt OR a single Cookie header).
-      const cookiesTxt = (useCookiesChk.checked ? (cookiesText.value || "").trim() : "");
+      // Desktop/testing only: optional cookies txt
+      const cookiesTxt = (!isIOS && document.getElementById('use-cookies')?.checked)
+        ? ((document.getElementById('cookies-text')?.value || "").trim())
+        : "";
 
       try {
-        // First attempt: try to get a direct progressive URL
+        // First try: direct progressive URL
         const r = await fetch(`${API_BASE}/api/clip`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ url: val, cookiesTxt, prefer: quality })
+          body: JSON.stringify({ url: val, cookiesTxt })
         });
 
-        // If server says 409 → no progressive stream, fall back to merge job
+        if (r.status === 403) {
+          const t = await r.text();
+          throw new Error(`Blocked in App Store mode: ${t}`);
+        }
+
+        // If server says 409 → merge job
         if (r.status === 409) {
-          const j = await r.json().catch(()=>({}));
-          const why = j?.reason ? ` (${j.reason})` : '';
-          setProgress(10, 'No single stream available. Merging audio+video…' + why);
+          setProgress(10, 'No single stream available. Merging audio+video…');
           const r2 = await fetch(`${API_BASE}/api/jobs`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ url: val, cookiesTxt, prefer: quality })
+            body: JSON.stringify({ url: val, cookiesTxt })
           });
           if (!r2.ok) {
             const t2 = await r2.text();
@@ -573,7 +545,6 @@
           return startJobPoll(jobId);
         }
 
-        // Normal flow: must be OK or error
         if (!r.ok) {
           const t = await r.text();
           throw new Error(`API ${r.status}: ${t || 'unknown error'}`);
@@ -584,7 +555,7 @@
 
         setProgress(20, 'Fetching media…');
         sendProgress(0.2);
-        sendResult(data.directUrl); // iOS app starts native download
+        sendResult(data.directUrl);
 
         const result = document.getElementById('tool-result');
         if(result){
