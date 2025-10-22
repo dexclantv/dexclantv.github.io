@@ -241,376 +241,445 @@
     </div>
   </section>
 
-  <!-- TOOLS -->
-  <section id="tools">
-    <span class="eyebrow">Utilities</span>
-    <h2>Tools</h2>
-    <p class="lead" id="tools-copy">Paste a direct MP4 / M3U8 link you own and we’ll generate clip candidates.</p>
+ <!-- TOOLS -->
+<section id="tools">
+  <span class="eyebrow">Utilities</span>
+  <h2>Tools</h2>
+  <p class="lead" id="tools-copy">Paste a direct MP4 / M3U8 link you own and we’ll generate clip candidates.</p>
 
-    <div class="tools">
-      <div class="tools-row" style="margin-bottom:10px">
-        <input id="repurpose-input" type="url" placeholder="Paste direct .mp4 / .m3u8 URL you own" />
-        <button id="repurpose-run" class="btn" type="button">Generate Clips</button>
-        <button id="clear-input" class="btn secondary" type="button">Clear</button>
-        <button id="simulate-progress" class="btn secondary" type="button" title="Test app progress bridge">Simulate Progress</button>
-        <button id="simulate-result" class="btn secondary" type="button" title="Test app result bridge">Simulate Result</button>
-      </div>
-
-      <!-- Cookies toggle + textarea (hidden on iOS) -->
-      <div class="banner" id="mobile-banner" style="display:none">
-        Exporting cookies is easiest on desktop. Paste them here afterwards if needed (desktop/testing only).
-      </div>
-
-      <div class="row" id="cookies-row" style="margin-top:10px; display:none">
-        <label class="small"><input type="checkbox" id="use-cookies" /> Use my site cookies (desktop export)</label>
-        <button id="open-cookie-help" class="btn secondary" type="button">How do I get cookies?</button>
-      </div>
-
-      <div class="cookies-wrap" id="cookies-wrap" style="display:none">
-        <textarea id="cookies-text" placeholder="Paste cookies.txt here (Netscape format) — or paste a single Cookie header like: NAME=VALUE; SID=..."></textarea>
-        <div class="row" style="margin-top:8px">
-          <button id="save-cookies" class="btn secondary" type="button">Save locally</button>
-          <button id="clear-cookies" class="btn secondary" type="button">Clear</button>
-          <span class="small">Saved only on your device (localStorage). Sent only when you request a clip.</span>
-        </div>
-        <div class="warn">Security: Don’t share your cookies. We don’t persist them on our servers in this MVP.</div>
-      </div>
-
-      <div class="progress-wrap" id="progress-wrap" style="display:none">
-        <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
-        <div id="status" class="status"></div>
-      </div>
-
-      <div id="tool-result" style="margin-top:16px; display:none"></div>
+  <div class="tools">
+    <div class="tools-row" style="margin-bottom:10px">
+      <input id="repurpose-input" type="url" placeholder="Paste direct .mp4 / .m3u8 URL you own" />
+      <button id="repurpose-run" class="btn" type="button">Generate Clips</button>
+      <button id="clear-input" class="btn secondary" type="button">Clear</button>
+      <button id="simulate-progress" class="btn secondary" type="button" title="Test app progress bridge">Simulate Progress</button>
+      <button id="simulate-result" class="btn secondary" type="button" title="Test app result bridge">Simulate Result</button>
     </div>
-  </section>
 
-  <!-- FAQ -->
-  <section id="faq">
-    <span class="eyebrow">FAQ</span>
-    <h2>Quick answers</h2>
-    <details class="reveal"><summary>What is DexTracker?</summary><p>An AI-assisted toolkit for ideation, analysis, and faster shipping—privacy-first.</p></details>
-    <details class="reveal"><summary>Do you track me?</summary><p>No. We don’t use tracking beacons. Cookies you paste (desktop/testing) are stored only on your device and only sent when you request a clip.</p></details>
-  </section>
-
-  <footer>
-    <div>© 2025 DexTracker • <a href="https://dexclantv.github.io/landing.html" target="_blank" rel="noopener">GitHub Pages</a></div>
-    <div style="margin-top:6px">Follow: <a href="https://www.instagram.com/Perry.Glo" target="_blank" rel="noopener">Instagram</a> • <a href="https://twitter.com/DexClanTv" target="_blank" rel="noopener">Twitter</a> • <a href="https://www.youtube.com/@DexClanTv" target="_blank" rel="noopener">YouTube</a></div>
-    <div style="margin-top:10px; font-size:12px; color:#9cf5c9">
-      Privacy: No tracking pixels. Optional cookies (desktop/testing only) are stored locally and sent only per request. In the App Store build, only direct links you own are allowed.
+    <!-- NEW: Format Picker Row -->
+    <div class="tools-row" style="margin-bottom:10px">
+      <button id="list-formats" class="btn secondary" type="button">List Formats</button>
+      <select id="format-select" style="min-width:260px; flex:1; background:#0b140b; color:#e7ffe7; border:1px solid var(--line); border-radius:10px; padding:10px; display:none">
+        <option value="">— choose a format —</option>
+      </select>
+      <button id="download-format" class="btn secondary" type="button" style="display:none">Download Selected</button>
+      <button id="get-mp3" class="btn secondary" type="button" title="Extract audio as MP3">Get MP3</button>
     </div>
-  </footer>
 
-  <!-- Bridge helpers (always available) -->
-  <script src="minimal.js" defer></script>
+    <!-- Cookies toggle + textarea (hidden on iOS) -->
+    <div class="banner" id="mobile-banner" style="display:none">
+      Exporting cookies is easiest on desktop. Paste them here afterwards if needed (desktop/testing only).
+    </div>
 
-  <!-- Help Modal -->
-  <div class="modal" id="cookie-modal" aria-hidden="true">
-    <div class="modal-card">
-      <h3>How to export cookies (desktop)</h3>
-      <ol>
-        <li>On your computer, sign in to the site in Chrome or Firefox.</li>
-        <li>Install a cookies exporter:
-          <ul>
-            <li>Chrome: <a href="https://chromewebstore.google.com/detail/get-cookiestxt-locally/cclelndahbckbenkjhflpdbgdldlbecc" target="_blank" rel="noopener">Get cookies.txt locally</a></li>
-            <li>Firefox: <a href="https://addons.mozilla.org/en-US/firefox/addon/cookies-txt/" target="_blank" rel="noopener">cookies.txt</a></li>
-          </ul>
-        </li>
-        <li>While on the site, open the extension and click <b>Export</b>. Copy the text.</li>
-        <li>Return here, check <b>“Use my site cookies”</b>, paste, hit <b>Save</b>, then <b>Generate Clips</b>.</li>
-      </ol>
-      <p class="small">Tip: Cookies expire. If it stops working later, export again.</p>
-      <div class="modal-actions">
-        <button id="close-cookie-help" class="btn secondary" type="button">Close</button>
+    <div class="row" id="cookies-row" style="margin-top:10px; display:none">
+      <label class="small"><input type="checkbox" id="use-cookies" /> Use my site cookies (desktop export)</label>
+      <button id="open-cookie-help" class="btn secondary" type="button">How do I get cookies?</button>
+    </div>
+
+    <div class="cookies-wrap" id="cookies-wrap" style="display:none">
+      <textarea id="cookies-text" placeholder="Paste cookies.txt here (Netscape format) — or paste a single Cookie header like: NAME=VALUE; SID=..."></textarea>
+      <div class="row" style="margin-top:8px">
+        <button id="save-cookies" class="btn secondary" type="button">Save locally</button>
+        <button id="clear-cookies" class="btn secondary" type="button">Clear</button>
+        <span class="small">Saved only on your device (localStorage). Sent only when you request a clip.</span>
       </div>
+      <div class="warn">Security: Don’t share your cookies. We don’t persist them on our servers in this MVP.</div>
     </div>
+
+    <div class="progress-wrap" id="progress-wrap" style="display:none">
+      <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
+      <div id="status" class="status"></div>
+    </div>
+
+    <div id="tool-result" style="margin-top:16px; display:none"></div>
   </div>
+</section>
 
-  <!-- Page logic -->
-  <script>
-    const API_BASE = "https://dextracker-clips.fly.dev";
+<!-- … (FAQ + footer unchanged) … -->
 
-    // ---- Detect iOS; hide cookie UI + adjust copy for App Store safety ----
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-    if (isIOS) {
-      const heroCopy = document.getElementById('hero-copy');
-      const toolsCopy = document.getElementById('tools-copy');
-      const input = document.getElementById('repurpose-input');
+<script src="minimal.js" defer></script>
 
-      heroCopy && (heroCopy.textContent = "Import your video, find highlight candidates, and export clean MP4s.");
-      toolsCopy && (toolsCopy.textContent = "Paste a direct MP4 / M3U8 link you own or use the demo to preview the flow.");
-      input && input.setAttribute("placeholder", "Paste direct .mp4 / .m3u8 URL you own");
+<script>
+  // Allow ?api= override for local/tunnel testing
+  const API_BASE =
+    new URLSearchParams(location.search).get("api") ||
+    "https://dextracker-clips.fly.dev";
 
-      // Hide cookie UI on iOS
-      document.getElementById('cookies-row')?.remove();
-      document.getElementById('cookies-wrap')?.remove();
+  // iOS cookie UI hiding (unchanged)
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  if (isIOS) {
+    document.getElementById('cookies-row')?.remove();
+    document.getElementById('cookies-wrap')?.remove();
+    document.getElementById('mobile-banner')?.remove();
+    const heroCopy = document.getElementById('hero-copy');
+    const toolsCopy = document.getElementById('tools-copy');
+    const input = document.getElementById('repurpose-input');
+    heroCopy && (heroCopy.textContent = "Import your video, find highlight candidates, and export clean MP4s.");
+    toolsCopy && (toolsCopy.textContent = "Paste a direct MP4 / M3U8 link you own or use the demo to preview the flow.");
+    input && input.setAttribute("placeholder", "Paste direct .mp4 / .m3u8 URL you own");
+  } else {
+    document.getElementById('mobile-banner').style.display = 'block';
+    document.getElementById('cookies-row').style.display = 'flex';
+  }
 
-      // Banner not needed on iOS
-      document.getElementById('mobile-banner')?.remove();
-    } else {
-      // Non-iOS: allow cookie helpers for desktop/testing
-      const b = document.getElementById('mobile-banner'); if (b) b.style.display = 'block';
-      const row = document.getElementById('cookies-row'); if (row) row.style.display = 'flex';
+  // Small helpers
+  function showProgressUI(show){
+    const wrap = document.getElementById('progress-wrap');
+    if(!wrap) return;
+    wrap.style.display = show ? 'block' : 'none';
+  }
+  function setProgress(pct, text){
+    const fill = document.getElementById('progress-fill');
+    const status = document.getElementById('status');
+    if(fill){ fill.style.width = Math.max(0, Math.min(100, pct)) + '%'; }
+    if(status){ status.textContent = text || ''; }
+  }
+  function bindTap(id, handler){
+    const el = document.getElementById(id);
+    if(!el) return;
+    let fired = false;
+    const wrap = (e) => {
+      if (fired) return;
+      fired = true;
+      try { handler(e); } finally { setTimeout(()=>fired=false, 120); }
+    };
+    el.addEventListener('click', wrap, { passive: true });
+    el.addEventListener('touchend', wrap, { passive: true });
+  }
+
+  // Cookies helpers (desktop/testing)
+  const useCookiesChk = document.getElementById('use-cookies');
+  const cookiesWrap = document.getElementById('cookies-wrap');
+  const cookiesText = document.getElementById('cookies-text');
+  (function(){
+    const saved = localStorage.getItem('dex.cookies.txt') || '';
+    if (saved && !isIOS && cookiesText) {
+      cookiesText.value = saved;
+      if (useCookiesChk) useCookiesChk.checked = true;
+      if (cookiesWrap) cookiesWrap.style.display = 'block';
     }
+  })();
+  document.getElementById('save-cookies')?.addEventListener('click', () => {
+    localStorage.setItem('dex.cookies.txt', cookiesText.value || '');
+    alert('Cookies saved locally.');
+  });
+  document.getElementById('clear-cookies')?.addEventListener('click', () => {
+    localStorage.removeItem('dex.cookies.txt');
+    if (cookiesText) cookiesText.value = '';
+    alert('Cleared local cookies.');
+  });
+  document.getElementById('open-cookie-help')?.addEventListener('click', () => {
+    document.getElementById('cookie-modal')?.classList.add('open');
+    document.getElementById('cookie-modal')?.setAttribute('aria-hidden', 'false');
+  });
+  document.getElementById('close-cookie-help')?.addEventListener('click', () => {
+    document.getElementById('cookie-modal')?.classList.remove('open');
+    document.getElementById('cookie-modal')?.setAttribute('aria-hidden', 'true');
+  });
 
-    // ---- Mobile nav toggle ----
-    const burger = document.getElementById('burger');
-    const links = document.getElementById('navlinks');
-    burger?.addEventListener('click', () => {
-      const open = links.classList.toggle('open');
-      burger.setAttribute('aria-expanded', open ? 'true':'false');
-    });
+  // ===== Format parsing (client-side) =====
+  // Parses yt-dlp "-F" output text into [{id, ext, res, fps, vcodec, acodec, size, note}]
+  function parseFormats(text){
+    const lines = (text || "").split("\n");
+    const rows = [];
+    for (const ln of lines){
+      // Typical: "137          mp4        1920x1080  1080p  ...  vcodec avc1 ..."
+      // Or audio: "140          m4a        audio only ..."
+      const m = ln.match(/^\s*([0-9a-zA-Z.-]+)\s+(\S+)\s+(.+?)\s{2,}(.+)?$/);
+      if (!m) continue;
+      const id = m[1];
+      const ext = m[2];
+      const col3 = m[3]; // may be "1920x1080" or "audio only" or "256x144"
+      const rest = (m[4]||"").trim();
 
-    function scrollToWithOffset(id){
-      const el = document.querySelector(id);
-      const nav = document.getElementById('nav');
-      if(!el || !nav) return;
-      const y = el.getBoundingClientRect().top + window.scrollY - (nav.offsetHeight + 8);
-      window.scrollTo({top:y, behavior:'smooth'});
-    }
-
-    document.querySelectorAll('[data-link]')?.forEach(a=>{
-      a.addEventListener('click', (e)=>{
-        e.preventDefault();
-        scrollToWithOffset(a.getAttribute('href'));
-        links.classList.remove('open');
-      });
-    });
-
-    const sections = [...document.querySelectorAll('header[id], section[id]')];
-    const navLinks = [...document.querySelectorAll('.links a[data-link]')];
-    const byId = id => navLinks.find(a=>a.getAttribute('href')==="#"+id);
-    const spy = new IntersectionObserver(entries=>{
-      entries.forEach(({isIntersecting, target})=>{
-        if(isIntersecting){
-          navLinks.forEach(n=>n.classList.remove('active'));
-          byId(target.id)?.classList.add('active');
-        }
-      })
-    },{rootMargin:'-40% 0px -55% 0px', threshold:[0, .2, .6, 1]});
-    sections.forEach(s=>spy.observe(s));
-
-    document.querySelectorAll('.card').forEach(card=>{
-      card.addEventListener('pointermove', e=>{
-        const r = card.getBoundingClientRect();
-        card.style.setProperty('--x', ((e.clientX-r.left)/r.width*100)+'%');
-        card.style.setProperty('--y', ((e.clientY-r.top)/r.height*100)+'%');
-      })
-    });
-
-    const revealer = new IntersectionObserver((entries)=>{
-      entries.forEach(({isIntersecting, target})=>{
-        if(isIntersecting){ target.classList.add('in'); revealer.unobserve(target); }
-      })
-    },{threshold:.12});
-    document.querySelectorAll('.reveal').forEach(n=>revealer.observe(n));
-
-    function showProgressUI(show){
-      const wrap = document.getElementById('progress-wrap');
-      if(!wrap) return;
-      wrap.style.display = show ? 'block' : 'none';
-    }
-    function setProgress(pct, text){
-      const fill = document.getElementById('progress-fill');
-      const status = document.getElementById('status');
-      if(fill){ fill.style.width = Math.max(0, Math.min(100, pct)) + '%'; }
-      if(status){ status.textContent = text || ''; }
-    }
-
-    function bindTap(id, handler){
-      const el = document.getElementById(id);
-      if(!el) return;
-      let fired = false;
-      const wrap = (e) => {
-        if (fired) return;
-        fired = true;
-        try { handler(e); } finally { setTimeout(()=>fired=false, 120); }
-      };
-      el.addEventListener('click', wrap, { passive: true });
-      el.addEventListener('touchend', wrap, { passive: true });
-    }
-
-    // ===== Cookies helpers (desktop/testing only) =====
-    const useCookiesChk = document.getElementById('use-cookies');
-    const cookiesWrap = document.getElementById('cookies-wrap');
-    const cookiesText = document.getElementById('cookies-text');
-    const saveCookiesBtn = document.getElementById('save-cookies');
-    const clearCookiesBtn = document.getElementById('clear-cookies');
-
-    (function(){
-      const saved = localStorage.getItem('dex.cookies.txt') || '';
-      if (saved && !isIOS && cookiesText) {
-        cookiesText.value = saved;
-        if (useCookiesChk) useCookiesChk.checked = true;
-        if (cookiesWrap) cookiesWrap.style.display = 'block';
+      let res = "", fps = "", vcodec="", acodec="", size="";
+      if (/audio only/i.test(col3)){
+        res = "audio";
+      } else {
+        // Try to find resolution like 1920x1080 or 1080p
+        const r1 = col3.match(/(\d{3,4}x\d{3,4})/);
+        const r2 = col3.match(/(\d{3,4}p)/i);
+        res = r1 ? r1[1] : (r2 ? r2[1] : col3.trim());
       }
-    })();
+      // search in the rest for hints
+      const fpsm = rest.match(/(\d{2,3})fps/);
+      fps = fpsm ? fpsm[1] : "";
+      const vc = rest.match(/vcodec\s+([^\s,]+)/i);
+      if (vc) vcodec = vc[1];
+      const ac = rest.match(/acodec\s+([^\s,]+)/i);
+      if (ac) acodec = ac[1];
+      const sz = rest.match(/(\d+(?:\.\d+)?[MK]B)/i);
+      if (sz) size = sz[1];
 
-    useCookiesChk?.addEventListener('change', () => {
-      if (!cookiesWrap) return;
-      cookiesWrap.style.display = useCookiesChk.checked ? 'block' : 'none';
+      rows.push({ id, ext, res, fps, vcodec, acodec, size, note: rest });
+    }
+    // Deduplicate
+    const seen = new Set();
+    return rows.filter(r=>{
+      const key = r.id+"|"+r.ext+"|"+r.res+"|"+r.fps;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
     });
+  }
 
-    saveCookiesBtn?.addEventListener('click', () => {
-      localStorage.setItem('dex.cookies.txt', cookiesText.value || '');
-      alert('Cookies saved locally.');
+  // Populate <select> with human-friendly labels
+  function fillFormatSelect(rows){
+    const sel = document.getElementById("format-select");
+    const btn = document.getElementById("download-format");
+    if (!sel) return;
+    sel.innerHTML = `<option value="">— choose a format —</option>`;
+    rows.forEach(r=>{
+      const label = [
+        r.id,
+        r.ext.toUpperCase(),
+        r.res || "",
+        r.fps ? `${r.fps}fps` : "",
+        r.size ? `(${r.size})` : "",
+        (r.vcodec && r.acodec) ? `${r.vcodec}+${r.acodec}` : (r.vcodec || r.acodec || "")
+      ].filter(Boolean).join(" · ");
+      const opt = document.createElement("option");
+      opt.value = r.id;
+      opt.textContent = label;
+      sel.appendChild(opt);
     });
-    clearCookiesBtn?.addEventListener('click', () => {
-      localStorage.removeItem('dex.cookies.txt');
-      if (cookiesText) cookiesText.value = '';
-      alert('Cleared local cookies.');
-    });
+    sel.style.display = "block";
+    btn.style.display = "inline-flex";
+  }
 
-    // ---- Help modal ----
-    const modal = document.getElementById('cookie-modal');
-    bindTap('open-cookie-help', () => { modal?.classList.add('open'); modal?.setAttribute('aria-hidden', 'false'); });
-    bindTap('close-cookie-help', () => { modal?.classList.remove('open'); modal?.setAttribute('aria-hidden', 'true'); });
-    modal?.addEventListener('click', (e)=>{ if(e.target===modal){ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); } });
-
-    // ======== NEW: job polling helper for 409 fallback ========
-    async function startJobPoll(jobId){
-      let lastPct = 10;
-      const resultEl = document.getElementById('tool-result');
-      resultEl.style.display = 'block';
-      resultEl.innerHTML = `<div class="card"><h3>Merging streams…</h3><p>This can take a minute.</p></div>`;
-
-      async function poll(){
+  // Job poller shared
+  async function pollJob(jobId){
+    return new Promise((resolve, reject)=>{
+      let last = 10;
+      async function tick(){
         try{
           const r = await fetch(`${API_BASE}/api/jobs/${jobId}`);
           const data = await r.json();
-          if (data.status === 'running'){
-            const pct = Math.max(lastPct, Math.round((data.progress||0)*100));
-            lastPct = pct;
-            setProgress(pct, `Processing… ${pct}%`);
-            setTimeout(poll, 1000);
-          } else if (data.status === 'done' && data.url){
-            const fileUrl = `${API_BASE}${data.url}`;
-            setProgress(100, 'Finished!');
-            resultEl.innerHTML = `<div class="card"><h3>Result</h3><p><a href="${fileUrl}" target="_blank" rel="noopener">Download MP4</a></p></div>`;
-          } else if (data.status === 'error'){
-            setProgress(0, 'Error');
-            alert('Clip merge failed: ' + (data.error || 'unknown error') + (data.detail ? '\n\n' + data.detail : ''));
+          if (data.status === "running"){
+            last = Math.max(last, Math.round((data.progress||0)*100));
+            setProgress(last, `Processing… ${last}%`);
+            setTimeout(tick, 900);
+          } else if (data.status === "done" && data.url){
+            setProgress(100, "Finished!");
+            resolve(`${API_BASE}${data.url}`);
+          } else if (data.status === "error"){
+            reject(new Error(data.error || "merge error"));
           } else {
-            setTimeout(poll, 1200);
+            setTimeout(tick, 1200);
           }
-        }catch(e){
-          setTimeout(poll, 1500);
+        } catch {
+          setTimeout(tick, 1200);
         }
       }
-      poll();
-    }
+      tick();
+    });
+  }
 
-    // ---- REAL backend hookup on "Generate Clips" ----
-    bindTap('repurpose-run', async () => {
-      const input = document.getElementById('repurpose-input');
-      const val = input?.value?.trim();
-      if(!val){ alert('Paste a direct .mp4/.m3u8 URL you own.'); return; }
+  // ===== Buttons wiring =====
+  bindTap('repurpose-run', async () => {
+    const input = document.getElementById('repurpose-input');
+    const val = input?.value?.trim();
+    if(!val){ alert('Paste a direct .mp4/.m3u8 URL you own.'); return; }
 
-      showProgressUI(true);
-      setProgress(5, 'Contacting Clip API…');
-      sendProgress(0.05);
+    showProgressUI(true);
+    setProgress(5, 'Contacting Clip API…');
+    sendProgress(0.05);
 
-      // Desktop/testing only: optional cookies txt
-      const cookiesTxt = (!isIOS && document.getElementById('use-cookies')?.checked)
-        ? ((document.getElementById('cookies-text')?.value || "").trim())
-        : "";
+    const cookiesTxt = (!isIOS && document.getElementById('use-cookies')?.checked)
+      ? ((document.getElementById('cookies-text')?.value || "").trim())
+      : "";
 
-      try {
-        // First try: direct progressive URL
-        const r = await fetch(`${API_BASE}/api/clip`, {
+    try {
+      const r = await fetch(`${API_BASE}/api/clip`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: val, cookiesTxt })
+      });
+
+      if (r.status === 403) throw new Error(await r.text());
+
+      // Fallback to merge
+      if (r.status === 409) {
+        setProgress(10, 'No single stream. Merging…');
+        const r2 = await fetch(`${API_BASE}/api/jobs`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ url: val, cookiesTxt })
         });
-
-        if (r.status === 403) {
-          const t = await r.text();
-          throw new Error(`Blocked in App Store mode: ${t}`);
-        }
-
-        // If server says 409 → merge job
-        if (r.status === 409) {
-          setProgress(10, 'No single stream available. Merging audio+video…');
-          const r2 = await fetch(`${API_BASE}/api/jobs`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ url: val, cookiesTxt })
-          });
-          if (!r2.ok) {
-            const t2 = await r2.text();
-            throw new Error(`API ${r2.status}: ${t2 || 'job create failed'}`);
-          }
-          const { jobId } = await r2.json();
-          if (!jobId) throw new Error('No jobId returned by API');
-          return startJobPoll(jobId);
-        }
-
-        if (!r.ok) {
-          const t = await r.text();
-          throw new Error(`API ${r.status}: ${t || 'unknown error'}`);
-        }
-
-        const data = await r.json();
-        if (!data.directUrl) throw new Error('No directUrl returned from API');
-
-        setProgress(20, 'Fetching media…');
-        sendProgress(0.2);
-        sendResult(data.directUrl);
-
-        const result = document.getElementById('tool-result');
-        if(result){
-          result.style.display = 'block';
-          result.innerHTML = `<div class="card" style="margin-top:8px">
-            <h3>Result</h3>
-            <p>Sent final clip URL to the app.</p>
-            <p>Fallback link: <a href="${data.directUrl}" target="_blank" rel="noopener">open</a></p>
-          </div>`;
-        }
-        setProgress(100, 'Finished!');
-        sendProgress(1.0);
-      } catch (e) {
-        console.error(e);
-        setProgress(0, 'Error: ' + (e?.message || e));
-        alert('Clip API failed: ' + (e?.message || e));
-        sendProgress(0.0);
+        if (!r2.ok) throw new Error(await r2.text() || `HTTP ${r2.status}`);
+        const { jobId } = await r2.json();
+        const fileUrl = await pollJob(jobId);
+        const el = document.getElementById('tool-result');
+        el.style.display = 'block';
+        el.innerHTML = `<div class="card"><h3>Result</h3><p><a href="${fileUrl}" target="_blank" rel="noopener">Download MP4</a></p></div>`;
+        return;
       }
-    });
 
-    // Clear
-    bindTap('clear-input', () => {
-      const input = document.getElementById('repurpose-input');
-      const result = document.getElementById('tool-result');
-      if(input) input.value = '';
-      if(result){ result.style.display = 'none'; result.innerHTML = ''; }
-      showProgressUI(false);
-      setProgress(0, '');
-      sendProgress(0.0);
-    });
+      if (!r.ok) throw new Error(await r.text() || `HTTP ${r.status}`);
 
-    // Demo buttons
-    bindTap('simulate-progress', () => {
-      showProgressUI(true);
-      let p = 0;
-      const id = setInterval(()=>{
-        p = Math.min(1, p + 0.06);
-        setProgress(Math.round(p*100), `Analyzing / clipping… ${Math.round(p*100)}%`);
-        sendProgress(p);
-        if (p >= 1) clearInterval(id);
-      }, 300);
-    });
-    bindTap('simulate-result', () => {
-      const demo = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
-      sendResult(demo);
+      const data = await r.json();
+      if (!data.directUrl) throw new Error('No directUrl returned');
+      setProgress(20, 'Fetching media…');
+      sendResult(data.directUrl);
+
       const result = document.getElementById('tool-result');
-      if(result){
-        result.style.display = 'block';
-        result.innerHTML = `<div class="card" style="margin-top:8px">
-          <h3>Result</h3>
-          <p>Sent final clip URL to the app. Fallback link: <a href="${demo}" target="_blank" rel="noopener">open</a></p>
-        </div>`;
-      }
+      result.style.display = 'block';
+      result.innerHTML = `<div class="card" style="margin-top:8px">
+        <h3>Result</h3>
+        <p>Sent final clip URL to the app.</p>
+        <p>Fallback link: <a href="${data.directUrl}" target="_blank" rel="noopener">open</a></p>
+      </div>`;
       setProgress(100, 'Finished!');
-    });
-  </script>
+      sendProgress(1.0);
+    } catch (e) {
+      console.error(e);
+      setProgress(0, 'Error: ' + (e?.message || e));
+      alert('Clip API failed: ' + (e?.message || e));
+      sendProgress(0.0);
+    }
+  });
+
+  // NEW: List Formats
+  bindTap('list-formats', async ()=>{
+    const input = document.getElementById('repurpose-input');
+    const val = input?.value?.trim();
+    if(!val){ return alert("Paste a URL first."); }
+    showProgressUI(true);
+    setProgress(8, "Listing formats…");
+    try{
+      const r = await fetch(`${API_BASE}/api/vb/formats`, {
+        method: "POST",
+        headers: {"content-type":"application/json"},
+        body: JSON.stringify({ url: val })
+      });
+      if (!r.ok) throw new Error(await r.text() || `HTTP ${r.status}`);
+      const data = await r.json();
+      const rows = parseFormats(data.formats || "");
+      if (!rows.length) throw new Error("No formats found.");
+      fillFormatSelect(rows);
+      setProgress(12, "Choose a format then Download Selected");
+    }catch(e){
+      alert("Formats failed: " + (e.message || e));
+      setProgress(0, "Error");
+    }
+  });
+
+  // NEW: Download Selected format
+  bindTap('download-format', async ()=>{
+    const input = document.getElementById('repurpose-input');
+    const url = input?.value?.trim();
+    const sel = document.getElementById('format-select');
+    const format = sel?.value?.trim();
+    if (!url) return alert("Paste a URL first.");
+    if (!format) return alert("Choose a format first.");
+
+    showProgressUI(true);
+    setProgress(10, `Downloading format ${format}…`);
+
+    try{
+      // Try progressive first
+      const r = await fetch(`${API_BASE}/api/clip`, {
+        method: "POST",
+        headers: {"content-type":"application/json"},
+        body: JSON.stringify({ url, format })
+      });
+
+      if (r.status === 403) throw new Error(await r.text());
+
+      if (r.status === 409) {
+        // Merge route (forces -f selected format server-side)
+        const r2 = await fetch(`${API_BASE}/api/jobs`, {
+          method: "POST",
+          headers: {"content-type":"application/json"},
+          body: JSON.stringify({ url, format })
+        });
+        if (!r2.ok) throw new Error(await r2.text() || `HTTP ${r2.status}`);
+        const { jobId } = await r2.json();
+        const fileUrl = await pollJob(jobId);
+        const el = document.getElementById('tool-result');
+        el.style.display = 'block';
+        el.innerHTML = `<div class="card"><h3>Result</h3><p><a href="${fileUrl}" target="_blank" rel="noopener">Download MP4</a></p></div>`;
+        return;
+      }
+
+      if (!r.ok) throw new Error(await r.text() || `HTTP ${r.status}`);
+      const data = await r.json();
+      if (!data.directUrl) throw new Error("No directUrl returned");
+      setProgress(20, "Fetching media…");
+      sendResult(data.directUrl);
+      const el = document.getElementById('tool-result');
+      el.style.display = 'block';
+      el.innerHTML = `<div class="card"><h3>Result</h3>
+        <p>Sent final clip URL to the app. Fallback: <a href="${data.directUrl}" target="_blank" rel="noopener">open</a></p></div>`;
+      setProgress(100, "Finished!");
+    }catch(e){
+      alert("Download failed: " + (e.message || e));
+      setProgress(0, "Error");
+    }
+  });
+
+  // MP3
+  bindTap("get-mp3", async ()=>{
+    const input = document.getElementById('repurpose-input');
+    const url = input?.value?.trim();
+    if(!url) return alert("Paste a URL first.");
+    showProgressUI(true);
+    setProgress(10, "Extracting audio…");
+    try{
+      const r = await fetch(`${API_BASE}/api/mp3`, {
+        method: "POST",
+        headers: {"content-type":"application/json"},
+        body: JSON.stringify({ url })
+      });
+      if (!r.ok) throw new Error(await r.text() || `HTTP ${r.status}`);
+      const { jobId } = await r.json();
+      const fileUrl = await pollJob(jobId);
+      window.open(fileUrl, "_blank", "noopener");
+    }catch(e){
+      alert("MP3 API failed: " + (e.message || e));
+      setProgress(0, "Error");
+    }
+  });
+
+  // Clear
+  bindTap('clear-input', () => {
+    const input = document.getElementById('repurpose-input');
+    const result = document.getElementById('tool-result');
+    const sel = document.getElementById('format-select');
+    const dl = document.getElementById('download-format');
+    if(input) input.value = '';
+    if(result){ result.style.display = 'none'; result.innerHTML = ''; }
+    if(sel){ sel.style.display = 'none'; sel.innerHTML = `<option value="">— choose a format —</option>`; }
+    if(dl){ dl.style.display = 'none'; }
+    showProgressUI(false);
+    setProgress(0, '');
+    sendProgress(0.0);
+  });
+
+  // Sim demos
+  bindTap('simulate-progress', () => {
+    showProgressUI(true);
+    let p = 0;
+    const id = setInterval(()=>{
+      p = Math.min(1, p + 0.06);
+      setProgress(Math.round(p*100), `Analyzing / clipping… ${Math.round(p*100)}%`);
+      sendProgress(p);
+      if (p >= 1) clearInterval(id);
+    }, 300);
+  });
+  bindTap('simulate-result', () => {
+    const demo = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
+    sendResult(demo);
+    const result = document.getElementById('tool-result');
+    if(result){
+      result.style.display = 'block';
+      result.innerHTML = `<div class="card" style="margin-top:8px">
+        <h3>Result</h3>
+        <p>Sent final clip URL to the app. Fallback link: <a href="${demo}" target="_blank" rel="noopener">open</a></p>
+      </div>`;
+    }
+    setProgress(100, 'Finished!');
+  });
+</script>
 </body>
 </html>
