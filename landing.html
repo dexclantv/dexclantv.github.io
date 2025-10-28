@@ -124,26 +124,6 @@
     .progress-bar{ width:100%; height:10px; border-radius:999px; background:#06210f; border:1px solid var(--line); overflow:hidden }
     .progress-fill{ height:100%; width:0%; background:var(--acid); transition:width .25s ease; }
     .status{color:#cdeedb; font-size:13px; margin-top:6px}
-
-    /* Cookies UI */
-    .small{font-size:12px; color:#9cf5c9}
-    .row{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
-    .cookies-wrap{margin-top:10px; display:none}
-    .cookies-wrap textarea{
-      width:100%; min-height:110px; background:#0b140b; color:#e7ffe7;
-      border:1px solid var(--line); border-radius:10px; padding:10px; font-family:ui-monospace, SFMono-Regular, Menlo, monospace;
-    }
-    .warn{margin-top:8px; font-size:12px; color:#c5f7dc}
-    .banner{margin:10px 0 0; padding:10px 12px; background:#082312; border:1px solid #145c2e; border-radius:10px; color:#bdf6d6}
-
-    /* Modal */
-    .modal{position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.5); z-index:2000}
-    .modal.open{display:flex}
-    .modal-card{max-width:min(720px, 92vw); background:#0b140b; border:1px solid var(--line); border-radius:14px; padding:18px}
-    .modal-card h3{margin:0 0 8px; color:#b9ffd8}
-    .modal-card ol{margin:0 0 8px 18px}
-    .modal-card a{color:var(--acid); text-decoration:none}
-    .modal-actions{display:flex; justify-content:flex-end; margin-top:10px}
   </style>
 </head>
 <body>
@@ -256,7 +236,7 @@
         <button id="simulate-result" class="btn secondary" type="button" title="Test app result bridge">Simulate Result</button>
       </div>
 
-      <!-- NEW: Format Picker Row -->
+      <!-- Format Picker Row -->
       <div class="tools-row" style="margin-bottom:10px">
         <button id="list-formats" class="btn secondary" type="button">List Formats</button>
         <select id="format-select" style="min-width:260px; flex:1; background:#0b140b; color:#e7ffe7; border:1px solid var(--line); border-radius:10px; padding:10px; display:none">
@@ -264,26 +244,6 @@
         </select>
         <button id="download-format" class="btn secondary" type="button" style="display:none">Download Selected</button>
         <button id="get-mp3" class="btn secondary" type="button" title="Extract audio as MP3">Get MP3</button>
-      </div>
-
-      <!-- Cookies toggle + textarea (hidden on iOS) -->
-      <div class="banner" id="mobile-banner" style="display:none">
-        Exporting cookies is easiest on desktop. Paste them here afterwards if needed (desktop/testing only).
-      </div>
-
-      <div class="row" id="cookies-row" style="margin-top:10px; display:none">
-        <label class="small"><input type="checkbox" id="use-cookies" /> Use my site cookies (desktop export)</label>
-        <button id="open-cookie-help" class="btn secondary" type="button">How do I get cookies?</button>
-      </div>
-
-      <div class="cookies-wrap" id="cookies-wrap" style="display:none">
-        <textarea id="cookies-text" placeholder="Paste cookies.txt here (Netscape format) — or paste a single Cookie header like: NAME=VALUE; SID=..."></textarea>
-        <div class="row" style="margin-top:8px">
-          <button id="save-cookies" class="btn secondary" type="button">Save locally</button>
-          <button id="clear-cookies" class="btn secondary" type="button">Clear</button>
-          <span class="small">Saved only on your device (localStorage). Sent only when you request a clip.</span>
-        </div>
-        <div class="warn">Security: Don’t share your cookies. We don’t persist them on our servers in this MVP.</div>
       </div>
 
       <div class="progress-wrap" id="progress-wrap" style="display:none">
@@ -300,41 +260,19 @@
     <span class="eyebrow">FAQ</span>
     <h2>Quick answers</h2>
     <details class="reveal"><summary>What is DexTracker?</summary><p>An AI-assisted toolkit for ideation, analysis, and faster shipping—privacy-first.</p></details>
-    <details class="reveal"><summary>Do you track me?</summary><p>No. We don’t use tracking beacons. Cookies you paste (desktop/testing) are stored only on your device and only sent when you request a clip.</p></details>
+    <details class="reveal"><summary>Do you track me?</summary><p>No tracking pixels. We only process links you submit.</p></details>
   </section>
 
   <footer>
     <div>© 2025 DexTracker • <a href="https://dexclantv.github.io/landing.html" target="_blank" rel="noopener">GitHub Pages</a></div>
     <div style="margin-top:6px">Follow: <a href="https://www.instagram.com/Perry.Glo" target="_blank" rel="noopener">Instagram</a> • <a href="https://twitter.com/DexClanTv" target="_blank" rel="noopener">Twitter</a> • <a href="https://www.youtube.com/@DexClanTv" target="_blank" rel="noopener">YouTube</a></div>
     <div style="margin-top:10px; font-size:12px; color:#9cf5c9">
-      Privacy: No tracking pixels. Optional cookies (desktop/testing only) are stored locally and sent only per request. In the App Store build, only direct links you own are allowed.
+      Privacy: No tracking pixels. We only use the URLs you provide to generate results.
     </div>
   </footer>
 
   <!-- Bridge helpers (always available) -->
   <script src="minimal.js" defer></script>
-
-  <!-- Help Modal -->
-  <div class="modal" id="cookie-modal" aria-hidden="true">
-    <div class="modal-card">
-      <h3>How to export cookies (desktop)</h3>
-      <ol>
-        <li>On your computer, sign in to the site in Chrome or Firefox.</li>
-        <li>Install a cookies exporter:
-          <ul>
-            <li>Chrome: <a href="https://chromewebstore.google.com/detail/get-cookiestxt-locally/cclelndahbckbenkjhflpdbgdldlbecc" target="_blank" rel="noopener">Get cookies.txt locally</a></li>
-            <li>Firefox: <a href="https://addons.mozilla.org/en-US/firefox/addon/cookies-txt/" target="_blank" rel="noopener">cookies.txt</a></li>
-          </ul>
-        </li>
-        <li>While on the site, open the extension and click <b>Export</b>. Copy the text.</li>
-        <li>Return here, check <b>“Use my site cookies”</b>, paste, hit <b>Save</b>, then <b>Generate Clips</b>.</li>
-      </ol>
-      <p class="small">Tip: Cookies expire. If it stops working later, export again.</p>
-      <div class="modal-actions">
-        <button id="close-cookie-help" class="btn secondary" type="button">Close</button>
-      </div>
-    </div>
-  </div>
 
   <!-- Page logic -->
   <script>
@@ -342,23 +280,6 @@
     const API_BASE =
       new URLSearchParams(location.search).get("api") ||
       "https://dextracker-clips.fly.dev";
-
-    // iOS cookie UI hiding
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-    if (isIOS) {
-      document.getElementById('cookies-row')?.remove();
-      document.getElementById('cookies-wrap')?.remove();
-      document.getElementById('mobile-banner')?.remove();
-      const heroCopy = document.getElementById('hero-copy');
-      const toolsCopy = document.getElementById('tools-copy');
-      const input = document.getElementById('repurpose-input');
-      heroCopy && (heroCopy.textContent = "Import your video, find highlight candidates, and export clean MP4s.");
-      toolsCopy && (toolsCopy.textContent = "Paste a direct MP4 / M3U8 link you own or use the demo to preview the flow.");
-      input && input.setAttribute("placeholder", "Paste direct .mp4 / .m3u8 URL you own");
-    } else {
-      document.getElementById('mobile-banner').style.display = 'block';
-      document.getElementById('cookies-row').style.display = 'flex';
-    }
 
     // Small helpers
     function showProgressUI(show){
@@ -384,36 +305,6 @@
       el.addEventListener('click', wrap, { passive: true });
       el.addEventListener('touchend', wrap, { passive: true });
     }
-
-    // Cookies helpers (desktop/testing)
-    const useCookiesChk = document.getElementById('use-cookies');
-    const cookiesWrap = document.getElementById('cookies-wrap');
-    const cookiesText = document.getElementById('cookies-text');
-    (function(){
-      const saved = localStorage.getItem('dex.cookies.txt') || '';
-      if (saved && !isIOS && cookiesText) {
-        cookiesText.value = saved;
-        if (useCookiesChk) useCookiesChk.checked = true;
-        if (cookiesWrap) cookiesWrap.style.display = 'block';
-      }
-    })();
-    document.getElementById('save-cookies')?.addEventListener('click', () => {
-      localStorage.setItem('dex.cookies.txt', cookiesText.value || '');
-      alert('Cookies saved locally.');
-    });
-    document.getElementById('clear-cookies')?.addEventListener('click', () => {
-      localStorage.removeItem('dex.cookies.txt');
-      if (cookiesText) cookiesText.value = '';
-      alert('Cleared local cookies.');
-    });
-    document.getElementById('open-cookie-help')?.addEventListener('click', () => {
-      document.getElementById('cookie-modal')?.classList.add('open');
-      document.getElementById('cookie-modal')?.setAttribute('aria-hidden', 'false');
-    });
-    document.getElementById('close-cookie-help')?.addEventListener('click', () => {
-      document.getElementById('cookie-modal')?.classList.remove('open');
-      document.getElementById('cookie-modal')?.setAttribute('aria-hidden', 'true');
-    });
 
     // ===== Format parsing (client-side) =====
     // Parses yt-dlp "-F" output text into [{id, ext, res, fps, vcodec, acodec, size, note}]
@@ -456,7 +347,7 @@
       });
     }
 
-    // Populate <select> with human-friendly labels (NOW tags audio)
+    // Populate <select> with human-friendly labels (tags audio)
     function fillFormatSelect(rows){
       const sel = document.getElementById("format-select");
       const btn = document.getElementById("download-format");
@@ -477,7 +368,7 @@
         const opt = document.createElement("option");
         opt.value = r.id;
         opt.textContent = label;
-        opt.dataset.isAudio = isAudio ? "1" : "0";  // <-- tag it
+        opt.dataset.isAudio = isAudio ? "1" : "0";
         sel.appendChild(opt);
       });
 
@@ -523,15 +414,11 @@
       setProgress(5, 'Contacting Clip API…');
       sendProgress(0.05);
 
-      const cookiesTxt = (!isIOS && document.getElementById('use-cookies')?.checked)
-        ? ((document.getElementById('cookies-text')?.value || "").trim())
-        : "";
-
       try {
         const r = await fetch(`${API_BASE}/api/clip`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ url: val, cookiesTxt })
+          body: JSON.stringify({ url: val })
         });
 
         if (r.status === 403) throw new Error(await r.text());
@@ -542,7 +429,7 @@
           const r2 = await fetch(`${API_BASE}/api/jobs`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ url: val, cookiesTxt })
+            body: JSON.stringify({ url: val })
           });
           if (!r2.ok) throw new Error(await r2.text() || `HTTP ${r2.status}`);
           const { jobId } = await r2.json();
@@ -611,7 +498,6 @@
       if (!url) return alert("Paste a URL first.");
       if (!format) return alert("Choose a format first.");
 
-      // If the chosen format is video-only, merge with bestaudio
       const isAudioOnly = sel.options[sel.selectedIndex]?.dataset?.isAudio === "1";
       if (!isAudioOnly && !format.includes("+")) {
         format = `${format}+bestaudio/b`;
@@ -621,7 +507,6 @@
       setProgress(10, `Downloading ${format}…`);
 
       try{
-        // Try progressive first (rare, but harmless)
         const r = await fetch(`${API_BASE}/api/clip`, {
           method: "POST",
           headers: {"content-type":"application/json"},
@@ -631,7 +516,6 @@
         if (r.status === 403) throw new Error(await r.text());
 
         if (r.status === 409) {
-          // Merge route
           const r2 = await fetch(`${API_BASE}/api/jobs`, {
             method: "POST",
             headers: {"content-type":"application/json"},
@@ -685,7 +569,7 @@
       }
     });
 
-    // Mobile nav + reveals (unchanged basics)
+    // Mobile nav + reveals
     const burger = document.getElementById('burger');
     const links = document.getElementById('navlinks');
     burger?.addEventListener('click', () => {
