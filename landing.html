@@ -124,6 +124,15 @@
     .progress-bar{ width:100%; height:10px; border-radius:999px; background:#06210f; border:1px solid var(--line); overflow:hidden }
     .progress-fill{ height:100%; width:0%; background:var(--acid); transition:width .25s ease; }
     .status{color:#cdeedb; font-size:13px; margin-top:6px}
+
+    /* App handoff banner */
+    .handoff{
+      display:none; align-items:center; gap:10px; padding:10px 12px; margin:10px 0;
+      border:1px dashed var(--line); border-radius:10px; background:rgba(18,255,109,.06); color:var(--muted);
+    }
+    .handoff b{ color: var(--acid); }
+    .handoff .x{ margin-left:auto; cursor:pointer; opacity:.75 }
+    .handoff.show{ display:flex; }
   </style>
 </head>
 <body>
@@ -225,11 +234,18 @@
   <section id="tools">
     <span class="eyebrow">Utilities</span>
     <h2>Tools</h2>
-    <p class="lead" id="tools-copy">Paste a direct MP4 / M3U8 link you own and we’ll generate clip candidates.</p>
+    <p class="lead" id="tools-copy">
+      Paste a direct MP4 / M3U8 link you own <b>or a YouTube watch link for your content</b> — we’ll generate clip candidates.
+    </p>
+
+    <div id="handoff" class="handoff">
+      <span>🎯 <b>Received video</b> <code id="handoff-id"></code> from app</span>
+      <span class="x" onclick="this.parentElement.classList.remove('show')">✕</span>
+    </div>
 
     <div class="tools">
       <div class="tools-row" style="margin-bottom:10px">
-        <input id="repurpose-input" type="url" placeholder="Paste direct .mp4 / .m3u8 URL you own" />
+        <input id="repurpose-input" type="url" placeholder="Paste direct .mp4 / .m3u8 / YouTube URL you own" />
         <button id="repurpose-run" class="btn" type="button">Generate Clips</button>
         <button id="clear-input" class="btn secondary" type="button">Clear</button>
         <button id="simulate-progress" class="btn secondary" type="button" title="Test app progress bridge">Simulate Progress</button>
@@ -239,7 +255,7 @@
       <!-- Format Picker Row -->
       <div class="tools-row" style="margin-bottom:10px">
         <button id="list-formats" class="btn secondary" type="button">List Formats</button>
-        <select id="format-select" style="min-width:260px; flex:1; background:#0b140b; color:#e7ffe7; border:1px solid var(--line); border-radius:10px; padding:10px; display:none">
+        <select id="format-select" style="min-width:260px; flex:1; background:#0b140b; color:#e7ffe7; border:1px solid #124b22; border-radius:10px; padding:10px; display:none">
           <option value="">— choose a format —</option>
         </select>
         <button id="download-format" class="btn secondary" type="button" style="display:none">Download Selected</button>
@@ -276,10 +292,103 @@
 
   <!-- Page logic -->
   <script>
+    // --- App bridge fallbacks (in case minimal.js isn't present) ---
+    window.sendProgress = window.sendProgress || function (p) {
+      try { window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.clipper.postMessage({type:'progress', value:p}); } catch {}
+    };
+    window.sendResult = window.sendResult || function (url) {
+      try { window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.clipper.postMessage({type:'result', url}); } catch {}
+    };
+
     // Allow ?api= override for local/tunnel testing
     const API_BASE =
       new URLSearchParams(location.search).get("api") ||
       "https://dextracker-clips.fly.dev";
+
+    // ---------- Handoff / prefill ----------
+    function toWatchUrlFromId(id){
+      const clean = (id||"").trim().replace(/^vid=/,'').replace(/^#/,'');
+      if(!clean) return "";
+      return `https://www.youtube.com/watch?v=${encodeURIComponent(clean)}`;
+    }
+    function parseVideoIdFromLocation(){
+      try{
+        const qp = new URLSearchParams(location.search);
+        const fromQ = qp.get('videoId') || qp.get('v') || "";
+        if (fromQ) return fromQ;
+        const h = (location.hash || "");
+        const m = h.match(/(?:^#?vid=|^#?v=)([^&]+)/i);
+        if (m && m[1]) return decodeURIComponent(m[1]);
+      }catch{}
+      return "";
+    }
+    function setInput(urlOrId){
+      const input = document.getElementById('repurpose-input');
+      if(!input) return;
+      let val = (urlOrId||"").trim();
+
+      // If it's a bare ID, convert to watch URL
+      if (val && !/^https?:\/\//i.test(val) && /^[a-zA-Z0-9_-]{8,}$/.test(val)) {
+        val = toWatchUrlFromId(val);
+      }
+      if(!val) return;
+
+      input.value = val;
+      input.dispatchEvent(new Event('input', {bubbles:true}));
+      input.dispatchEvent(new Event('change', {bubbles:true}));
+
+      // show banner
+      try {
+        const id = extractVideoIdFromAny(val) || val;
+        if (id) {
+          localStorage.setItem('dex_video_id', id);
+          const b = document.getElementById('handoff');
+          const code = document.getElementById('handoff-id');
+          if (b && code){ code.textContent = id; b.classList.add('show'); }
+        }
+      } catch {}
+    }
+    function extractVideoIdFromAny(u){
+      if (!u) return "";
+      try{
+        if (/youtu\.be\//i.test(u)) {
+          return new URL(u).pathname.replace('/','').split('?')[0];
+        }
+        if (/youtube\.com\/watch/i.test(u)) {
+          return new URL(u).searchParams.get('v') || "";
+        }
+        // already raw-ish id?
+        if (/^[a-zA-Z0-9_-]{8,}$/.test(u)) return u;
+      }catch{}
+      return "";
+    }
+
+    // Support direct calls from the iOS app
+    window.dexSetVideoId = function(id){
+      setInput(id);
+      // ensure URL reflects state so refresh keeps it
+      try{
+        const u = new URL(location.href);
+        if (!u.searchParams.get('v')) u.searchParams.set('v', id);
+        if (!u.searchParams.get('videoId')) u.searchParams.set('videoId', id);
+        if (!u.hash || u.hash.indexOf('vid=') === -1) u.hash = 'vid=' + encodeURIComponent(id);
+        history.replaceState(null, '', u.toString());
+      }catch{}
+    };
+    window.addEventListener('message', (e)=>{
+      if (e && e.data && (e.data.type === 'dex-video-id') && e.data.id) {
+        window.dexSetVideoId(e.data.id);
+      }
+    });
+
+    // Bootstrap prefill from query/hash/localStorage
+    (function bootstrapHandoff(){
+      let id = parseVideoIdFromLocation();
+      if (!id) {
+        try { id = localStorage.getItem('dex_video_id') || ''; } catch {}
+      }
+      if (id) setInput(id);
+    })();
 
     // Small helpers
     function showProgressUI(show){
@@ -328,7 +437,7 @@
           res = r1 ? r1[1] : (r2 ? r2[1] : col3.trim());
         }
         const fpsm = rest.match(/(\d{2,3})fps/);
-        fps = fpsm ? fpsm[1] : "";
+        fps = fpsm ? r2?.[1] || fpsm[1] : "";
         const vc = rest.match(/vcodec\s+([^\s,]+)/i);
         if (vc) vcodec = vc[1];
         const ac = rest.match(/acodec\s+([^\s,]+)/i);
@@ -408,7 +517,7 @@
     bindTap('repurpose-run', async () => {
       const input = document.getElementById('repurpose-input');
       const val = input?.value?.trim();
-      if(!val){ alert('Paste a direct .mp4/.m3u8 URL you own.'); return; }
+      if(!val){ alert('Paste a direct .mp4/.m3u8 URL or a YouTube link you own.'); return; }
 
       showProgressUI(true);
       setProgress(5, 'Contacting Clip API…');
@@ -611,7 +720,7 @@
     });
     const revealer = new IntersectionObserver((entries)=>{
       entries.forEach(({isIntersecting, target})=>{
-        if(isIntersecting){ target.classList.add('in'); revealer.unobserve(target); }
+        if(isIntersecting){ target classList? target.classList.add('in') : (target.className += ' in'); revealer.unobserve(target); }
       })
     },{threshold:.12});
     document.querySelectorAll('.reveal').forEach(n=>revealer.observe(n));
@@ -629,6 +738,9 @@
       showProgressUI(false);
       setProgress(0, '');
       sendProgress(0.0);
+      try { localStorage.removeItem('dex_video_id'); } catch {}
+      const b = document.getElementById('handoff');
+      if (b) b.classList.remove('show');
     });
 
     // Demo buttons
