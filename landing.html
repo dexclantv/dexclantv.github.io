@@ -120,10 +120,10 @@
     .btn.secondary{background:transparent; color:var(--muted); border-color:var(--line);}
 
     /* Tool Progress UI */
-    .progress-wrap{margin-top:12px}
+    .progress-wrap{ margin-top:12px }
     .progress-bar{ width:100%; height:10px; border-radius:999px; background:#06210f; border:1px solid var(--line); overflow:hidden }
     .progress-fill{ height:100%; width:0%; background:var(--acid); transition:width .25s ease; }
-    .status{color:#cdeedb; font-size:13px; margin-top:6px}
+    .status{ color:#cdeedb; font-size:13px; margin-top:6px }
 
     /* App handoff banner */
     .handoff{
@@ -234,12 +234,10 @@
   <section id="tools">
     <span class="eyebrow">Utilities</span>
     <h2>Tools</h2>
-    <p class="lead" id="tools-copy">
-      Paste a direct MP4 / M3U8 link you own <b>or a YouTube watch link for your content</b> — we’ll generate clip candidates.
-    </p>
+    <p class="lead" id="tools-copy">Paste a direct MP4 / M3U8 link you own (or a YouTube watch URL for your content) and we’ll generate clip candidates.</p>
 
     <div id="handoff" class="handoff">
-      <span>🎯 <b>Received video</b> <code id="handoff-id"></code> from app</span>
+      <span>🎯 <b>Received</b> <code id="handoff-id"></code> from app</span>
       <span class="x" onclick="this.parentElement.classList.remove('show')">✕</span>
     </div>
 
@@ -255,7 +253,7 @@
       <!-- Format Picker Row -->
       <div class="tools-row" style="margin-bottom:10px">
         <button id="list-formats" class="btn secondary" type="button">List Formats</button>
-        <select id="format-select" style="min-width:260px; flex:1; background:#0b140b; color:#e7ffe7; border:1px solid #124b22; border-radius:10px; padding:10px; display:none">
+        <select id="format-select" style="min-width:260px; flex:1; background:#0b140b; color:#e7ffe7; border:1px solid var(--line); border-radius:10px; padding:10px; display:none">
           <option value="">— choose a format —</option>
         </select>
         <button id="download-format" class="btn secondary" type="button" style="display:none">Download Selected</button>
@@ -287,17 +285,17 @@
     </div>
   </footer>
 
-  <!-- Bridge helpers (always available) -->
+  <!-- Bridge helpers (load minimal.js if you have it; safe without) -->
   <script src="minimal.js" defer></script>
 
   <!-- Page logic -->
   <script>
-    // --- App bridge fallbacks (in case minimal.js isn't present) ---
+    /* Fallbacks if minimal.js isn't present (don’t throw) */
     window.sendProgress = window.sendProgress || function (p) {
-      try { window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.clipper.postMessage({type:'progress', value:p}); } catch {}
+      try { window.webkit?.messageHandlers?.clipper?.postMessage({type:'progress', value:p}); } catch {}
     };
     window.sendResult = window.sendResult || function (url) {
-      try { window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.clipper.postMessage({type:'result', url}); } catch {}
+      try { window.webkit?.messageHandlers?.clipper?.postMessage({type:'result', url}); } catch {}
     };
 
     // Allow ?api= override for local/tunnel testing
@@ -306,91 +304,70 @@
       "https://dextracker-clips.fly.dev";
 
     // ---------- Handoff / prefill ----------
+    function showHandoff(id){
+      const b = document.getElementById('handoff');
+      const code = document.getElementById('handoff-id');
+      if (b && code){ code.textContent = id; b.classList.add('show'); }
+    }
+    function setInput(raw){
+      const input = document.getElementById('repurpose-input');
+      if (!input) return;
+      const val = (raw||"").trim();
+      if (!val) return;
+      input.value = val;
+      input.dispatchEvent(new Event('input', {bubbles:true}));
+      input.dispatchEvent(new Event('change', {bubbles:true}));
+      try { localStorage.setItem('dex_last_url_or_id', val); } catch {}
+      showHandoff(val);
+    }
     function toWatchUrlFromId(id){
       const clean = (id||"").trim().replace(/^vid=/,'').replace(/^#/,'');
       if(!clean) return "";
       return `https://www.youtube.com/watch?v=${encodeURIComponent(clean)}`;
     }
-    function parseVideoIdFromLocation(){
-      try{
-        const qp = new URLSearchParams(location.search);
-        const fromQ = qp.get('videoId') || qp.get('v') || "";
-        if (fromQ) return fromQ;
-        const h = (location.hash || "");
-        const m = h.match(/(?:^#?vid=|^#?v=)([^&]+)/i);
-        if (m && m[1]) return decodeURIComponent(m[1]);
-      }catch{}
-      return "";
-    }
-    function setInput(urlOrId){
-      const input = document.getElementById('repurpose-input');
-      if(!input) return;
-      let val = (urlOrId||"").trim();
-
-      // If it's a bare ID, convert to watch URL
-      if (val && !/^https?:\/\//i.test(val) && /^[a-zA-Z0-9_-]{8,}$/.test(val)) {
-        val = toWatchUrlFromId(val);
-      }
-      if(!val) return;
-
-      input.value = val;
-      input.dispatchEvent(new Event('input', {bubbles:true}));
-      input.dispatchEvent(new Event('change', {bubbles:true}));
-
-      // show banner
-      try {
-        const id = extractVideoIdFromAny(val) || val;
-        if (id) {
-          localStorage.setItem('dex_video_id', id);
-          const b = document.getElementById('handoff');
-          const code = document.getElementById('handoff-id');
-          if (b && code){ code.textContent = id; b.classList.add('show'); }
-        }
-      } catch {}
-    }
     function extractVideoIdFromAny(u){
       if (!u) return "";
       try{
-        if (/youtu\.be\//i.test(u)) {
-          return new URL(u).pathname.replace('/','').split('?')[0];
-        }
-        if (/youtube\.com\/watch/i.test(u)) {
-          return new URL(u).searchParams.get('v') || "";
-        }
-        // already raw-ish id?
+        if (/youtu\.be\//i.test(u)) return new URL(u).pathname.slice(1).split('?')[0];
+        if (/youtube\.com\/watch/i.test(u)) return new URL(u).searchParams.get('v') || "";
         if (/^[a-zA-Z0-9_-]{8,}$/.test(u)) return u;
       }catch{}
       return "";
     }
 
-    // Support direct calls from the iOS app
-    window.dexSetVideoId = function(id){
-      setInput(id);
-      // ensure URL reflects state so refresh keeps it
-      try{
-        const u = new URL(location.href);
-        if (!u.searchParams.get('v')) u.searchParams.set('v', id);
-        if (!u.searchParams.get('videoId')) u.searchParams.set('videoId', id);
-        if (!u.hash || u.hash.indexOf('vid=') === -1) u.hash = 'vid=' + encodeURIComponent(id);
-        history.replaceState(null, '', u.toString());
-      }catch{}
-    };
+    // Public bridge for the iOS app
+    window.dexSetUrl = function(url){ setInput(url); };
+    window.dexSetVideoId = function(id){ setInput(toWatchUrlFromId(id) || id); };
+
+    // Listen for postMessage from app
     window.addEventListener('message', (e)=>{
-      if (e && e.data && (e.data.type === 'dex-video-id') && e.data.id) {
-        window.dexSetVideoId(e.data.id);
-      }
+      try{
+        const d = e?.data || {};
+        if (d.type === 'dex-url' && d.url) return window.dexSetUrl(d.url);
+        if (d.type === 'dex-video-id' && d.id) return window.dexSetVideoId(d.id);
+      }catch{}
     });
 
-    // Bootstrap prefill from query/hash/localStorage
-    (function bootstrapHandoff(){
-      let id = parseVideoIdFromLocation();
-      if (!id) {
-        try { id = localStorage.getItem('dex_video_id') || ''; } catch {}
-      }
-      if (id) setInput(id);
+    // Bootstrap from query/hash/localStorage
+    (function bootstrap(){
+      try{
+        const qs = new URLSearchParams(location.search);
+        const urlQ = qs.get('url');
+        const vidQ = qs.get('videoId') || qs.get('v');
+        const hash = location.hash || '';
+        const urlH = (hash.match(/[#&]url=([^&]+)/i)||[])[1];
+        const vidH = (hash.match(/[#&](?:vid|v)=([^&]+)/i)||[])[1];
+        const stored = localStorage.getItem('dex_last_url_or_id') || '';
+
+        if (urlQ) return setInput(decodeURIComponent(urlQ));
+        if (urlH) return setInput(decodeURIComponent(urlH));
+        if (vidQ) return setInput(toWatchUrlFromId(decodeURIComponent(vidQ)));
+        if (vidH) return setInput(toWatchUrlFromId(decodeURIComponent(vidH)));
+        if (stored) setInput(stored);
+      }catch{}
     })();
 
-    // Small helpers
+    // UI helpers
     function showProgressUI(show){
       const wrap = document.getElementById('progress-wrap');
       if(!wrap) return;
@@ -405,18 +382,17 @@
     function bindTap(id, handler){
       const el = document.getElementById(id);
       if(!el) return;
-      let fired = false;
+      let firing = false;
       const wrap = (e) => {
-        if (fired) return;
-        fired = true;
-        try { handler(e); } finally { setTimeout(()=>fired=false, 120); }
+        if (firing) return;
+        firing = true;
+        try { handler(e); } finally { setTimeout(()=>firing=false, 140); }
       };
-      el.addEventListener('click', wrap, { passive: true });
+      el.addEventListener('click', wrap);
       el.addEventListener('touchend', wrap, { passive: true });
     }
 
     // ===== Format parsing (client-side) =====
-    // Parses yt-dlp "-F" output text into [{id, ext, res, fps, vcodec, acodec, size, note}]
     function parseFormats(text){
       const lines = (text || "").split("\n");
       const rows = [];
@@ -436,8 +412,8 @@
           const r2 = col3.match(/(\d{3,4}p)/i);
           res = r1 ? r1[1] : (r2 ? r2[1] : col3.trim());
         }
-        const fpsm = rest.match(/(\d{2,3})fps/);
-        fps = fpsm ? r2?.[1] || fpsm[1] : "";
+        const fpsm = (rest.match(/(\d{2,3})fps/i) || []);
+        fps = fpsm[1] || "";
         const vc = rest.match(/vcodec\s+([^\s,]+)/i);
         if (vc) vcodec = vc[1];
         const ac = rest.match(/acodec\s+([^\s,]+)/i);
@@ -456,11 +432,10 @@
       });
     }
 
-    // Populate <select> with human-friendly labels (tags audio)
     function fillFormatSelect(rows){
       const sel = document.getElementById("format-select");
       const btn = document.getElementById("download-format");
-      if (!sel) return;
+      if (!sel || !btn) return;
       sel.innerHTML = `<option value="">— choose a format —</option>`;
 
       rows.forEach(r=>{
@@ -485,7 +460,7 @@
       btn.style.display = "inline-flex";
     }
 
-    // Job poller shared
+    // Poll a job
     async function pollJob(jobId){
       return new Promise((resolve, reject)=>{
         let last = 10;
@@ -505,7 +480,8 @@
             } else {
               setTimeout(tick, 1200);
             }
-          } catch {
+          } catch(err) {
+            console.error(err);
             setTimeout(tick, 1200);
           }
         }
@@ -513,7 +489,7 @@
       });
     }
 
-    // ===== Buttons wiring =====
+    // ===== Buttons =====
     bindTap('repurpose-run', async () => {
       const input = document.getElementById('repurpose-input');
       const val = input?.value?.trim();
@@ -532,7 +508,6 @@
 
         if (r.status === 403) throw new Error(await r.text());
 
-        // Fallback to merge
         if (r.status === 409) {
           setProgress(10, 'No single stream. Merging…');
           const r2 = await fetch(`${API_BASE}/api/jobs`, {
@@ -573,7 +548,6 @@
       }
     });
 
-    // List Formats
     bindTap('list-formats', async ()=>{
       const input = document.getElementById('repurpose-input');
       const val = input?.value?.trim();
@@ -593,12 +567,12 @@
         fillFormatSelect(rows);
         setProgress(12, "Choose a format then Download Selected");
       }catch(e){
+        console.error(e);
         alert("Formats failed: " + (e.message || e));
         setProgress(0, "Error");
       }
     });
 
-    // Download Selected format (auto-upgrade video-only → +bestaudio)
     bindTap('download-format', async ()=>{
       const input = document.getElementById('repurpose-input');
       const url = input?.value?.trim();
@@ -650,12 +624,12 @@
           <p>Sent final clip URL to the app. Fallback: <a href="${data.directUrl}" target="_blank" rel="noopener">open</a></p></div>`;
         setProgress(100, "Finished!");
       }catch(e){
+        console.error(e);
         alert("Download failed: " + (e.message || e));
         setProgress(0, "Error");
       }
     });
 
-    // MP3
     bindTap("get-mp3", async ()=>{
       const input = document.getElementById('repurpose-input');
       const url = input?.value?.trim();
@@ -673,6 +647,7 @@
         const fileUrl = await pollJob(jobId);
         window.open(fileUrl, "_blank", "noopener");
       }catch(e){
+        console.error(e);
         alert("MP3 API failed: " + (e.message || e));
         setProgress(0, "Error");
       }
@@ -702,70 +677,18 @@
     const sections = [...document.querySelectorAll('header[id], section[id]')];
     const navLinks = [...document.querySelectorAll('.links a[data-link]')];
     const byId = id => navLinks.find(a=>a.getAttribute('href')==="#"+id);
-    const spy = new IntersectionObserver(entries=>{
+    const revealer = new IntersectionObserver((entries)=>{
       entries.forEach(({isIntersecting, target})=>{
-        if(isIntersecting){
-          navLinks.forEach(n=>n.classList.remove('active'));
-          byId(target.id)?.classList.add('active');
-        }
+        if(isIntersecting){ target.classList.add('in'); revealer.unobserve(target); }
       })
-    },{rootMargin:'-40% 0px -55% 0px', threshold:[0, .2, .6, 1]});
-    sections.forEach(s=>spy.observe(s));
+    },{threshold:.12});
+    sections.forEach(s=>revealer.observe(s));
     document.querySelectorAll('.card').forEach(card=>{
       card.addEventListener('pointermove', e=>{
         const r = card.getBoundingClientRect();
         card.style.setProperty('--x', ((e.clientX-r.left)/r.width*100)+'%');
         card.style.setProperty('--y', ((e.clientY-r.top)/r.height*100)+'%');
       })
-    });
-    const revealer = new IntersectionObserver((entries)=>{
-      entries.forEach(({isIntersecting, target})=>{
-        if(isIntersecting){ target classList? target.classList.add('in') : (target.className += ' in'); revealer.unobserve(target); }
-      })
-    },{threshold:.12});
-    document.querySelectorAll('.reveal').forEach(n=>revealer.observe(n));
-
-    // Clear
-    bindTap('clear-input', () => {
-      const input = document.getElementById('repurpose-input');
-      const result = document.getElementById('tool-result');
-      const sel = document.getElementById('format-select');
-      const dl = document.getElementById('download-format');
-      if(input) input.value = '';
-      if(result){ result.style.display = 'none'; result.innerHTML = ''; }
-      if(sel){ sel.style.display = 'none'; sel.innerHTML = `<option value="">— choose a format —</option>`; }
-      if(dl){ dl.style.display = 'none'; }
-      showProgressUI(false);
-      setProgress(0, '');
-      sendProgress(0.0);
-      try { localStorage.removeItem('dex_video_id'); } catch {}
-      const b = document.getElementById('handoff');
-      if (b) b.classList.remove('show');
-    });
-
-    // Demo buttons
-    bindTap('simulate-progress', () => {
-      showProgressUI(true);
-      let p = 0;
-      const id = setInterval(()=>{
-        p = Math.min(1, p + 0.06);
-        setProgress(Math.round(p*100), `Analyzing / clipping… ${Math.round(p*100)}%`);
-        sendProgress(p);
-        if (p >= 1) clearInterval(id);
-      }, 300);
-    });
-    bindTap('simulate-result', () => {
-      const demo = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
-      sendResult(demo);
-      const result = document.getElementById('tool-result');
-      if(result){
-        result.style.display = 'block';
-        result.innerHTML = `<div class="card" style="margin-top:8px">
-          <h3>Result</h3>
-          <p>Sent final clip URL to the app. Fallback link: <a href="${demo}" target="_blank" rel="noopener">open</a></p>
-        </div>`;
-      }
-      setProgress(100, 'Finished!');
     });
   </script>
 </body>
