@@ -10,14 +10,28 @@
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 
   <style>
-    :root{ --bg:#000; --bg2:#0b140b; --fg:#e7ffe7; --acid:#12ff6d; --grid:#083108; --muted:#9cf5c9; --card:#0c160d; --line:#124b22; --glass:rgba(0,0,0,.55) }
-    *{box-sizing:border-box} html,body{height:100%} html{scroll-behavior:smooth}
+    :root{
+      --bg:#000;
+      --bg2:#0b140b;
+      --fg:#e7ffe7;
+      --acid:#12ff6d;
+      --acid-soft:rgba(18,255,109,.15);
+      --grid:#083108;
+      --muted:#9cf5c9;
+      --card:#0c160d;
+      --line:#124b22;
+      --glass:rgba(0,0,0,.55);
+      --danger:#ff4d4f;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    html{scroll-behavior:smooth}
     body{
       margin:0; color:var(--fg);
       font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
       background:
-        radial-gradient(1200px 800px at 10% -10%, #051505 0%, var(--bg) 55%),
-        radial-gradient(1200px 800px at 90% 110%, #051505 0%, var(--bg) 55%);
+        radial-gradient(1100px 760px at 15% -10%, #051505 0%, var(--bg) 55%),
+        radial-gradient(1100px 760px at 90% 110%, #051505 0%, var(--bg) 55%);
     }
 
     /* NAV */
@@ -25,117 +39,329 @@
       position:sticky; top:0; z-index:1000; inset-inline:0;
       display:flex; align-items:center; justify-content:space-between;
       padding:14px clamp(16px,4vw,28px);
-      background:linear-gradient(to bottom, rgba(0,0,0,.85), rgba(0,0,0,.55));
+      background:linear-gradient(to bottom, rgba(0,0,0,.85), rgba(0,0,0,.15));
       backdrop-filter:saturate(140%) blur(10px);
-      border-bottom:1px solid var(--line);
+      border-bottom:1px solid rgba(18,255,109,.08);
     }
     .brand{display:flex; gap:10px; align-items:center; font-family:Orbitron, sans-serif; letter-spacing:.5px}
-    .logo{width:28px; aspect-ratio:1; border-radius:6px; background:conic-gradient(from 90deg, #00ff95, #00c853, #00ff95); box-shadow:0 0 20px #00ff95aa inset, 0 0 20px #00ff95aa}
+    .logo{
+      width:30px; aspect-ratio:1; border-radius:8px;
+      background:conic-gradient(from 90deg, #00ff95, #00c853, #00ff95);
+      box-shadow:0 0 20px #00ff95aa inset, 0 0 20px #00ff95aa;
+    }
     .brand b{color:var(--acid)}
-    .nav a{color:var(--muted); text-decoration:none; font-weight:600; margin:0 10px; padding:8px 10px; border-radius:8px; transition:color .15s, background .15s}
-    .nav a:hover{color:var(--fg); background:rgba(18,255,109,.08)}
+    .nav a{
+      color:var(--muted); text-decoration:none; font-weight:600;
+      margin:0 6px; padding:8px 12px; border-radius:10px;
+      transition:color .15s, background .15s, transform .15s;
+    }
+    .nav a:hover{color:var(--fg); background:rgba(18,255,109,.08); transform:translateY(-1px)}
     .nav a.active{color:#001a0e; background:var(--acid)}
     .burger{display:none; flex-direction:column; gap:4px; cursor:pointer}
     .burger span{width:24px; height:2px; background:var(--fg);}
     .links{display:flex; align-items:center}
-    @media (max-width:860px){
+    @media (max-width:880px){
       .burger{display:flex}
-      .links{position:fixed; right:16px; top:64px; background:var(--glass); backdrop-filter:blur(16px); padding:12px; border:1px solid var(--line); border-radius:12px; display:none; flex-direction:column}
+      .links{
+        position:fixed; right:16px; top:64px; background:var(--glass);
+        backdrop-filter:blur(16px); padding:12px; border:1px solid var(--line); border-radius:12px;
+        display:none; flex-direction:column; min-width:180px;
+      }
       .links a{display:block; width:100%; text-align:left; margin:4px 0}
       .links.open{display:flex}
     }
 
     /* HERO */
     .hero{
-      min-height:96svh; display:grid; place-items:center; text-align:center; position:relative; overflow:hidden;
-      background: linear-gradient(to bottom, rgba(0,0,0,.6), rgba(0,0,0,.9)), url('https://images.unsplash.com/photo-1527443154391-507e9dc6c5cc?q=80&w=1600&auto=format&fit=crop') center/cover no-repeat fixed;
-      border-bottom:1px solid var(--line);
+      min-height:90vh; display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:32px;
+      align-items:center;
+      padding: clamp(30px, 6vw, 46px) clamp(16px, 5vw, 28px);
+      border-bottom:1px solid rgba(18,255,109,.03);
     }
-    .hero h1{font-family:Orbitron, sans-serif; font-size: clamp(32px, 5vw, 68px); margin:0 0 12px; color:var(--acid); text-shadow:0 0 30px #00ff95aa}
-    .hero p{max-width:min(780px, 90vw); margin:0 auto 24px; font-size:clamp(16px, 1.6vw, 20px); color:#c9ffd6}
-    .cta{display:inline-flex; align-items:center; gap:10px; padding:12px 18px; border-radius:12px; font-weight:800; text-decoration:none; color:#001a0e; background:var(--acid); box-shadow:0 0 24px #00ff9580; border:1px solid #7bffc1}
-    .subcta{display:inline-flex; margin-left:10px; color:var(--muted)}
-    .tools-btn{display:inline-flex; margin-left:10px; color:#001a0e; background:transparent; border:1px solid #7bffc1; padding:12px 18px; border-radius:12px; font-weight:800; text-decoration:none; background:rgba(18,255,109,.15)}
-    .tools-btn:hover{background:rgba(18,255,109,.25)}
+    .hero-text{
+      max-width:580px;
+      animation:fadeUp .6s ease .1s both;
+    }
+    .eyebrow{
+      color:var(--muted); letter-spacing:.18em; text-transform:uppercase; font-weight:800; font-size:12px;
+    }
+    .hero h1{
+      font-family:Orbitron, sans-serif;
+      font-size: clamp(34px, 4.5vw, 62px);
+      margin:.25rem 0 .4rem;
+      color:var(--acid);
+      text-shadow:0 0 35px rgba(0,255,149,.35);
+      line-height:1;
+    }
+    .hero p{
+      color:#c9ffd6;
+      font-size:clamp(15px, 1.5vw, 18px);
+      margin-bottom:20px;
+    }
+    .hero-actions{
+      display:flex; flex-wrap:wrap; gap:12px;
+    }
+    .btn-primary, .btn-ghost{
+      display:inline-flex; align-items:center; gap:8px;
+      border-radius:14px;
+      font-weight:700; text-decoration:none;
+      transition:transform .12s ease, box-shadow .12s ease, background .12s ease;
+      cursor:pointer;
+    }
+    .btn-primary{
+      background:var(--acid);
+      color:#001a0e;
+      padding:12px 20px;
+      box-shadow:0 14px 40px rgba(0,255,149,.35);
+    }
+    .btn-primary:hover{transform:translateY(-1px); box-shadow:0 18px 45px rgba(0,255,149,.35);}
+    .btn-ghost{
+      background:rgba(18,255,109,.00);
+      border:1px solid rgba(124,255,196,.35);
+      color:var(--fg);
+      padding:11px 17px;
+      backdrop-filter:blur(10px);
+    }
+    .btn-ghost:hover{background:rgba(18,255,109,.08);}
+    @media (max-width:980px){
+      .hero{grid-template-columns:1fr; padding-top:76px;}
+    }
 
-    /* TICKER */
-    .ticker{position:relative; overflow:hidden; border-block:1px solid var(--line); background:#031a0b}
-    .ticker__row{display:flex; gap:40px; white-space:nowrap; padding:8px 0; animation:ticker 28s linear infinite}
-    .chip{border:1px solid var(--line); background:#061e10; color:#9cf5c9; padding:6px 10px; border-radius:999px}
-    @keyframes ticker{from{transform:translateX(0)} to{transform:translateX(-50%)}}
+    /* HERO VIDEO CARD */
+    .hero-video{
+      position:relative;
+      border:1px solid rgba(18,255,109,.12);
+      background:radial-gradient(circle at 10% 10%, rgba(18,255,109,.15), rgba(0,0,0,0));
+      border-radius:22px;
+      overflow:hidden;
+      min-height:250px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      animation:fadeInRight .7s ease .25s both;
+    }
+    .hero-video video{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+    .glow-ring{
+      position:absolute;
+      inset:-20% -5%;
+      background:radial-gradient(circle, rgba(18,255,109,.25), rgba(18,255,109,0));
+      filter:blur(25px);
+      pointer-events:none;
+      animation:pulseGlow 3.4s ease-in-out infinite;
+    }
+    @keyframes pulseGlow{
+      0%,100%{opacity:.2; transform:scale(1);}
+      50%{opacity:.6; transform:scale(1.05);}
+    }
+    @keyframes fadeUp{
+      from{opacity:0; transform:translateY(12px);}
+      to{opacity:1; transform:translateY(0);}
+    }
+    @keyframes fadeInRight{
+      from{opacity:0; transform:translateX(10px);}
+      to{opacity:1; transform:translateX(0);}
+    }
 
     /* SECTIONS */
     section{padding: clamp(48px, 9vw, 110px) clamp(16px, 5vw, 28px); max-width:1200px; margin-inline:auto}
-    .eyebrow{color:var(--muted); letter-spacing:.18em; text-transform:uppercase; font-weight:800; font-size:12px}
     h2{font-family:Orbitron, sans-serif; color:var(--acid); margin:.25rem 0 1rem; font-size: clamp(26px, 3.2vw, 42px)}
     .lead{color:#c7f6dd; max-width:880px}
-    .grid{display:grid; gap:18px}
-    .grid.cols-3{grid-template-columns:repeat(3, 1fr)}
-    .grid.cols-2{grid-template-columns:repeat(2, 1fr)}
-    @media (max-width:980px){.grid.cols-3{grid-template-columns:1fr 1fr}}
-    @media (max-width:680px){.grid.cols-3,.grid.cols-2{grid-template-columns:1fr}}
 
-    .card{background: linear-gradient(180deg, rgba(10,18,12,.9), rgba(6,12,8,.9)); border:1px solid var(--line); padding:20px; border-radius:14px; position:relative; overflow:hidden}
-    .card:before{content:""; position:absolute; inset:-1px; border-radius:14px; background:radial-gradient(500px 140px at var(--x, 10%) var(--y, 0%), #0bff8a22, transparent 40%); pointer-events:none}
-    .card h3{margin:.3rem 0 .6rem; color:#b9ffd8}
-    .card p{color:#cdeedb}
+    /* PRICING (3 cards) */
+    .pricing-row{
+      display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));
+      gap:18px; margin-top:26px;
+    }
+    .price-card{
+      background:radial-gradient(circle at 10% 10%, rgba(18,255,109,.12), rgba(0,0,0,0)) , rgba(4,14,8,.85);
+      border:1px solid rgba(18,255,109,.25);
+      border-radius:18px;
+      padding:20px 20px 22px;
+      display:flex; flex-direction:column; gap:12px;
+      box-shadow:0 14px 50px rgba(0,0,0,.25);
+    }
+    .price-title{font-weight:700; font-size:1.15rem}
+    .price-num{font-size:2.6rem; font-weight:800; color:var(--acid); line-height:1; display:flex; align-items:baseline; gap:6px}
+    .price-num small{font-size:.65rem; color:var(--muted); font-weight:600}
+    .feat-list{list-style:none; padding:0; margin:4px 0 0; display:flex; flex-direction:column; gap:6px}
+    .feat-list li{display:flex; gap:8px; align-items:flex-start; color:#d5ffe3; font-size:.9rem}
+    .feat-list li:before{content:""; width:6px; height:6px; border-radius:999px; background:var(--acid); margin-top:7px; flex:0 0 6px;}
+    .price-cta{
+      margin-top:auto;
+      display:inline-flex; align-items:center; justify-content:center;
+      gap:6px; background:var(--acid); color:#001a0e;
+      padding:11px 14px; border-radius:12px; font-weight:700; text-decoration:none;
+    }
+    .badge-pill{
+      align-self:flex-end;
+      background:rgba(196,255,222,.12);
+      color:var(--fg);
+      border:1px solid rgba(196,255,222,.22);
+      border-radius:999px;
+      padding:3px 11px;
+      font-size:.65rem;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
 
-    /* Pricing */
-    .pricing{display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:18px}
-    .price{font-size:32px; font-weight:800; color:var(--acid)}
+    /* TOOLS (full-screen style) */
+    .tools-wrap{
+      max-width:1300px;
+      margin:0 auto 90px;
+      background: radial-gradient(circle at top, rgba(18,255,109,.07), rgba(0,0,0,0)) , rgba(2,8,4,.9);
+      border:1px solid rgba(18,255,109,.15);
+      border-radius:24px;
+      padding:28px 28px 32px;
+      box-shadow:0 20px 60px rgba(0,0,0,.35);
+    }
+    .tools-headline{
+      display:flex; align-items:center; justify-content:space-between; gap:14px; margin-bottom:18px;
+    }
+    .tools-input-row{
+      display:flex; gap:14px; flex-wrap:wrap;
+    }
+    .tools-input{
+      flex:1;
+      min-width:240px;
+      background:rgba(0,0,0,.15);
+      border:1px solid rgba(156,245,201,.25);
+      border-radius:16px;
+      padding:13px 14px;
+      color:var(--fg);
+      font-size:.95rem;
+      outline:none;
+    }
+    .tools-btn-big{
+      background:var(--acid);
+      border:none;
+      border-radius:16px;
+      padding:12px 20px;
+      font-weight:700;
+      color:#001a0e;
+      display:inline-flex; align-items:center; gap:8px;
+      transition:transform .1s ease;
+    }
+    .tools-small-btn{
+      background:transparent;
+      border:1px solid rgba(156,245,201,.15);
+      border-radius:12px;
+      color:var(--fg);
+      padding:10px 14px;
+      font-weight:600;
+      display:inline-flex; align-items:center; gap:5px;
+      transition:background .1s;
+    }
+    .tools-btn-big:hover{transform:translateY(-1px);}
+    .tools-small-btn:hover{background:rgba(156,245,201,.08);}
+    .progress-wrap{ margin-top:14px }
+    .progress-bar{
+      width:100%; height:10px; border-radius:999px;
+      background:rgba(6,33,15,1);
+      border:1px solid rgba(18,255,109,.08);
+      overflow:hidden;
+    }
+    .progress-fill{
+      height:100%; width:0%;
+      background:var(--acid);
+      transition:width .25s ease;
+    }
+    .status{ color:#cdeedb; font-size:13px; margin-top:6px }
 
-    /* Gallery */
-    .gallery{display:grid; grid-template-columns:repeat(3,1fr); gap:12px}
-    .tile{position:relative; border-radius:14px; overflow:hidden; border:1px solid var(--line)}
-    .tile img{display:block; width:100%; height:100%; object-fit:cover; aspect-ratio:4/3; filter:saturate(0.8) contrast(1.05)}
-    .tile .overlay{position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.75), transparent 60%); display:flex; align-items:flex-end; padding:12px; font-weight:700}
+    /* Tool result box */
+    #tool-result .cardish{
+      background:rgba(0,0,0,.15);
+      border:1px solid rgba(18,255,109,.12);
+      border-radius:18px;
+      padding:18px;
+      margin-top:18px;
+    }
 
-    /* FAQ */
-    details{border:1px solid var(--line); border-radius:12px; padding:14px 16px; background:#07140a}
-    details+details{margin-top:10px}
-    summary{cursor:pointer; font-weight:700; color:#b8ffd7}
-    details p{color:#dff7ea}
+    /* HOW cards (reuse faq-grid layout) */
+    .faq-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+      gap:14px;
+      margin-top:18px;
+    }
 
-    /* Footer */
-    footer{border-top:1px solid var(--line); background:#030a06; padding:28px; text-align:center; color:var(--muted)}
+    /* FAQ updated hacker style */
+    details.faq-item{
+      border:1px solid rgba(18,255,109,.12);
+      border-radius:16px;
+      padding:14px 16px;
+      background:rgba(0,0,0,.08);
+      overflow:hidden;
+      transition:border .15s ease, box-shadow .15s ease, background .15s ease;
+      position:relative;
+    }
+    details.faq-item[open]{
+      border:1px solid rgba(18,255,109,.55);
+      background:radial-gradient(circle at top, rgba(18,255,109,.12), rgba(0,0,0,0));
+      box-shadow:0 0 26px rgba(18,255,109,.12);
+    }
+    details.faq-item summary{
+      cursor:pointer; font-weight:700; color:#b8ffd7;
+      list-style:none;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-height:48px;
+      user-select:none;
+    }
+    details.faq-item summary::-webkit-details-marker{display:none}
+    .faq-arrow{
+      width:22px;
+      height:22px;
+      border-radius:999px;
+      border:1px solid rgba(18,255,109,.35);
+      display:grid;
+      place-items:center;
+      color:var(--acid);
+      font-size:12px;
+      transition:transform .15s ease;
+      background:rgba(0,0,0,.35);
+      flex:0 0 22px;
+    }
+    details.faq-item[open] .faq-arrow{
+      transform:rotate(90deg);
+      background:rgba(18,255,109,.25);
+    }
+    details.faq-item p{
+      color:#dff7ea;
+      margin:0 0 12px 32px;
+      line-height:1.5;
+      font-size:.9rem;
+      padding-right:4px;
+    }
+
+    footer{
+      border-top:1px solid rgba(18,255,109,.05);
+      background:linear-gradient(to bottom, #030a06, #000);
+      padding:28px; text-align:center; color:var(--muted)
+    }
     footer a{color:var(--acid); text-decoration:none}
 
-    /* Reveal animations */
+    /* Reveal scroll animations */
     .reveal{opacity:0; transform:translateY(16px); transition:opacity .6s ease, transform .6s ease}
     .reveal.in{opacity:1; transform:none}
 
-    /* TOOLS SECTION */
-    .tools{ background:linear-gradient(180deg, rgba(6,12,8,.85), rgba(3,10,6,.85)); border:1px solid var(--line); border-radius:14px; padding:20px; }
-    .tools-row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
-    .tools input{
-      flex:1; min-width:260px; background:#0b140b; color:#e7ffe7;
-      border:1px solid var(--line); border-radius:10px; padding:12px 14px; outline:none;
-      pointer-events:auto; -webkit-tap-highlight-color: transparent;
+    @media (max-width:640px){
+      .hero-actions{flex-direction:column; align-items:flex-start;}
+      .tools-input-row{flex-direction:column; align-items:flex-start;}
+      .tools-headline{flex-direction:column; align-items:flex-start;}
+      .tools-wrap{border-radius:20px; padding:20px 15px 28px;}
     }
-    .btn{
-      display:inline-flex; align-items:center; gap:8px; padding:12px 14px; border-radius:10px;
-      border:1px solid #7bffc1; background:var(--acid); color:#001a0e; font-weight:800; text-decoration:none;
-      cursor:pointer; pointer-events:auto; -webkit-tap-highlight-color: transparent;
-    }
-    .btn.secondary{background:transparent; color:var(--muted); border-color:var(--line);}
-
-    /* Tool Progress UI */
-    .progress-wrap{ margin-top:12px }
-    .progress-bar{ width:100%; height:10px; border-radius:999px; background:#06210f; border:1px solid var(--line); overflow:hidden }
-    .progress-fill{ height:100%; width:0%; background:var(--acid); transition:width .25s ease; }
-    .status{ color:#cdeedb; font-size:13px; margin-top:6px }
-
-    /* App handoff banner */
-    .handoff{
-      display:none; align-items:center; gap:10px; padding:10px 12px; margin:10px 0;
-      border:1px dashed var(--line); border-radius:10px; background:rgba(18,255,109,.06); color:var(--muted);
-    }
-    .handoff b{ color: var(--acid); }
-    .handoff .x{ margin-left:auto; cursor:pointer; opacity:.75 }
-    .handoff.show{ display:flex; }
   </style>
 </head>
 <body>
+
   <!-- NAV -->
   <nav class="nav" id="nav">
     <div class="brand"><span class="logo"></span><span>DexTracker <b>Ai</b></span></div>
@@ -144,120 +370,70 @@
     </div>
     <div class="links" id="navlinks">
       <a href="#home" data-link>Home</a>
-      <a href="#features" data-link>Features</a>
-      <a href="#how" data-link>How It Works</a>
-      <a href="#gallery" data-link>Gallery</a>
-      <a href="#pricing" data-link>Pricing</a>
       <a href="#tools" data-link>Tools</a>
+      <a href="#pricing" data-link>Pricing</a>
+      <a href="#how" data-link>How It Works</a>
       <a href="#faq" data-link>FAQ</a>
     </div>
   </nav>
 
   <!-- HERO -->
   <header class="hero" id="home">
-    <div>
-      <h1>Unlock Ridiculous Momentum</h1>
-      <p id="hero-copy">Hacker-clean analytics, clip candidates, and retention-spike helpers so you post smarter and grow faster.</p>
-      <a class="cta" href="#pricing" data-link>Start Free Trial →</a>
-      <a class="subcta" href="#features" data-link>See how it works</a>
-      <a class="tools-btn" href="#tools" data-link>Tools</a>
+    <div class="hero-text">
+      <p class="eyebrow">Creator Ops • Retention • Auto Clipping</p>
+      <h1>Hacker-clean video AI for DexClanTV energy.</h1>
+      <p>Paste a link, get clip candidates, see retention spikes, then send it right back into your iOS app.</p>
+      <div class="hero-actions">
+        <a class="btn-primary" href="#tools" data-link>Open tools →</a>
+        <a class="btn-ghost" href="#pricing" data-link>View plans</a>
+      </div>
+    </div>
+    <div class="hero-video">
+      <div class="glow-ring"></div>
+      <!-- ✅ drop your GitHub raw .mov here -->
+      <!-- Example: https://raw.githubusercontent.com/USERNAME/REPO/main/Comp%201.mov -->
+      <video
+        src="wow.mp4"
+        autoplay
+        muted
+        loop
+        playsinline
+        poster=""
+      ></video>
     </div>
   </header>
 
-  <!-- TICKER -->
-  <div class="ticker" aria-hidden="true">
-    <div class="ticker__row">
-      <span class="chip">Live CTR titles</span>
-      <span class="chip">Retention spike alerts</span>
-      <span class="chip">Script Brainstormer</span>
-      <span class="chip">AI reply queue</span>
-      <span class="chip">Hacker UI</span>
-      <span class="chip">DexClanTv verified</span>
-      <span class="chip">Live CTR titles</span>
-      <span class="chip">Retention spike alerts</span>
-      <span class="chip">Script Brainstormer</span>
-      <span class="chip">AI reply queue</span>
-      <span class="chip">Hacker UI</span>
-      <span class="chip">DexClanTv verified</span>
-    </div>
-  </div>
-
-  <!-- FEATURES -->
-  <section id="features">
-    <span class="eyebrow">Capabilities</span>
-    <h2>Everything you need to win the upload war</h2>
-    <p class="lead">Jet-black UI + neon clarity for creators who ship.</p>
-    <div class="grid cols-3">
-      <div class="card reveal"><h3>🔁 Clip Candidates</h3><p>Surface spike windows and one-tap exports for Shorts/Reels/TikTok.</p></div>
-      <div class="card reveal"><h3>🧠 Script Brainstormer</h3><p>Full script drafts tuned to <em>your</em> tone + SEO-aware title ideas.</p></div>
-      <div class="card reveal"><h3>📈 Live Analytics</h3><p>CTR, impressions, and retention in one glance.</p></div>
-      <div class="card reveal"><h3>🤖 Reply Queue</h3><p>Pull recent comments, propose replies; you approve.</p></div>
-      <div class="card reveal"><h3>🔔 Smart Alerts</h3><p>Notify on dips/spikes and suggest iterations.</p></div>
-      <div class="card reveal"><h3>🛡️ Privacy-First</h3><p>Local secrets + transparent scopes. You’re in control.</p></div>
-    </div>
-  </section>
-
-  <!-- HOW -->
-  <section id="how">
-    <span class="eyebrow">Workflow</span>
-    <h2>Three steps. All gas, no brakes.</h2>
-    <div class="grid cols-3">
-      <div class="card reveal"><h3>1) Set Intent</h3><p>Tailor dashboards and alerts to your goals.</p></div>
-      <div class="card reveal"><h3>2) Leverage AI</h3><p>Brainstorm scripts, simulate titles, and queue clips.</p></div>
-      <div class="card reveal"><h3>3) React Fast</h3><p>Push notifications flag dips/spikes so you iterate faster.</p></div>
-    </div>
-  </section>
-
-  <!-- GALLERY -->
-  <section id="gallery">
-    <span class="eyebrow">Interface</span>
-    <h2>Looks cold. Works hot.</h2>
-    <p class="lead">Neon-glass tiles meet hacker-clean signal.</p>
-    <div class="gallery">
-      <div class="tile reveal"><img alt="CTR Heatmap" src="https://images.unsplash.com/photo-1551281044-8b4c1b7e4d5f?q=80&w=1200&auto=format&fit=crop"><div class="overlay">CTR Heatmaps</div></div>
-      <div class="tile reveal"><img alt="Retention Chart" src="https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?q=80&w=1200&auto=format&fit=crop"><div class="overlay">Retention Curves</div></div>
-      <div class="tile reveal"><img alt="AI Brainstorm" src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=1200&auto=format&fit=crop"><div class="overlay">AI Brainstorm</div></div>
-    </div>
-  </section>
-
-  <!-- PRICING -->
-  <section id="pricing">
-    <span class="eyebrow">Plans</span>
-    <h2>Simple pricing. 7-day free trial.</h2>
-    <div class="pricing">
-      <div class="card reveal"><h3>Pro</h3><p class="price">$9.99<span style="font-size:16px">/mo</span></p><p>All premium features • Daily analytics • Alerts • AI replies</p><p><a class="cta" href="#" onclick="alert('Coming soon • App Store connect')">Get Pro</a></p></div>
-      <div class="card reveal"><h3>Elite</h3><p class="price">$49.99<span style="font-size:16px">/yr</span></p><p>Everything in Pro • Annual savings • Early access experiments</p><p><a class="cta" href="#" onclick="alert('Coming soon • App Store connect')">Go Elite</a></p></div>
-    </div>
-  </section>
-
-  <!-- TOOLS -->
+  <!-- TOOLS (full style) -->
   <section id="tools">
-    <span class="eyebrow">Utilities</span>
-    <h2>Tools</h2>
-    <p class="lead" id="tools-copy">Paste a direct MP4 / M3U8 link you own (or a YouTube watch URL for your content) and we’ll generate clip candidates.</p>
-
-    <div id="handoff" class="handoff">
-      <span>🎯 <b>Received</b> <code id="handoff-id"></code> from app</span>
-      <span class="x" onclick="this.parentElement.classList.remove('show')">✕</span>
-    </div>
-
-    <div class="tools">
-      <div class="tools-row" style="margin-bottom:10px">
-        <input id="repurpose-input" type="url" placeholder="Paste direct .mp4 / .m3u8 / YouTube URL you own" />
-        <button id="repurpose-run" class="btn" type="button">Generate Clips</button>
-        <button id="clear-input" class="btn secondary" type="button">Clear</button>
-        <button id="simulate-progress" class="btn secondary" type="button" title="Test app progress bridge">Simulate Progress</button>
-        <button id="simulate-result" class="btn secondary" type="button" title="Test app result bridge">Simulate Result</button>
+    <div class="tools-wrap">
+      <div class="tools-headline">
+        <div>
+          <p class="eyebrow">Utilities</p>
+          <h2 style="margin-bottom:6px">Tools</h2>
+          <p class="lead" id="tools-copy">Paste a direct MP4 / M3U8 / YouTube link you own and we’ll generate clip candidates.</p>
+        </div>
+        <button id="simulate-progress" class="tools-small-btn" type="button">Simulate Progress</button>
       </div>
 
-      <!-- Format Picker Row -->
-      <div class="tools-row" style="margin-bottom:10px">
-        <button id="list-formats" class="btn secondary" type="button">List Formats</button>
-        <select id="format-select" style="min-width:260px; flex:1; background:#0b140b; color:#e7ffe7; border:1px solid var(--line); border-radius:10px; padding:10px; display:none">
+      <div id="handoff" class="handoff" style="display:none">
+        <span>🎯 <b>Received</b> <code id="handoff-id"></code> from app</span>
+        <span class="x" onclick="this.parentElement.style.display='none'">✕</span>
+      </div>
+
+      <div class="tools-input-row" style="margin-bottom:12px">
+        <input id="repurpose-input" class="tools-input" type="url" placeholder="https://www.youtube.com/watch?v=…" />
+        <button id="repurpose-run" class="tools-btn-big" type="button">Generate Clips</button>
+        <button id="clear-input" class="tools-small-btn" type="button">Clear</button>
+        <button id="simulate-result" class="tools-small-btn" type="button">Simulate Result</button>
+      </div>
+
+      <div class="tools-input-row" style="margin-bottom:6px">
+        <button id="list-formats" class="tools-small-btn" type="button">List Formats</button>
+        <select id="format-select" style="min-width:240px; flex:1; background:#0b140b; color:#e7ffe7; border:1px solid var(--line); border-radius:10px; padding:10px; display:none">
           <option value="">— choose a format —</option>
         </select>
-        <button id="download-format" class="btn secondary" type="button" style="display:none">Download Selected</button>
-        <button id="get-mp3" class="btn secondary" type="button" title="Extract audio as MP3">Get MP3</button>
+        <button id="download-format" class="tools-small-btn" type="button" style="display:none">Download Selected</button>
+        <button id="get-mp3" class="tools-small-btn" type="button" title="Extract audio as MP3">Get MP3</button>
       </div>
 
       <div class="progress-wrap" id="progress-wrap" style="display:none">
@@ -269,28 +445,173 @@
     </div>
   </section>
 
+  <!-- HOW -->
+  <section id="how">
+    <p class="eyebrow">Workflow</p>
+    <h2>Three steps. All gas, no brakes.</h2>
+    <p class="lead">Same flow as your iOS app.</p>
+    <div class="faq-grid">
+      <div class="reveal cardish">
+        <h3>1) Set intent</h3>
+        <p>Tell DexTracker what you’re doing today: upload, clip, or SEO checks.</p>
+      </div>
+      <div class="reveal cardish">
+        <h3>2) Leverage AI</h3>
+        <p>Script brainstormer, title simulator, and clip generator work together.</p>
+      </div>
+      <div class="reveal cardish">
+        <h3>3) React fast</h3>
+        <p>Spikes or dips? We flag it so you can swap title/thumbnail fast.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pricing">
+    <p class="eyebrow">Pricing</p>
+    <h2>Three plans for where you are</h2>
+    <p class="lead">Start light, grow to Pro, or hit us for team / multi-channel setups.</p>
+
+    <div class="pricing-row">
+      <!-- Starter -->
+      <article class="price-card reveal">
+        <h3 class="price-title">Starter</h3>
+        <div class="price-num">$0 <small>/mo</small></div>
+        <p>Test the tool, 1–2 clips/day, basic parsing.</p>
+        <ul class="feat-list">
+          <li>Tools page access</li>
+          <li>Manual paste only</li>
+          <li>Demo video support</li>
+        </ul>
+        <a href="#tools" class="price-cta">Start free</a>
+      </article>
+
+      <!-- Pro -->
+      <article class="price-card reveal" style="border:1px solid rgba(18,255,109,.55); box-shadow:0 24px 65px rgba(0,255,149,.12);">
+        <div class="badge-pill">Most used</div>
+        <h3 class="price-title">Pro</h3>
+        <div class="price-num">$9.99 <small>/mo</small></div>
+        <p>Everything you’ve been building in DexTracker (alerts, CTR helpers, reply queue).</p>
+        <ul class="feat-list">
+          <li>Auto handoff from iOS app</li>
+          <li>Clip candidate generator</li>
+          <li>Retention / spike suggestions</li>
+          <li>SEO-aware script starter</li>
+          <li>Comment reply queue (manual approve)</li>
+          <li>5 Grok messages/day</li>
+        </ul>
+        <a href="#" class="price-cta" onclick="alert('Coming soon • App Store connect')">Get Pro</a>
+      </article>
+
+      <!-- Business -->
+      <article class="price-card reveal">
+        <h3 class="price-title">Business</h3>
+        <div class="price-num">Let’s talk</div>
+        <p>Ideal for agencies, teams, or brands that want creator analytics in a private dashboard.</p>
+        <ul class="feat-list">
+          <li>Custom clip endpoints</li>
+          <li>Team onboarding</li>
+          <li>Priority support</li>
+        </ul>
+        <a href="mailto:dexclantv@gmail.com?subject=DexTracker%20Business" class="price-cta">Contact us →</a>
+      </article>
+    </div>
+  </section>
+
   <!-- FAQ -->
   <section id="faq">
-    <span class="eyebrow">FAQ</span>
+    <p class="eyebrow">FAQ</p>
     <h2>Quick answers</h2>
-    <details class="reveal"><summary>What is DexTracker?</summary><p>An AI-assisted toolkit for ideation, analysis, and faster shipping—privacy-first.</p></details>
-    <details class="reveal"><summary>Do you track me?</summary><p>No tracking pixels. We only process links you submit.</p></details>
+    <div class="faq-grid">
+      <details class="reveal faq-item" open>
+        <summary>
+          <span class="faq-arrow">›</span>
+          What is DexTracker?
+        </summary>
+        <p>Dex Tracker is an AI-powered assistant that helps you grow your YouTube channel by automating analytics, clipping, scripting, and trend research — same energy as the iOS app.</p>
+      </details>
+      <details class="reveal faq-item" open>
+        <summary>
+          <span class="faq-arrow">›</span>
+          How does auto-clipping work?
+        </summary>
+        <p>We detect high-retention moments in your videos and let you export them as ready-to-post Shorts, Reels, or TikToks.</p>
+      </details>
+      <details class="reveal faq-item">
+        <summary>
+          <span class="faq-arrow">›</span>
+          What does the SEO simulator do?
+        </summary>
+        <p>It generates optimized titles and compares their CTR potential using emotional triggers, curiosity scores, and historic patterns.</p>
+      </details>
+      <details class="reveal faq-item">
+        <summary>
+          <span class="faq-arrow">›</span>
+          Can I export clips to CapCut?
+        </summary>
+        <p>Yes — export the MP4 from the tools page, then import to CapCut, iMovie, or your iPhone camera roll.</p>
+      </details>
+      <details class="reveal faq-item">
+        <summary>
+          <span class="faq-arrow">›</span>
+          Is there a free trial?
+        </summary>
+        <p>Yep. Just like the app: 7-day free trial, then your plan.</p>
+      </details>
+      <details class="reveal faq-item">
+        <summary>
+          <span class="faq-arrow">›</span>
+          Will Dex Tracker post my stats to Discord?
+        </summary>
+        <p>Only if you enable it. By default, nothing is posted anywhere.</p>
+      </details>
+    </div>
   </section>
 
   <footer>
     <div>© 2025 DexTracker • <a href="https://dexclantv.github.io/landing.html" target="_blank" rel="noopener">GitHub Pages</a></div>
     <div style="margin-top:6px">Follow: <a href="https://www.instagram.com/Perry.Glo" target="_blank" rel="noopener">Instagram</a> • <a href="https://twitter.com/DexClanTv" target="_blank" rel="noopener">Twitter</a> • <a href="https://www.youtube.com/@DexClanTv" target="_blank" rel="noopener">YouTube</a></div>
-    <div style="margin-top:10px; font-size:12px; color:#9cf5c9">
-      Privacy: No tracking pixels. We only use the URLs you provide to generate results.
-    </div>
+    <div style="margin-top:10px; font-size:12px; color:#9cf5c9">Privacy: No tracking pixels. We only use the URLs you provide to generate results.</div>
   </footer>
 
   <!-- Bridge helpers (load minimal.js if you have it; safe without) -->
   <script src="minimal.js" defer></script>
 
-  <!-- Page logic -->
   <script>
-    /* Fallbacks if minimal.js isn't present (don’t throw) */
+    // mobile nav
+    const burger = document.getElementById('burger');
+    const links = document.getElementById('navlinks');
+    burger?.addEventListener('click', () => {
+      const open = links.classList.toggle('open');
+      burger.setAttribute('aria-expanded', open ? 'true':'false');
+    });
+
+    // Smooth scroll with offset
+    function scrollToWithOffset(id){
+      const el = document.querySelector(id);
+      const nav = document.getElementById('nav');
+      if(!el || !nav) return;
+      const y = el.getBoundingClientRect().top + window.scrollY - (nav.offsetHeight + 8);
+      window.scrollTo({top:y, behavior:'smooth'});
+    }
+    document.querySelectorAll('[data-link]')?.forEach(a=>{
+      a.addEventListener('click', (e)=>{
+        e.preventDefault();
+        scrollToWithOffset(a.getAttribute('href'));
+        links.classList.remove('open');
+      });
+    });
+
+    // scroll reveal
+    const observer = new IntersectionObserver((entries)=>{
+      entries.forEach(({target, isIntersecting})=>{
+        if(isIntersecting){ target.classList.add('in'); observer.unobserve(target); }
+      });
+    }, {threshold:.16});
+    document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+    // ====== TOOL LOGIC ======
+    // fallback bridge (safe)
     window.sendProgress = window.sendProgress || function (p) {
       try { window.webkit?.messageHandlers?.clipper?.postMessage({type:'progress', value:p}); } catch {}
     };
@@ -298,16 +619,12 @@
       try { window.webkit?.messageHandlers?.clipper?.postMessage({type:'result', url}); } catch {}
     };
 
-    // Allow ?api= override for local/tunnel testing
-    const API_BASE =
-      new URLSearchParams(location.search).get("api") ||
-      "https://dextracker-clips.fly.dev";
+    const API_BASE = new URLSearchParams(location.search).get("api") || "https://dextracker-clips.fly.dev";
 
-    // ---------- Handoff / prefill ----------
     function showHandoff(id){
       const b = document.getElementById('handoff');
       const code = document.getElementById('handoff-id');
-      if (b && code){ code.textContent = id; b.classList.add('show'); }
+      if (b && code){ code.textContent = id; b.style.display = 'flex'; }
     }
     function setInput(raw){
       const input = document.getElementById('repurpose-input');
@@ -315,8 +632,6 @@
       const val = (raw||"").trim();
       if (!val) return;
       input.value = val;
-      input.dispatchEvent(new Event('input', {bubbles:true}));
-      input.dispatchEvent(new Event('change', {bubbles:true}));
       try { localStorage.setItem('dex_last_url_or_id', val); } catch {}
       showHandoff(val);
     }
@@ -325,21 +640,9 @@
       if(!clean) return "";
       return `https://www.youtube.com/watch?v=${encodeURIComponent(clean)}`;
     }
-    function extractVideoIdFromAny(u){
-      if (!u) return "";
-      try{
-        if (/youtu\.be\//i.test(u)) return new URL(u).pathname.slice(1).split('?')[0];
-        if (/youtube\.com\/watch/i.test(u)) return new URL(u).searchParams.get('v') || "";
-        if (/^[a-zA-Z0-9_-]{8,}$/.test(u)) return u;
-      }catch{}
-      return "";
-    }
-
-    // Public bridge for the iOS app
     window.dexSetUrl = function(url){ setInput(url); };
     window.dexSetVideoId = function(id){ setInput(toWatchUrlFromId(id) || id); };
 
-    // Listen for postMessage from app
     window.addEventListener('message', (e)=>{
       try{
         const d = e?.data || {};
@@ -348,26 +651,21 @@
       }catch{}
     });
 
-    // Bootstrap from query/hash/localStorage
+    // bootstrap auto-paste + auto-scroll to tools
     (function bootstrap(){
       try{
         const qs = new URLSearchParams(location.search);
         const urlQ = qs.get('url');
         const vidQ = qs.get('videoId') || qs.get('v');
-        const hash = location.hash || '';
-        const urlH = (hash.match(/[#&]url=([^&]+)/i)||[])[1];
-        const vidH = (hash.match(/[#&](?:vid|v)=([^&]+)/i)||[])[1];
         const stored = localStorage.getItem('dex_last_url_or_id') || '';
-
-        if (urlQ) return setInput(decodeURIComponent(urlQ));
-        if (urlH) return setInput(decodeURIComponent(urlH));
-        if (vidQ) return setInput(toWatchUrlFromId(decodeURIComponent(vidQ)));
-        if (vidH) return setInput(toWatchUrlFromId(decodeURIComponent(vidH)));
-        if (stored) setInput(stored);
+        if (urlQ) setInput(decodeURIComponent(urlQ));
+        else if (vidQ) setInput(toWatchUrlFromId(decodeURIComponent(vidQ)));
+        else if (stored) setInput(stored);
+        // go straight to tools
+        scrollToWithOffset('#tools');
       }catch{}
     })();
 
-    // UI helpers
     function showProgressUI(show){
       const wrap = document.getElementById('progress-wrap');
       if(!wrap) return;
@@ -392,7 +690,7 @@
       el.addEventListener('touchend', wrap, { passive: true });
     }
 
-    // ===== Format parsing (client-side) =====
+    // format parser (same as before)
     function parseFormats(text){
       const lines = (text || "").split("\n");
       const rows = [];
@@ -403,25 +701,18 @@
         const ext = m[2];
         const col3 = m[3];
         const rest = (m[4]||"").trim();
-
-        let res = "", fps = "", vcodec="", acodec="", size="";
-        if (/audio only/i.test(col3)){
-          res = "audio";
-        } else {
+        let res = "", fps = "", size="";
+        if (/audio only/i.test(col3)){ res = "audio"; }
+        else {
           const r1 = col3.match(/(\d{3,4}x\d{3,4})/);
           const r2 = col3.match(/(\d{3,4}p)/i);
           res = r1 ? r1[1] : (r2 ? r2[1] : col3.trim());
         }
         const fpsm = (rest.match(/(\d{2,3})fps/i) || []);
         fps = fpsm[1] || "";
-        const vc = rest.match(/vcodec\s+([^\s,]+)/i);
-        if (vc) vcodec = vc[1];
-        const ac = rest.match(/acodec\s+([^\s,]+)/i);
-        if (ac) acodec = ac[1];
         const sz = rest.match(/(\d+(?:\.\d+)?[MK]B)/i);
         if (sz) size = sz[1];
-
-        rows.push({ id, ext, res, fps, vcodec, acodec, size, note: rest });
+        rows.push({ id, ext, res, fps, size, note: rest });
       }
       const seen = new Set();
       return rows.filter(r=>{
@@ -431,13 +722,11 @@
         return true;
       });
     }
-
     function fillFormatSelect(rows){
       const sel = document.getElementById("format-select");
       const btn = document.getElementById("download-format");
       if (!sel || !btn) return;
       sel.innerHTML = `<option value="">— choose a format —</option>`;
-
       rows.forEach(r=>{
         const isAudio = (r.res || "").toLowerCase() === "audio" || /audio only/i.test(r.note||"");
         const label = [
@@ -446,21 +735,17 @@
           isAudio ? "AUDIO" : (r.res || ""),
           r.fps ? `${r.fps}fps` : "",
           r.size ? `(${r.size})` : "",
-          (r.vcodec && r.acodec) ? `${r.vcodec}+${r.acodec}` : (r.vcodec || r.acodec || "")
         ].filter(Boolean).join(" · ");
-
         const opt = document.createElement("option");
         opt.value = r.id;
         opt.textContent = label;
         opt.dataset.isAudio = isAudio ? "1" : "0";
         sel.appendChild(opt);
       });
-
       sel.style.display = "block";
       btn.style.display = "inline-flex";
     }
 
-    // Poll a job
     async function pollJob(jobId){
       return new Promise((resolve, reject)=>{
         let last = 10;
@@ -489,7 +774,7 @@
       });
     }
 
-    // ===== Buttons =====
+    // BUTTONS
     bindTap('repurpose-run', async () => {
       const input = document.getElementById('repurpose-input');
       const val = input?.value?.trim();
@@ -520,7 +805,7 @@
           const fileUrl = await pollJob(jobId);
           const el = document.getElementById('tool-result');
           el.style.display = 'block';
-          el.innerHTML = `<div class="card"><h3>Result</h3><p><a href="${fileUrl}" target="_blank" rel="noopener">Download MP4</a></p></div>`;
+          el.innerHTML = `<div class="cardish"><h3>Result</h3><p><a href="${fileUrl}" target="_blank" rel="noopener">Download MP4</a></p></div>`;
           return;
         }
 
@@ -533,7 +818,7 @@
 
         const result = document.getElementById('tool-result');
         result.style.display = 'block';
-        result.innerHTML = `<div class="card" style="margin-top:8px">
+        result.innerHTML = `<div class="cardish">
           <h3>Result</h3>
           <p>Sent final clip URL to the app.</p>
           <p>Fallback link: <a href="${data.directUrl}" target="_blank" rel="noopener">open</a></p>
@@ -546,6 +831,36 @@
         alert('Clip API failed: ' + (e?.message || e));
         sendProgress(0.0);
       }
+    });
+
+    bindTap('clear-input', ()=>{
+      const input = document.getElementById('repurpose-input');
+      if (input) input.value = '';
+      const res = document.getElementById('tool-result');
+      if (res) res.style.display = 'none';
+      showProgressUI(false);
+    });
+
+    bindTap('simulate-progress', ()=>{
+      showProgressUI(true);
+      let n = 0;
+      const tick = () => {
+        n += 12;
+        setProgress(Math.min(n, 100), 'Simulating… ' + Math.min(n,100) + '%');
+        if (n < 100) setTimeout(tick, 160);
+      };
+      tick();
+    });
+
+    bindTap('simulate-result', ()=>{
+      const el = document.getElementById('tool-result');
+      el.style.display = 'block';
+      el.innerHTML = `<div class="cardish">
+        <h3>Result</h3>
+        <p>Sent final clip URL to the app.</p>
+        <p>Fallback link: <a href="https://example.com/demo.mp4" target="_blank" rel="noopener">open</a></p>
+      </div>`;
+      setProgress(100, 'Finished!');
     });
 
     bindTap('list-formats', async ()=>{
@@ -609,7 +924,7 @@
           const fileUrl = await pollJob(jobId);
           const el = document.getElementById('tool-result');
           el.style.display = 'block';
-          el.innerHTML = `<div class="card"><h3>Result</h3><p><a href="${fileUrl}" target="_blank" rel="noopener">Download MP4</a></p></div>`;
+          el.innerHTML = `<div class="cardish"><h3>Result</h3><p><a href="${fileUrl}" target="_blank" rel="noopener">Download MP4</a></p></div>`;
           return;
         }
 
@@ -620,7 +935,7 @@
         sendResult(data.directUrl);
         const el = document.getElementById('tool-result');
         el.style.display = 'block';
-        el.innerHTML = `<div class="card"><h3>Result</h3>
+        el.innerHTML = `<div class="cardish"><h3>Result</h3>
           <p>Sent final clip URL to the app. Fallback: <a href="${data.directUrl}" target="_blank" rel="noopener">open</a></p></div>`;
         setProgress(100, "Finished!");
       }catch(e){
@@ -653,43 +968,6 @@
       }
     });
 
-    // Mobile nav + reveals
-    const burger = document.getElementById('burger');
-    const links = document.getElementById('navlinks');
-    burger?.addEventListener('click', () => {
-      const open = links.classList.toggle('open');
-      burger.setAttribute('aria-expanded', open ? 'true':'false');
-    });
-    function scrollToWithOffset(id){
-      const el = document.querySelector(id);
-      const nav = document.getElementById('nav');
-      if(!el || !nav) return;
-      const y = el.getBoundingClientRect().top + window.scrollY - (nav.offsetHeight + 8);
-      window.scrollTo({top:y, behavior:'smooth'});
-    }
-    document.querySelectorAll('[data-link]')?.forEach(a=>{
-      a.addEventListener('click', (e)=>{
-        e.preventDefault();
-        scrollToWithOffset(a.getAttribute('href'));
-        links.classList.remove('open');
-      });
-    });
-    const sections = [...document.querySelectorAll('header[id], section[id]')];
-    const navLinks = [...document.querySelectorAll('.links a[data-link]')];
-    const byId = id => navLinks.find(a=>a.getAttribute('href')==="#"+id);
-    const revealer = new IntersectionObserver((entries)=>{
-      entries.forEach(({isIntersecting, target})=>{
-        if(isIntersecting){ target.classList.add('in'); revealer.unobserve(target); }
-      })
-    },{threshold:.12});
-    sections.forEach(s=>revealer.observe(s));
-    document.querySelectorAll('.card').forEach(card=>{
-      card.addEventListener('pointermove', e=>{
-        const r = card.getBoundingClientRect();
-        card.style.setProperty('--x', ((e.clientX-r.left)/r.width*100)+'%');
-        card.style.setProperty('--y', ((e.clientY-r.top)/r.height*100)+'%');
-      })
-    });
   </script>
 </body>
 </html>
