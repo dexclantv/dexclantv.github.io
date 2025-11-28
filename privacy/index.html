@@ -2,120 +2,240 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Privacy Policy | DexTracker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#000000" />
+  <title>Privacy Protocol | DexTracker</title>
+
+  <!-- fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
   <style>
+    :root {
+      --bg: #030303;
+      --bg-panel: #0a0f0a;
+      --fg: #e0fce0;
+      --acid: #00ff66;
+      --acid-glow: rgba(0, 255, 102, 0.4);
+      --acid-dim: rgba(0, 255, 102, 0.05);
+      --grid-color: rgba(0, 255, 102, 0.07);
+      --border: rgba(0, 255, 102, 0.2);
+      --font-ui: 'Inter', system-ui, sans-serif;
+      --font-tech: 'Orbitron', sans-serif;
+      --font-code: 'JetBrains Mono', monospace;
+      --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    * { box-sizing: border-box; }
+    
+    html { scroll-behavior: smooth; }
+    
     body {
       margin: 0;
-      font-family: 'Courier New', Courier, monospace;
-      background-color: #000;
-      color: #00ff88;
-      padding: 40px;
-      line-height: 1.7;
+      color: var(--fg);
+      font-family: var(--font-ui);
+      background-color: var(--bg);
+      background-image: 
+        linear-gradient(var(--grid-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+      background-size: 50px 50px;
+      overflow-x: hidden;
     }
 
-    h1, h2 {
-      color: #00ff88;
-      text-shadow: 0 0 8px #00ff88;
+    /* Ambient Glow */
+    body::before {
+      content: ''; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: radial-gradient(circle at 50% 50%, rgba(0, 255, 102, 0.08), transparent 70%);
+      pointer-events: none; z-index: -1; animation: ambientPulse 10s infinite alternate;
     }
+    @keyframes ambientPulse { 0% { opacity: 0.5; } 100% { opacity: 1; } }
 
-    a {
-      color: #00ff88;
-      text-decoration: underline;
+    /* NAV */
+    .nav {
+      position: sticky; top: 0; z-index: 1000;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px clamp(20px, 5vw, 40px);
+      background: rgba(3, 3, 3, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
     }
+    .brand { font-family: var(--font-tech); font-weight: 700; display: flex; gap: 12px; align-items: center; text-transform: uppercase; color: white; text-decoration: none; }
+    .brand b { color: var(--acid); text-shadow: 0 0 12px var(--acid); }
+    .nav-links a { color: var(--fg); text-decoration: none; font-size: 0.9rem; font-weight: 600; padding: 8px 16px; transition: 0.3s; }
+    .nav-links a:hover { color: var(--acid); text-shadow: 0 0 8px var(--acid); }
 
+    /* LAYOUT */
     .container {
-      max-width: 800px;
-      margin: auto;
+      max-width: 900px; margin: 0 auto; padding: 120px 20px 60px;
     }
 
-    .header {
-      border-bottom: 1px solid #00ff88;
-      margin-bottom: 40px;
-      padding-bottom: 10px;
+    .eyebrow {
+      font-family: var(--font-code); color: var(--acid); font-size: 0.85rem; letter-spacing: 2px;
+      margin-bottom: 16px; display: inline-block; border: 1px solid var(--acid); padding: 4px 12px; background: var(--acid-dim);
     }
 
-    .section {
-      margin-bottom: 40px;
+    h1 {
+      font-family: var(--font-tech); font-size: clamp(30px, 5vw, 50px); color: white; margin: 0 0 40px; text-transform: uppercase;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.8);
     }
 
+    /* DOCUMENT CARD STYLES */
+    .doc-panel {
+      position: relative;
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 40px;
+      overflow: hidden;
+    }
+
+    /* Spotlight Effect */
+    .spotlight-card { --mouse-x: 50%; --mouse-y: 50%; position: relative; }
+    .spotlight-card::before {
+      content: ""; position: absolute; inset: 0;
+      background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(0, 255, 102, 0.15), transparent 40%);
+      opacity: 0; transition: opacity 0.5s; z-index: 1; pointer-events: none;
+    }
+    .spotlight-card:hover::before { opacity: 1; }
+    .spotlight-card::after {
+      content: ""; position: absolute; inset: -1px; border-radius: inherit;
+      background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(0, 255, 102, 0.6), transparent 40%);
+      z-index: 0; opacity: 0; transition: opacity 0.5s;
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none;
+    }
+    .spotlight-card:hover::after { opacity: 1; }
+
+    .content-layer { position: relative; z-index: 2; }
+
+    /* TEXT STYLES */
     .section-title {
-      font-size: 20px;
-      margin-bottom: 10px;
-      border-left: 4px solid #00ff88;
-      padding-left: 12px;
+      font-family: var(--font-tech); color: var(--acid); font-size: 1.4rem; margin-top: 40px; margin-bottom: 15px;
+      border-bottom: 1px solid var(--border); padding-bottom: 10px; display: flex; align-items: center; gap: 10px;
     }
+    .section-title::before { content: '>'; color: white; font-family: var(--font-code); }
+    
+    p, li { line-height: 1.8; color: #b0c4b0; margin-bottom: 15px; }
+    ul { list-style: none; padding-left: 10px; }
+    ul li::before { content: '::'; color: var(--acid); margin-right: 10px; font-family: var(--font-code); }
+    
+    a.link { color: var(--acid); text-decoration: none; border-bottom: 1px solid transparent; transition: 0.3s; }
+    a.link:hover { border-color: var(--acid); box-shadow: 0 2px 10px var(--acid-glow); }
 
-    .footer {
-      font-size: 14px;
-      opacity: 0.8;
-      border-top: 1px solid #00ff88;
-      padding-top: 20px;
-    }
+    /* FOOTER */
+    footer { border-top: 1px solid var(--border); padding: 40px; text-align: center; margin-top: 60px; background: black; }
+    footer a { color: var(--acid); text-decoration: none; margin: 0 10px; font-weight: 700; font-family: var(--font-code); font-size: 0.8rem; }
+  
+    /* Reveal Animation */
+    .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s var(--ease-out); }
+    .reveal.active { opacity: 1; transform: translateY(0); }
 
-    @media (max-width: 600px) {
-      body {
-        padding: 20px;
-      }
+    @media (max-width: 768px) {
+      .doc-panel { padding: 20px; }
+      .nav-links { display: none; } /* Simplified mobile nav for legal pages */
     }
   </style>
 </head>
 <body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a href="index.html" class="brand">
+      <span>DexTracker <b>Ai</b></span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="terms.html">Terms</a>
+    </div>
+  </nav>
+
+  <!-- CONTENT -->
   <div class="container">
-    <div class="header">
-      <h1>🔒 DexTracker Privacy Policy</h1>
-      <p><strong>Last Updated:</strong> June 12, 2025</p>
-    </div>
+    <div class="eyebrow">&lt;SYSTEM_DOC // TYPE: PRIVACY&gt;</div>
+    <h1 class="reveal">Privacy Protocol</h1>
 
-    <div class="section">
-      <div class="section-title">1. What We Collect</div>
-      <p>• Account Info (Google/Apple email and profile image)</p>
-      <p>• YouTube Data (with permission, for insights)</p>
-      <p>• AI Input/Output for scripts, replies, titles (not reused unless saved)</p>
-      <p>• Billing handled by Apple. We store zero payment data.</p>
-    </div>
+    <div class="doc-panel spotlight-card reveal">
+      <div class="content-layer">
+        <p style="font-family: var(--font-code); color: #666; font-size: 0.8rem; margin-bottom: 30px;">
+          LAST_UPDATED: JUNE 12, 2025<br>
+          STATUS: ACTIVE
+        </p>
 
-    <div class="section">
-      <div class="section-title">2. How We Use It</div>
-      <p>• Power retention and CTR alerts</p>
-      <p>• Personalize dashboard analytics</p>
-      <p>• Improve AI generation</p>
-      <p>• Manage subscriptions and features</p>
-    </div>
+        <div class="section-title">01. Data Collection</div>
+        <p>We minimize data intake to essential vectors only. The system collects:</p>
+        <ul>
+          <li><strong>Account Identifiers:</strong> Google/Apple email and profile images for authentication.</li>
+          <li><strong>Platform Data:</strong> YouTube analytics metrics (retention, views) only when explicitly authorized via OAuth.</li>
+          <li><strong>AI Interactions:</strong> Input prompts and output generations for scripts and titles. These are processed locally or ephemerally and not used for model training without consent.</li>
+          <li><strong>Payment Info:</strong> Managed entirely by Apple/StoreKit. We do not store credit card integers.</li>
+        </ul>
 
-    <div class="section">
-      <div class="section-title">3. Data Storage</div>
-      <p>• All data is local — on your device</p>
-      <p>• Manual backup/export available</p>
-      <p>• No cloud sync unless you enable it</p>
-    </div>
+        <div class="section-title">02. Usage Parameters</div>
+        <p>Collected data is utilized strictly to:</p>
+        <ul>
+          <li>Power visual retention graphs and CTR alert systems.</li>
+          <li>Personalize the dashboard interface.</li>
+          <li>Refine AI generation context.</li>
+          <li>Validate subscription clearance levels.</li>
+        </ul>
 
-    <div class="section">
-      <div class="section-title">4. Your Rights</div>
-      <p>• Delete the app = delete your data</p>
-      <p>• Revoke YouTube access via your Google account</p>
-      <p>• Cancel subscriptions via the App Store</p>
-    </div>
+        <div class="section-title">03. Storage & Security</div>
+        <p>DexTracker operates on a "Local-First" philosophy.</p>
+        <ul>
+          <li>Data resides primarily on your local device.</li>
+          <li>Manual export protocols are available.</li>
+          <li>Cloud synchronization occurs only upon user activation.</li>
+        </ul>
 
-    <div class="section">
-      <div class="section-title">5. No Kids</div>
-      <p>DexTracker isn’t meant for users under 13. No info is knowingly collected from children.</p>
-    </div>
+        <div class="section-title">04. User Rights</div>
+        <p>You maintain full command authority over your data:</p>
+        <ul>
+          <li><strong>Deletion:</strong> Removing the app purges local caches. Account deletion requests wipe server-side references.</li>
+          <li><strong>Revocation:</strong> Access to YouTube data can be revoked via your <a href="https://myaccount.google.com/permissions" target="_blank" class="link">Google Account Security</a> settings.</li>
+        </ul>
 
-    <div class="section">
-      <div class="section-title">6. Updates</div>
-      <p>We’ll notify you of major changes directly in the app.</p>
-    </div>
+        <div class="section-title">05. Age Restrictions</div>
+        <p>DexTracker is not designed for operatives under 13 years of age. No data is knowingly harvested from minors.</p>
 
-    <div class="section">
-      <div class="section-title">7. Contact</div>
-      <p>Email: <a href="mailto:dexclantvs@gmail.com">dexclantvs@gmail.com</a></p>
-      <p>Website: <a href="https://dexclantv.github.io/landing" target="_blank">dexclantv.github.io/landing</a></p>
-    </div>
-
-    <div class="footer">
-      DexTracker © 2025. All rights reserved.
+        <div class="section-title">06. Communication</div>
+        <p>Direct inquiries to Command HQ:</p>
+        <p style="font-family: var(--font-code);">
+          EMAIL: <a href="mailto:dexclantvs@gmail.com" class="link">dexclantvs@gmail.com</a><br>
+          WEB: <a href="https://dexclantv.github.io/landing" class="link">dexclantv.github.io</a>
+        </p>
+      </div>
     </div>
   </div>
+
+  <footer>
+    <div style="font-family: var(--font-tech); margin-bottom: 10px;">DEXTRACKER AI</div>
+    <a href="index.html">HOME</a>
+    <a href="terms.html">TERMS</a>
+    <div style="margin-top: 20px; color: #555; font-size: 10px; font-family: var(--font-code);">
+      ENCRYPTION: STANDARD<br>
+      © 2025 DEXCLANTV
+    </div>
+  </footer>
+
+  <script>
+    // Spotlight Effect
+    document.addEventListener("mousemove", (e) => {
+      const cards = document.querySelectorAll(".spotlight-card");
+      for (const card of cards) {
+        const rect = card.getBoundingClientRect();
+        card.style.setProperty("--mouse-x", `${e.clientX - rect.left}px`);
+        card.style.setProperty("--mouse-y", `${e.clientY - rect.top}px`);
+      }
+    });
+
+    // Reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
 </body>
 </html>
