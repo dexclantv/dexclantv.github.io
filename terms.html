@@ -1,193 +1,246 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#000000" />
   <title>Terms of Use | DexTracker</title>
-      tiktok-developers-site-verification=5rGO7m0quPZp5gWL5iQAFvzfi4ECk8je 
-  <meta name="description" content="DexTracker Terms of Use — the rules for using our app and services." />
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <!-- Required Verification -->
+  <meta name="tiktok-developers-site-verification" content="5rGO7m0quPZp5gWL5iQAFvzfi4ECk8je" />
+  
+  <!-- fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
   <style>
-    :root{ --bg:#000; --fg:#dfffe9; --acid:#12ff6d; --line:#164a2b; --muted:#9ff5c9; --card:#0a140d; }
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
-    body{margin:0; background:radial-gradient(1200px 800px at 10% -10%, #051505 0%, var(--bg) 55%),
-                     radial-gradient(1200px 800px at 90% 110%, #051505 0%, var(--bg) 55%);
-         color:var(--fg); font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial}
+    :root {
+      --bg: #030303;
+      --bg-panel: #0a0f0a;
+      --fg: #e0fce0;
+      --acid: #00ff66;
+      --acid-glow: rgba(0, 255, 102, 0.4);
+      --acid-dim: rgba(0, 255, 102, 0.05);
+      --grid-color: rgba(0, 255, 102, 0.07);
+      --border: rgba(0, 255, 102, 0.2);
+      --font-ui: 'Inter', system-ui, sans-serif;
+      --font-tech: 'Orbitron', sans-serif;
+      --font-code: 'JetBrains Mono', monospace;
+      --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    }
 
-    .wrap{max-width:960px; margin:auto; padding:28px clamp(16px,5vw,32px)}
-        /* tiktok-developers-site-verification=5rGO7m0quPZp5gWL5iQAFvzfi4ECk8je */
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    
+    body {
+      margin: 0; color: var(--fg); font-family: var(--font-ui); background-color: var(--bg);
+      background-image: 
+        linear-gradient(var(--grid-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+      background-size: 50px 50px; overflow-x: hidden;
+    }
 
-    /* Header */
-    header{position:sticky; top:0; z-index:20; background:linear-gradient(to bottom, rgba(0,0,0,.88), rgba(0,0,0,.6));
-           backdrop-filter:blur(10px) saturate(140%); border-bottom:1px solid var(--line)}
-    .bar{display:flex; align-items:center; justify-content:space-between; padding:12px clamp(16px,5vw,24px)}
-    .brand{display:flex; gap:10px; align-items:center; font-family:Orbitron, sans-serif}
-    .logo{width:26px; aspect-ratio:1; border-radius:6px; background:conic-gradient(from 90deg, #00ff95, #00c853, #00ff95); box-shadow:0 0 20px #00ff95aa inset,0 0 20px #00ff95aa}
-    .brand b{color:var(--acid)}
-    .bar a{color:var(--muted); text-decoration:none; font-weight:700}
-    .bar a:hover{color:var(--fg)}
+    body::before {
+      content: ''; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: radial-gradient(circle at 50% 50%, rgba(0, 255, 102, 0.08), transparent 70%);
+      pointer-events: none; z-index: -1; animation: ambientPulse 10s infinite alternate;
+    }
+    @keyframes ambientPulse { 0% { opacity: 0.5; } 100% { opacity: 1; } }
 
-    .title{padding:28px 0 8px}
-    .title h1{margin:0; color:var(--acid); text-shadow:0 0 12px #00ff95aa; font-family:Orbitron, sans-serif}
-    .meta{color:var(--muted); font-size:14px}
+    /* NAV */
+    .nav {
+      position: sticky; top: 0; z-index: 1000;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px clamp(20px, 5vw, 40px);
+      background: rgba(3, 3, 3, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .brand { font-family: var(--font-tech); font-weight: 700; display: flex; gap: 12px; align-items: center; text-transform: uppercase; color: white; text-decoration: none; }
+    .brand b { color: var(--acid); text-shadow: 0 0 12px var(--acid); }
+    .nav-links a { color: var(--fg); text-decoration: none; font-size: 0.9rem; font-weight: 600; padding: 8px 16px; transition: 0.3s; }
+    .nav-links a:hover { color: var(--acid); text-shadow: 0 0 8px var(--acid); }
 
-    /* TOC */
-    .toc{margin:18px 0 28px; padding:14px; border:1px solid var(--line); border-radius:12px; background:#05160d}
-    .toc a{color:var(--muted); text-decoration:none; display:inline-block; margin:6px 10px}
-    .toc a:hover{color:var(--fg); text-decoration:underline}
+    /* MAIN */
+    .container { max-width: 900px; margin: 0 auto; padding: 120px 20px 60px; }
 
-    /* Sections */
-    section{margin:34px 0; padding:22px; border:1px solid var(--line); border-radius:14px; background:linear-gradient(180deg, rgba(10,18,12,.9), rgba(6,12,8,.9))}
-    h2{margin:.2rem 0 1rem; color:#b9ffd8; font-family:Orbitron, sans-serif; font-size:22px}
-    p, li{line-height:1.7}
-    code{background:#03190b; border:1px solid var(--line); padding:1px 6px; border-radius:6px}
+    .eyebrow {
+      font-family: var(--font-code); color: var(--acid); font-size: 0.85rem; letter-spacing: 2px;
+      margin-bottom: 16px; display: inline-block; border: 1px solid var(--acid); padding: 4px 12px; background: var(--acid-dim);
+    }
+
+    h1 {
+      font-family: var(--font-tech); font-size: clamp(30px, 5vw, 50px); color: white; margin: 0 0 20px; text-transform: uppercase;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.8);
+    }
+
+    .meta { font-family: var(--font-code); color: #666; font-size: 0.8rem; margin-bottom: 40px; }
+
+    /* TOC Box */
+    .toc-box {
+      background: rgba(0,255,102,0.03); border: 1px solid var(--border); padding: 20px; border-radius: 8px; margin-bottom: 40px;
+    }
+    .toc-title { font-family: var(--font-code); color: var(--acid); margin-bottom: 10px; font-weight: 700; }
+    .toc-links { display: flex; flex-wrap: wrap; gap: 10px; }
+    .toc-links a {
+      font-size: 0.85rem; color: #aaa; text-decoration: none; background: #000; padding: 5px 10px; border: 1px solid #222; transition: 0.3s;
+    }
+    .toc-links a:hover { border-color: var(--acid); color: white; }
+
+    /* Content Styling */
+    .doc-section {
+      margin-bottom: 40px;
+      padding: 30px;
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      position: relative;
+    }
+
+    /* Spotlight logic inline for sections */
+    .spotlight-card { --mouse-x: 50%; --mouse-y: 50%; position: relative; overflow:hidden; }
+    .spotlight-card::before {
+      content: ""; position: absolute; inset: 0;
+      background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(0, 255, 102, 0.1), transparent 40%);
+      opacity: 0; transition: opacity 0.5s; z-index: 1; pointer-events: none;
+    }
+    .spotlight-card:hover::before { opacity: 1; }
+    
+    .content-layer { position: relative; z-index: 2; }
+
+    h2 { font-family: var(--font-tech); color: var(--acid); margin-top: 0; font-size: 1.3rem; border-bottom: 1px solid #222; padding-bottom: 10px; }
+    p, li { line-height: 1.7; color: #b0c4b0; margin-bottom: 15px; }
+    a.link { color: white; text-decoration: underline; text-decoration-color: var(--acid); }
+    a.link:hover { color: var(--acid); }
+
+    /* Reveal */
+    .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s var(--ease-out); }
+    .reveal.active { opacity: 1; transform: translateY(0); }
 
     /* Footer */
-    footer{border-top:1px solid var(--line); padding:24px; text-align:center; color:var(--muted); background:#030a06}
-    footer a{color:var(--acid); text-decoration:none}
-
-    @media (max-width:640px){ .wrap{padding:22px} .title{padding:22px 0 6px} }
+    footer { border-top: 1px solid var(--border); padding: 40px; text-align: center; margin-top: 60px; background: black; }
+    footer a { color: var(--acid); text-decoration: none; margin: 0 10px; font-family: var(--font-code); font-size: 0.8rem; }
   </style>
 </head>
 <body>
-  <header>
-    <div class="bar">
-      <div class="brand"><span class="logo"></span><span>DexTracker <b>Terms</b></span></div>
-      <a href="https://github.com/dexclantv/dexclantv.github.io/landing.html" aria-label="Back to site">← Back to Site</a>
+
+  <nav class="nav">
+    <a href="index.html" class="brand">
+      <span>DexTracker <b>Terms</b></span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="privacy.html">Privacy</a>
     </div>
-  </header>
+  </nav>
 
-  <main class="wrap">
-    <div class="title">
-      <h1>📜 Terms of Use</h1>
-      <div class="meta"><strong>Effective date:</strong> August 24, 2025 • <strong>Owner:</strong> Luxury Methods LLC ("DexTracker", "we").</div>
+  <div class="container">
+    <div class="eyebrow">&lt;SYSTEM_DOC // TYPE: TERMS_OF_USE&gt;</div>
+    <h1 class="reveal">Operational Agreement</h1>
+    <div class="meta reveal">EFFECTIVE: AUG 24, 2025 // ENTITY: LUXURY METHODS LLC</div>
+
+    <!-- TOC -->
+    <div class="toc-box reveal">
+      <div class="toc-title">/// DIRECTORY_INDEX</div>
+      <div class="toc-links">
+        <a href="#acceptance">1. Acceptance</a>
+        <a href="#eligibility">2. Eligibility</a>
+        <a href="#payment">3. Payment</a>
+        <a href="#ai">4. AI Usage</a>
+        <a href="#youtube">5. YouTube/Google</a>
+        <a href="#liability">6. Liability</a>
+      </div>
     </div>
 
-    <nav class="toc" aria-label="Table of contents">
-      <strong>Jump to:</strong>
-      <a href="#acceptance">Acceptance</a>
-      <a href="#eligibility">Eligibility & Accounts</a>
-      <a href="#license">License</a>
-      <a href="#subscriptions">Subscriptions & Payment</a>
-      <a href="#acceptableuse">Acceptable Use</a>
-      <a href="#ai">AI Features</a>
-      <a href="#youtube">YouTube/Google</a>
-      <a href="#third">Third‑Party Services</a>
-      <a href="#ip">Intellectual Property</a>
-      <a href="#disclaimers">Disclaimers</a>
-      <a href="#limitation">Limitation of Liability</a>
-      <a href="#indemnity">Indemnity</a>
-      <a href="#termination">Termination</a>
-      <a href="#governing">Governing Law</a>
-      <a href="#changes">Changes</a>
-      <a href="#contact">Contact</a>
-    </nav>
+    <!-- SECTIONS -->
+    <div id="acceptance" class="doc-section spotlight-card reveal">
+      <div class="content-layer">
+        <h2>01. Acceptance of Protocol</h2>
+        <p>By initializing or accessing DexTracker (the "Service"), you agree to these Terms and our <a href="privacy.html" class="link">Privacy Policy</a>. If you do not consent to these protocols, terminate access immediately.</p>
+      </div>
+    </div>
 
-    <section id="acceptance">
-      <h2>1) Acceptance of Terms</h2>
-      <p>By accessing or using DexTracker (the app, website, and related services), you agree to these Terms of Use and our <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a>. If you do not agree, do not use DexTracker.</p>
-    </section>
+    <div id="eligibility" class="doc-section spotlight-card reveal">
+      <div class="content-layer">
+        <h2>02. Eligibility & Credentials</h2>
+        <p>User must be at least 13 years of age. You are responsible for maintaining the security of your authentication tokens. We reserve the right to suspend accounts that violate community safety standards.</p>
+      </div>
+    </div>
 
-    <section id="eligibility">
-      <h2>2) Eligibility & Accounts</h2>
-      <ul>
-        <li>You must be at least 13 years old (or the age of digital consent in your region). If you are 13–17, you represent you have parental permission.</li>
-        <li>Keep your login credentials secure and accurate. You are responsible for actions taken under your account.</li>
-        <li>We may refuse, suspend, or terminate accounts for violations or risks to users or the service.</li>
-      </ul>
-    </section>
+    <div id="payment" class="doc-section spotlight-card reveal">
+      <div class="content-layer">
+        <h2>03. Subscription & Billing</h2>
+        <p>Premium clearances are processed via Apple StoreKit.</p>
+        <ul>
+          <li><strong>Auto-Renewal:</strong> Subscriptions renew automatically unless canceled in device settings 24 hours prior to cycle end.</li>
+          <li><strong>Refunds:</strong> Handled exclusively by Apple Support.</li>
+          <li><strong>Pricing:</strong> Subject to change with appropriate notification.</li>
+        </ul>
+      </div>
+    </div>
 
-    <section id="license">
-      <h2>3) License</h2>
-      <p>We grant you a limited, personal, non‑transferable, revocable license to use DexTracker solely for lawful purposes and in accordance with these Terms. We reserve all rights not expressly granted.</p>
-    </section>
+    <div id="ai" class="doc-section spotlight-card reveal">
+      <div class="content-layer">
+        <h2>04. Artificial Intelligence</h2>
+        <p>The Service employs generative neural networks for script and title simulation. Outputs may contain hallucinations or inaccuracies. You act as the final editor and assume responsibility for deployed content. Inputs are not used for global model training unless explicitly opted-in.</p>
+      </div>
+    </div>
 
-    <section id="subscriptions">
-      <h2>4) Subscriptions & Payment</h2>
-      <ul>
-        <li>Premium features require a paid subscription purchased via Apple’s in‑app purchase system (StoreKit). Pricing and terms are shown at checkout.</li>
-        <li>Subscriptions auto‑renew until canceled. Manage or cancel in your device’s <em>App Store</em> settings. Deleting the app does not cancel a subscription.</li>
-        <li>Free trials, if offered, convert to a paid plan unless canceled before the trial ends. Eligibility and duration may vary.</li>
-        <li>Billing is handled by Apple. Refunds are provided at Apple’s discretion (<a href="https://support.apple.com/en-us/HT204084" target="_blank" rel="noopener">request a refund</a>).</li>
-        <li>We may change prices or features with notice where required. Continued use after changes constitutes acceptance.</li>
-      </ul>
-    </section>
+    <div id="youtube" class="doc-section spotlight-card reveal">
+      <div class="content-layer">
+        <h2>05. Platform Compliance</h2>
+        <p>By linking Google accounts, you agree to the <a href="https://developers.google.com/youtube/terms/api-services-terms-of-service" target="_blank" class="link">YouTube API Services Terms</a>. You may revoke DexTracker's access via <a href="https://myaccount.google.com/permissions" target="_blank" class="link">Google Security Settings</a> at any time.</p>
+      </div>
+    </div>
 
-    <section id="acceptableuse">
-      <h2>5) Acceptable Use</h2>
-      <ul>
-        <li>Comply with applicable laws and platform rules (e.g., YouTube’s Terms of Service).</li>
-        <li>No reverse engineering, scraping, circumvention of security, or unauthorized access.</li>
-        <li>No use of DexTracker to harass, spam, infringe, or otherwise harm others.</li>
-        <li>No uploading or sharing content that is illegal, infringing, or violates third‑party rights.</li>
-      </ul>
-    </section>
+    <div id="liability" class="doc-section spotlight-card reveal">
+      <div class="content-layer">
+        <h2>06. Limitation of Liability</h2>
+        <p>DexTracker is provided "AS IS". Luxury Methods LLC is not liable for data loss, channel strikes, or viral failures. Total liability is limited to the amount paid for the service in the preceding 12 months.</p>
+      </div>
+    </div>
 
-    <section id="ai">
-      <h2>6) AI Features</h2>
-      <p>DexTracker offers AI‑assisted tools (e.g., script brainstorming, reply suggestions, title simulations). AI outputs can be inaccurate or inappropriate. You are responsible for reviewing and deciding whether to use any AI output. Do not rely on AI for legal, medical, or other professional advice. You grant us the limited rights necessary to process your prompts and deliver outputs. We do not reuse your prompts/outputs for model training unless you opt in or save content in‑app.</p>
-    </section>
+    <div class="doc-section spotlight-card reveal">
+      <div class="content-layer">
+        <h2>07. Contact & Governance</h2>
+        <p>These terms are governed by the laws of California, USA.</p>
+        <p style="font-family: var(--font-code); color: var(--acid);">
+          CONTACT: <a href="mailto:dexclantvs@gmail.com" class="link">dexclantvs@gmail.com</a>
+        </p>
+      </div>
+    </div>
 
-    <section id="youtube">
-      <h2>7) YouTube & Google</h2>
-      <p>When you connect a Google account or grant YouTube permissions, you authorize DexTracker to access only the scopes you approve. We comply with the <a href="https://developers.google.com/youtube/terms/api-services-terms-of-service" target="_blank" rel="noopener">YouTube API Services Terms</a> and the <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener">Google API Services User Data Policy</a> (including Limited Use). You can revoke access at any time in your <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener">Google Account Permissions</a>.</p>
-    </section>
-
-    <section id="third">
-      <h2>8) Third‑Party Services</h2>
-      <p>DexTracker may link to or integrate with third‑party services (e.g., Apple, Google/YouTube, OpenAI, Discord). Your use of those services is governed by their terms and policies. We are not responsible for third‑party content or practices.</p>
-    </section>
-
-    <section id="ip">
-      <h2>9) Intellectual Property</h2>
-      <p>The DexTracker app, code, design, graphics, and content are owned by Luxury Methods LLC or our licensors and are protected by law. You may not copy, modify, distribute, or create derivative works except as permitted by applicable law or written permission.</p>
-    </section>
-
-    <section id="disclaimers">
-      <h2>10) Disclaimers</h2>
-      <p>DexTracker is provided on an <strong>“AS IS”</strong> and <strong>“AS AVAILABLE”</strong> basis without warranties of any kind, whether express, implied, or statutory, including but not limited to merchantability, fitness for a particular purpose, and non‑infringement. We do not warrant uninterrupted, error‑free, or secure operation, nor accuracy of analytics or AI outputs.</p>
-    </section>
-
-    <section id="limitation">
-      <h2>11) Limitation of Liability</h2>
-      <p>To the maximum extent permitted by law, Luxury Methods LLC and its affiliates, officers, employees, and agents will not be liable for any indirect, incidental, special, consequential, exemplary, or punitive damages; loss of profits, revenues, data, or goodwill; or business interruption, arising out of or related to your use of DexTracker, even if advised of the possibility. Our total liability for any claim will not exceed the amount you paid for DexTracker in the 12 months preceding the claim (or $50 if you paid nothing).</p>
-    </section>
-
-    <section id="indemnity">
-      <h2>12) Indemnity</h2>
-      <p>You agree to defend, indemnify, and hold harmless Luxury Methods LLC from and against any claims, liabilities, damages, losses, and expenses (including reasonable attorneys’ fees) arising from your use of DexTracker or violation of these Terms.</p>
-    </section>
-
-    <section id="termination">
-      <h2>13) Suspension & Termination</h2>
-      <p>We may suspend or terminate access immediately if we reasonably believe you have violated these Terms, pose a risk to the service or users, or for legal reasons. Upon termination, your license ends and you must stop using DexTracker. Sections that by nature should survive (e.g., IP, disclaimers, liability limits, indemnity) survive termination.</p>
-    </section>
-
-    <section id="governing">
-      <h2>14) Governing Law & Dispute Resolution</h2>
-      <p>These Terms are governed by the laws of the State of California, USA, without regard to conflict‑of‑laws rules. You agree to the exclusive jurisdiction and venue of the state and federal courts located in Alameda County, California, except where local law prohibits. You and we waive any right to a jury trial to the extent permitted by law.</p>
-    </section>
-
-    <section id="changes">
-      <h2>15) Changes to Terms</h2>
-      <p>We may update these Terms. We will post the new date above and notify you in‑app for material changes. Continued use after changes constitutes acceptance.</p>
-    </section>
-
-    <section id="contact">
-      <h2>16) Contact</h2>
-      <p>Questions? Email <a href="mailto:dexclantvs@gmail.com">dexclantvs@gmail.com</a> or visit <a href="https://dexclantv.github.io/landing" target="_blank" rel="noopener">dexclantv.github.io/landing</a>.</p>
-    </section>
-  </main>
+  </div>
 
   <footer>
-    DexTracker © 2025 Luxury Methods LLC. All rights reserved. • <a href="/privacy">Privacy Policy</a>
+    <div style="font-family: var(--font-tech); margin-bottom: 10px;">DEXTRACKER AI</div>
+    <a href="index.html">HOME</a>
+    <a href="privacy.html">PRIVACY</a>
+    <div style="margin-top: 20px; color: #555; font-size: 10px; font-family: var(--font-code);">
+      LUXURY METHODS LLC<br>
+      © 2025 ALL RIGHTS RESERVED
+    </div>
   </footer>
 
   <script>
-    // Reduced-motion safety
-    try{ if(window.matchMedia('(prefers-reduced-motion: reduce)')?.matches){ document.documentElement.style.scrollBehavior = 'auto'; } }catch(e){}
+    // Spotlight Logic
+    document.addEventListener("mousemove", (e) => {
+      const cards = document.querySelectorAll(".spotlight-card");
+      for (const card of cards) {
+        const rect = card.getBoundingClientRect();
+        card.style.setProperty("--mouse-x", `${e.clientX - rect.left}px`);
+        card.style.setProperty("--mouse-y", `${e.clientY - rect.top}px`);
+      }
+    });
+
+    // Reveal Logic
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
   </script>
 </body>
 </html>
