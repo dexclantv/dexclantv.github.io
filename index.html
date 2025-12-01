@@ -373,7 +373,7 @@
       pointer-events: none;
     }
 
-    /* App Controls / Stats Below Video */
+    /* App Controls / Stats */
     .app-ui {
       padding: 20px;
       flex: 1;
@@ -557,12 +557,12 @@
         <span class="highlight">Video Intelligence</span>
       </h1>
       <p class="lead">
-        Paste a link. Extract value. Auto-clipping and retention analysis with zero friction.
-        Now available on iOS for mobile operations.
+        Paste your YouTube link, and DexTracker finds the moments that keep people watching.
+        Get instant retention breakdowns and ready-to-post clips — now on iOS and the web.
       </p>
       <div style="display: flex; gap: 16px; flex-wrap: wrap;">
         <a href="https://apps.apple.com/us/app/dextracking/id6748963679" target="_blank" class="cyber-btn">Download iOS App</a>
-        <a href="#tools" class="cyber-btn ghost">Web Tools</a>
+        <a href="#tools" class="cyber-btn ghost">Use Web Tools</a>
       </div>
     </div>
     
@@ -640,7 +640,7 @@
   <section id="tools" style="padding: 100px 0;">
     <div class="tools-section">
       <div class="eyebrow">/// UTILITIES ///</div>
-      <h2 style="color:white; margin-bottom: 30px;">Extraction Console</h2>
+      <h2 style="color:white; margin-bottom: 30px;">Creator Console</h2>
       
       <div class="tools-ui">
         <!-- SVG Beam Border -->
@@ -649,25 +649,25 @@
         </svg>
 
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-          <p style="margin:0; font-family: var(--font-code);">STATUS: WAITING FOR INPUT</p>
-          <button id="simulate-progress" style="background:transparent; border:1px solid #333; color:#666; font-size:10px; padding:4px 8px; cursor:none;">RUN_SIM</button>
+          <p style="margin:0; font-family: var(--font-code);">STATUS: READY FOR A YOUTUBE LINK</p>
+          <button id="simulate-progress" style="background:transparent; border:1px solid #333; color:#666; font-size:10px; padding:4px 8px; cursor:none;">RUN DEMO</button>
         </div>
 
         <div id="handoff" style="display:none; background: rgba(0,255,102,0.1); border: 1px solid var(--acid); padding: 10px; margin-bottom: 15px;">
-           <span style="color:var(--acid)">⚠ INCOMING DATA:</span> <code id="handoff-id" style="color:white;"></code>
+           <span style="color:var(--acid)">⚠ LINK RECEIVED:</span> <code id="handoff-id" style="color:white;"></code>
            <button onclick="this.parentElement.style.display='none'" style="float:right; background:none; border:none; color:var(--acid); cursor:none;">[x]</button>
         </div>
 
         <div class="input-group">
-          <input id="repurpose-input" class="cyber-input" type="url" placeholder="https://www.youtube.com/watch?v=..." />
-          <button id="repurpose-run" class="cyber-btn">Execute</button>
-          <button id="clear-input" class="cyber-btn ghost" style="padding: 14px 18px;">CLR</button>
+          <input id="repurpose-input" class="cyber-input" type="url" placeholder="Paste your YouTube link here..." />
+          <button id="repurpose-run" class="cyber-btn">Generate Clip</button>
+          <button id="clear-input" class="cyber-btn ghost" style="padding: 14px 18px;">Clear</button>
         </div>
 
         <div class="input-group" style="gap:10px;">
-          <button id="list-formats" class="cyber-btn ghost" style="font-size: 0.8rem; padding: 10px 16px;">Scan Formats</button>
+          <button id="list-formats" class="cyber-btn ghost" style="font-size: 0.8rem; padding: 10px 16px;">Scan Video</button>
           <select id="format-select" class="cyber-input" style="display:none; max-width: 300px;">
-            <option value="">— SELECT DATA STREAM —</option>
+            <option value="">— SELECT QUALITY —</option>
           </select>
           <button id="download-format" class="cyber-btn" style="display:none; font-size: 0.8rem; padding: 10px 16px;">Download</button>
           <button id="get-mp3" class="cyber-btn ghost" style="font-size: 0.8rem; padding: 10px 16px;">Extract Audio</button>
@@ -691,25 +691,25 @@
   <!-- HOW IT WORKS -->
   <section id="how" style="padding: 80px 20px; max-width: 1200px; margin: 0 auto;">
     <div class="eyebrow">/// WORKFLOW_PROTOCOL</div>
-    <h2 style="color:white; margin-bottom: 40px;">Operations Manual</h2>
+    <h2 style="color:white; margin-bottom: 40px;">How DexTracker Works</h2>
     
     <div class="spotlight-group" id="spotlight-grid">
       <div class="card spotlight-card reveal">
         <div class="card-content">
-          <h3 style="color:var(--acid)">01. Intent</h3>
-          <p>Define your objective. Upload, clip generation, or SEO reconnaissance. The system adapts to your input vector.</p>
+          <h3 style="color:var(--acid)">01. Set Your Goal</h3>
+          <p>Start with what you need: find the best clips, understand retention, or test new titles and SEO. DexTracker lines up the right tools for the job.</p>
         </div>
       </div>
       <div class="card spotlight-card reveal">
         <div class="card-content">
-          <h3 style="color:var(--acid)">02. AI Processing</h3>
-          <p>Neural networks analyze retention graphs. Script brainstorming and title simulation execute in parallel.</p>
+          <h3 style="color:var(--acid)">02. Let AI Analyze</h3>
+          <p>DexTracker reads your retention graph, watch time, and engagement patterns. At the same time, it helps you brainstorm scripts and try better title ideas.</p>
         </div>
       </div>
       <div class="card spotlight-card reveal">
         <div class="card-content">
-          <h3 style="color:var(--acid)">03. Deployment</h3>
-          <p>Identify viral spikes. Swap titles/thumbnails instantly. Export MP4s directly to your mobile device.</p>
+          <h3 style="color:var(--acid)">03. Publish Faster</h3>
+          <p>See where viewers spike or drop off, test new titles and thumbnails, then export MP4 clips ready for Shorts, Reels, and TikTok — straight to your phone.</p>
         </div>
       </div>
     </div>
@@ -726,13 +726,13 @@
         <div class="card-content">
           <h3>Starter</h3>
           <div style="font-size: 2.5rem; font-weight: 800; color: white; margin: 10px 0;">$0</div>
-          <p>Basic reconnaissance. Manual entry only.</p>
+          <p>Try the core tools and manual link entry on the web.</p>
           <ul style="list-style: none; padding: 0; line-height: 2; color: #999;">
             <li style="color:var(--acid)">✓ Tools Page Access</li>
-            <li>✓ Manual Paste</li>
+            <li>✓ Paste Any YouTube Link</li>
             <li>✓ Demo Support</li>
           </ul>
-          <a href="#tools" class="cyber-btn ghost" style="width:100%; margin-top: 20px;">Initialize</a>
+          <a href="#tools" class="cyber-btn ghost" style="width:100%; margin-top: 20px;">Start Free</a>
         </div>
       </article>
 
@@ -742,11 +742,11 @@
         <div class="card-content">
           <h3 style="color:var(--acid)">Pro Operative</h3>
           <div style="font-size: 2.5rem; font-weight: 800; color: white; margin: 10px 0;">$9.99</div>
-          <p>Full suite automation and analytics.</p>
+          <p>Full automation for clips, retention insights, and SEO testing.</p>
           <ul style="list-style: none; padding: 0; line-height: 2; color: #999;">
-            <li style="color:var(--acid)">✓ Auto-Handoff from App</li>
-            <li style="color:var(--acid)">✓ Retention Spikes</li>
-            <li style="color:var(--acid)">✓ SEO Simulator</li>
+            <li style="color:var(--acid)">✓ Send Videos From iOS App</li>
+            <li style="color:var(--acid)">✓ Retention Spike Detection</li>
+            <li style="color:var(--acid)">✓ SEO Title Simulator</li>
             <li>✓ 5 Grok Messages/Day</li>
           </ul>
           <a href="https://apps.apple.com/us/app/dextracking/id6748963679" target="_blank" class="cyber-btn" style="width:100%; margin-top: 20px;">Download App</a>
@@ -758,9 +758,9 @@
         <div class="card-content">
           <h3>Organization</h3>
           <div style="font-size: 2.5rem; font-weight: 800; color: white; margin: 10px 0;">Custom</div>
-          <p>For agencies and multi-channel networks.</p>
+          <p>Built for agencies and teams managing multiple channels.</p>
           <ul style="list-style: none; padding: 0; line-height: 2; color: #999;">
-            <li style="color:var(--acid)">✓ Custom Endpoints</li>
+            <li style="color:var(--acid)">✓ Custom Integrations</li>
             <li>✓ Team Onboarding</li>
             <li>✓ Priority Support</li>
           </ul>
@@ -777,17 +777,17 @@
     
     <details class="faq-item reveal">
       <summary>What is DexTracker?</summary>
-      <div class="faq-content">Dex Tracker is an AI-powered assistant that helps you grow your YouTube channel by automating analytics, clipping, scripting, and trend research.</div>
+      <div class="faq-content">DexTracker is an AI-powered assistant that helps you grow your YouTube channel by turning retention analytics into clear insights, clips, and better titles — all from your phone.</div>
     </details>
     
     <details class="faq-item reveal">
       <summary>How does auto-clipping work?</summary>
-      <div class="faq-content">We detect high-retention moments in your videos via algorithmic analysis and allow you to export them as vertical video formats ready for TikTok/Shorts.</div>
+      <div class="faq-content">We detect the strongest parts of your video based on watch time and retention, then let you export those moments as vertical clips ready for Shorts, TikTok, and Reels.</div>
     </details>
     
     <details class="faq-item reveal">
       <summary>Is there a free trial?</summary>
-      <div class="faq-content">Yes. The system allows a 7-day trial period before requiring a clearance upgrade.</div>
+      <div class="faq-content">Yes. The iOS app includes a 7-day free trial so you can test auto-clipping, retention tools, and SEO features before upgrading.</div>
     </details>
   </section>
 
@@ -939,7 +939,7 @@
       const btn = document.getElementById("download-format");
       const hint = document.getElementById("format-hint");
       
-      sel.innerHTML = `<option value="">— SELECT DATA STREAM —</option>`;
+      sel.innerHTML = `<option value="">— SELECT QUALITY —</option>`;
       rows.forEach(r=>{
         const opt = document.createElement("option");
         opt.value = r.id;
@@ -948,7 +948,7 @@
       });
       sel.style.display = "inline-block";
       btn.style.display = "inline-flex";
-      if(hint) { hint.style.display="block"; hint.textContent = "Data streams acquired. Select format to initiate download."; }
+      if(hint) { hint.style.display="block"; hint.textContent = "Formats found. Pick the quality you want to download."; }
     }
 
     async function pollJob(jobId){
@@ -981,7 +981,7 @@
     bindTap('repurpose-run', async () => {
       const input = document.getElementById('repurpose-input');
       const val = input?.value?.trim();
-      if(!val){ alert('ERROR: Input vector empty.'); return; }
+      if(!val){ alert('Please paste a YouTube link first.'); return; }
 
       showProgressUI(true);
       setProgress(5, 'Connecting...');
@@ -1010,7 +1010,7 @@
         if (!r.ok) throw new Error("API Connection Failed");
 
         const data = await r.json();
-        if (!data.directUrl) throw new Error('No Data Received');
+        if (!data.directUrl) throw new Error('No clip URL returned');
         
         setProgress(100, 'Complete');
         sendResult(data.directUrl);
@@ -1018,7 +1018,7 @@
 
       } catch (e) {
         setProgress(0, 'Error');
-        alert('Operation Failed: ' + e.message);
+        alert('Something went wrong. Please try again.\n\nDetails: ' + e.message);
       }
     });
 
@@ -1027,8 +1027,8 @@
         result.style.display = 'block';
         result.innerHTML = `
           <div style="background:var(--bg-panel); padding:15px; border-left:2px solid var(--acid);">
-            <h3 style="color:var(--acid); font-size:14px; margin-bottom:5px;">OUTPUT GENERATED</h3>
-            <p style="font-size:12px; color:#999; margin-bottom:10px;">The requested data object is ready for retrieval.</p>
+            <h3 style="color:var(--acid); font-size:14px; margin-bottom:5px;">CLIP READY</h3>
+            <p style="font-size:12px; color:#999; margin-bottom:10px;">Your clip has been generated. Download it and post to Shorts, Reels, or TikTok.</p>
             <a href="${url}" target="_blank" class="cyber-btn" style="padding:10px 20px; font-size:12px;">DOWNLOAD .MP4</a>
           </div>`;
     }
@@ -1052,7 +1052,7 @@
 
     bindTap('list-formats', async ()=>{
       const val = document.getElementById('repurpose-input')?.value?.trim();
-      if(!val){ return alert("ERROR: URL Required"); }
+      if(!val){ return alert("Please enter a YouTube URL first."); }
       showProgressUI(true);
       setProgress(10, "Scanning...");
       try{
@@ -1065,7 +1065,7 @@
         fillFormatSelect(parseFormats(data.formats));
         setProgress(100, "Done");
       }catch(e){
-        alert("Scan Failed");
+        alert("Scan failed. Please try again.");
         showProgressUI(false);
       }
     });
@@ -1073,16 +1073,16 @@
     bindTap('download-format', async ()=>{
         const url = document.getElementById('repurpose-input').value.trim();
         const format = document.getElementById('format-select').value;
-        if(!url || !format) return alert("Missing Parameters");
+        if(!url || !format) return alert("Please choose a quality option first.");
         
         showProgressUI(true);
         setProgress(10, "Requesting...");
-        alert("Download sequence initiated for format: " + format);
+        alert("Download started for format: " + format);
         setProgress(100, "Initiated");
     });
     
     bindTap("get-mp3", async ()=>{
-       alert("Audio extraction module requires Pro Clearance.");
+       alert("Audio extraction is available on the Pro plan inside the app.");
     });
   </script>
 </body>
