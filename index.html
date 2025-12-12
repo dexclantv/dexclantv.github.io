@@ -267,7 +267,8 @@
       width: 100%; height: 600px;
       display: grid; place-items: center;
       transform-style: preserve-3d;
-      /* FIX: Added backface and translateZ for mobile stability */
+      /* FIX: Force hardware acceleration and stable rendering */
+      -webkit-backface-visibility: hidden;
       backface-visibility: hidden;
       transform: translateZ(0);
       will-change: transform;
@@ -312,7 +313,9 @@
       animation: phoneFloat 8s ease-in-out infinite;
       z-index: 10;
       /* FIX: Added for mobile rendering stability */
+      -webkit-backface-visibility: hidden;
       backface-visibility: hidden;
+      will-change: transform;
     }
     @keyframes phoneFloat {
       0%, 100% { transform: translateY(0) rotateY(-15deg) rotateX(10deg); }
@@ -330,6 +333,8 @@
         inset 0 0 20px rgba(0,255,102,0.1);
       overflow: hidden;
       display: flex; flex-direction: column;
+      /* FIX: Ensure children don't leak out during 3D transforms */
+      transform-style: flat; 
     }
     .iphone-notch {
       position: absolute; top: 0; left: 50%; transform: translateX(-50%);
@@ -366,14 +371,19 @@
       border-radius: 4px;
       /* FIX: Ensure container is stable in 3D */
       transform: translateZ(0);
+      /* FIX: Safari specific fix for overflow:hidden with border-radius in 3D */
+      -webkit-mask-image: -webkit-radial-gradient(white, black);
     }
     .phone-video {
       width: 100%; height: 100%;
       object-fit: cover;
       filter: sepia(100%) hue-rotate(90deg) saturate(120%) contrast(1.1);
       opacity: 0.9;
-      /* FIX: Added tiny Z-translation to prevent mobile flickering */
-      transform: translateZ(1px);
+      /* FIX: Stronger mobile stability fixes */
+      transform: translateZ(1px); /* Keep it slightly in front */
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      will-change: transform, filter;
     }
     .scanline {
       position: absolute; inset: 0;
@@ -463,6 +473,8 @@
       margin-top: 40px;
       max-width: 900px;
       margin-left: auto; margin-right: auto;
+      /* FIX: Ensure stable rendering for the new video section too */
+      transform: translateZ(0);
     }
     /* Corner bracket accents */
     .cyber-video-container::before,
