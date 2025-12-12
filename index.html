@@ -307,8 +307,6 @@
       transform-style: preserve-3d;
       animation: phoneFloat 8s ease-in-out infinite;
       z-index: 10;
-      /* Optimization for smooth mobile animation */
-      will-change: transform;
     }
     @keyframes phoneFloat {
       0%, 100% { transform: translateY(0) rotateY(-15deg) rotateX(10deg); }
@@ -326,8 +324,6 @@
         inset 0 0 20px rgba(0,255,102,0.1);
       overflow: hidden;
       display: flex; flex-direction: column;
-      /* Hardware Acceleration */
-      transform: translateZ(0);
     }
     .iphone-notch {
       position: absolute; top: 0; left: 50%; transform: translateX(-50%);
@@ -362,29 +358,25 @@
       box-shadow: 0 0 15px rgba(0,255,102,0.1);
       overflow: hidden;
       border-radius: 4px;
+      /* New: Setup for dual video side-by-side */
+      display: flex;
     }
-
-    /* New styles for split video */
-    .video-grid {
-        display: flex;
-        width: 100%;
-        height: 100%;
-    }
-
-    /* Target both videos inside the grid */
+    
+    /* Target all videos inside the frame for split view */
     .phone-video {
       width: 50%; /* Each video takes half the width */
-      height: 100%;
+      height: 100%;
       object-fit: cover;
+      /* Remove aggressive flicker-fix transforms for stability */
       filter: sepia(100%) hue-rotate(90deg) saturate(120%) contrast(1.1);
       opacity: 0.9;
-      /* Hardware Acceleration for both videos */
-      transform: translateZ(0); 
     }
 
-    /* Optional: Style for the separation between videos */
-    .phone-video:first-child {
-        border-right: 1px solid rgba(0, 255, 102, 0.3); /* Thin dividing line */
+    /* Add a dividing line between the two videos for a clean look */
+    .phone-video:first-of-type {
+        border-right: 1px solid rgba(0, 255, 102, 0.3);
+        /* Ensure the border doesn't cover the video */
+        box-sizing: border-box;
     }
 
     .scanline {
@@ -604,19 +596,17 @@
 
                         <div class="video-frame">
               <div class="scanline"></div>
-                <div class="video-grid">
-                  <video 
-                    class="phone-video"
-                    src="https://github.com/dexclantv/dexclantv.github.io/raw/refs/heads/main/wow.mp4"
-                    autoplay muted loop playsinline
-                  ></video>
-                  <video 
-                    class="phone-video"
-                    src="https://github.com/dexclantv/dexclantv.github.io/raw/refs/heads/main/dexad.mp4"
-                    autoplay muted loop playsinline
-                  ></video>
-                </div>
-                            </div>
+                              <video 
+                class="phone-video"
+                src="https://github.com/dexclantv/dexclantv.github.io/raw/refs/heads/main/wow.mp4"
+                autoplay muted loop playsinline
+              ></video>
+              <video 
+                class="phone-video"
+                src="https://github.com/dexclantv/dexclantv.github.io/raw/refs/heads/main/dexad.mp4"
+                autoplay muted loop playsinline
+              ></video>
+            </div>
 
                         <div class="app-ui">
               <div class="stat-row">
