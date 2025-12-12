@@ -370,11 +370,8 @@
     .phone-video {
       width: 100%; height: 100%;
       object-fit: cover;
-      /* UPDATED: Removed heavy filters for cleaner promo video look. */
-      /* filter: sepia(100%) hue-rotate(90deg) saturate(120%) contrast(1.1); */
-      /* Kept slight brightness pop */
-      filter: brightness(1.05); 
-      opacity: 1;
+      filter: sepia(100%) hue-rotate(90deg) saturate(120%) contrast(1.1);
+      opacity: 0.9;
       /* FIX: Added tiny Z-translation to prevent mobile flickering */
       transform: translateZ(1px);
     }
@@ -454,6 +451,28 @@
       .globe-wrapper { width: 300px; height: 300px; }
       .orbit-ring { width: 400px; height: 400px; }
     }
+
+    /* --- NEW CYBER VIDEO CONTAINER STYLES --- */
+    .cyber-video-container {
+      position: relative;
+      border: 2px solid var(--acid);
+      box-shadow: 0 0 30px rgba(0, 255, 102, 0.2), inset 0 0 20px rgba(0, 255, 102, 0.1);
+      border-radius: 12px;
+      overflow: hidden;
+      background: #000;
+      margin-top: 40px;
+      max-width: 900px;
+      margin-left: auto; margin-right: auto;
+    }
+    /* Corner bracket accents */
+    .cyber-video-container::before,
+    .cyber-video-container::after {
+        content: ''; position: absolute; width: 20px; height: 20px;
+        border-color: var(--acid); border-style: solid; z-index: 10; pointer-events: none;
+    }
+    .cyber-video-container::before { top: -2px; left: -2px; border-width: 3px 0 0 3px; }
+    .cyber-video-container::after { bottom: -2px; right: -2px; border-width: 0 3px 3px 0; }
+
 
     /* SPOTLIGHT CARDS */
     .spotlight-group {
@@ -537,6 +556,7 @@
     </div>
     <div class="nav-links" id="navlinks">
       <a href="#home" class="nav-a">Home</a>
+      <a href="#demo" class="nav-a">Demo</a>
       <a href="#tools" class="nav-a">Tools</a>
       <a href="#pricing" class="nav-a">Pricing</a>
       <a href="https://apps.apple.com/us/app/dextracking/id6748963679" class="nav-a" target="_blank" style="color:var(--acid);">iOS App</a>
@@ -598,7 +618,7 @@
               <div class="scanline"></div>
               <video 
                 class="phone-video"
-                src="./dexad.mp4"
+                src="https://github.com/dexclantv/dexclantv.github.io/raw/refs/heads/main/wow.mp4"
                 autoplay muted loop playsinline
               ></video>
             </div>
@@ -634,6 +654,29 @@
       </div>
     </div>
   </section>
+
+  <section id="demo" style="padding: 80px 20px; position: relative; z-index: 5;">
+    <div style="max-width: 1000px; margin: 0 auto; text-align: center;">
+       <div class="eyebrow">/// SYSTEM_DEMO ///</div>
+       <h2 style="color: white;">SEE DEXTRACKER IN ACTION</h2>
+       <p style="max-width: 600px; margin: 20px auto;">Watch how quick it is to turn a long-form video into high-retention clips.</p>
+
+       <div class="cyber-video-container reveal">
+         <div class="scanline" style="pointer-events: none;"></div> 
+         <video
+           src="./dexad.mp4"
+           controls
+           width="100%"
+           height="auto"
+           style="display: block; border-radius: 8px; position: relative; z-index: 1;"
+           poster=""
+         >
+           Your browser does not support the video tag.
+         </video>
+       </div>
+    </div>
+  </section>
+
 
   <section id="tools" style="padding: 100px 0;">
     <div class="tools-section">
@@ -806,7 +849,7 @@
       cursor.style.left = e.clientX + 'px';
       cursor.style.top = e.clientY + 'px';
     });
-    const interactables = document.querySelectorAll('a, button, input, summary, select');
+    const interactables = document.querySelectorAll('a, button, input, summary, select, video[controls]');
     interactables.forEach(el => {
       el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
       el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
