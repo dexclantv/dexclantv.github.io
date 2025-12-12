@@ -1,1089 +1,1094 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#000000" />
-  <title>DexTracker — Smarter YouTube Growth</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#000000" />
+  <title>DexTracker — Smarter YouTube Growth</title>
 
-  <!-- fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
-  <style>
-    :root {
-      --bg: #030303;
-      --bg-panel: #0a0f0a;
-      --fg: #e0fce0;
-      --acid: #00ff66;
-      --acid-glow: rgba(0, 255, 102, 0.5);
-      --acid-dim: rgba(0, 255, 102, 0.05);
-      --grid-color: rgba(0, 255, 102, 0.07);
-      --border: rgba(0, 255, 102, 0.2);
-      --glass: rgba(5, 10, 5, 0.7);
-      --font-ui: 'Inter', system-ui, sans-serif;
-      --font-tech: 'Orbitron', sans-serif;
-      --font-code: 'JetBrains Mono', monospace;
-      
-      --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
-    }
+  <style>
+    :root {
+      --bg: #030303;
+      --bg-panel: #0a0f0a;
+      --fg: #e0fce0;
+      --acid: #00ff66;
+      --acid-glow: rgba(0, 255, 102, 0.5);
+      --acid-dim: rgba(0, 255, 102, 0.05);
+      --grid-color: rgba(0, 255, 102, 0.07);
+      --border: rgba(0, 255, 102, 0.2);
+      --glass: rgba(5, 10, 5, 0.7);
+      --font-ui: 'Inter', system-ui, sans-serif;
+      --font-tech: 'Orbitron', sans-serif;
+      --font-code: 'JetBrains Mono', monospace;
+      
+      --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    }
 
-    * { box-sizing: border-box; cursor: none; }
-    
-    html { scroll-behavior: smooth; height: 100%; }
-    
-    body {
-      margin: 0;
-      color: var(--fg);
-      font-family: var(--font-ui);
-      background-color: var(--bg);
-      background-image: 
-        linear-gradient(var(--grid-color) 1px, transparent 1px),
-        linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
-      background-size: 50px 50px;
-      overflow-x: hidden;
-      position: relative;
-    }
+    * { box-sizing: border-box; cursor: none; }
+    
+    html { scroll-behavior: smooth; height: 100%; }
+    
+    body {
+      margin: 0;
+      color: var(--fg);
+      font-family: var(--font-ui);
+      background-color: var(--bg);
+      background-image: 
+        linear-gradient(var(--grid-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+      background-size: 50px 50px;
+      overflow-x: hidden;
+      position: relative;
+    }
 
-    /* Ambient Background Glow */
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0; left: 0; width: 100vw; height: 100vh;
-      background: radial-gradient(circle at 50% 50%, rgba(0, 255, 102, 0.08), transparent 70%);
-      pointer-events: none;
-      z-index: -1;
-      animation: ambientPulse 10s infinite alternate;
-    }
+    /* Ambient Background Glow */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: radial-gradient(circle at 50% 50%, rgba(0, 255, 102, 0.08), transparent 70%);
+      pointer-events: none;
+      z-index: -1;
+      animation: ambientPulse 10s infinite alternate;
+    }
 
-    @keyframes ambientPulse {
-      0% { opacity: 0.5; transform: scale(1); }
-      100% { opacity: 1; transform: scale(1.1); }
-    }
+    @keyframes ambientPulse {
+      0% { opacity: 0.5; transform: scale(1); }
+      100% { opacity: 1; transform: scale(1.1); }
+    }
 
-    /* --- CUSTOM CURSOR --- */
-    #cursor {
-      position: fixed;
-      top: 0; left: 0;
-      width: 20px; height: 20px;
-      border: 1px solid var(--acid);
-      background: rgba(0, 255, 102, 0.1);
-      transform: translate(-50%, -50%);
-      pointer-events: none;
-      z-index: 9999;
-      transition: width 0.2s, height 0.2s, background 0.2s;
-      mix-blend-mode: difference;
-    }
-    #cursor::after {
-      content: ''; position: absolute; top: 50%; left: 50%;
-      width: 4px; height: 4px; background: var(--acid);
-      transform: translate(-50%, -50%);
-      box-shadow: 0 0 10px var(--acid);
-    }
-    #cursor.hovered {
-      width: 50px; height: 50px;
-      background: rgba(0, 255, 102, 0.2);
-      border-color: white;
-    }
+    /* --- CUSTOM CURSOR --- */
+    #cursor {
+      position: fixed;
+      top: 0; left: 0;
+      width: 20px; height: 20px;
+      border: 1px solid var(--acid);
+      background: rgba(0, 255, 102, 0.1);
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 9999;
+      transition: width 0.2s, height 0.2s, background 0.2s;
+      mix-blend-mode: difference;
+    }
+    #cursor::after {
+      content: ''; position: absolute; top: 50%; left: 50%;
+      width: 4px; height: 4px; background: var(--acid);
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 10px var(--acid);
+    }
+    #cursor.hovered {
+      width: 50px; height: 50px;
+      background: rgba(0, 255, 102, 0.2);
+      border-color: white;
+    }
 
-    /* NAV */
-    .nav {
-      position: sticky; top: 0; z-index: 1000;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 16px clamp(20px, 5vw, 40px);
-      background: rgba(3, 3, 3, 0.85);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-    }
-    
-    .brand {
-      display: flex; gap: 12px; align-items: center;
-      font-family: var(--font-tech);
-      font-weight: 700;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      font-size: 1.1rem;
-    }
-    
-    .logo {
-      width: 32px; height: 32px;
-      background: black;
-      border: 1px solid var(--acid);
-      box-shadow: 0 0 10px var(--acid-glow);
-      display: grid; place-items: center;
-      position: relative;
-      overflow: hidden;
-    }
-    .logo::after {
-      content: ''; position: absolute; width: 150%; height: 10px;
-      background: var(--acid);
-      transform: rotate(45deg);
-      animation: logoScan 3s infinite linear;
-      opacity: 0.5;
-    }
-    @keyframes logoScan { 0% { top: -100%; } 100% { top: 200%; } }
+    /* NAV */
+    .nav {
+      position: sticky; top: 0; z-index: 1000;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px clamp(20px, 5vw, 40px);
+      background: rgba(3, 3, 3, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .brand {
+      display: flex; gap: 12px; align-items: center;
+      font-family: var(--font-tech);
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      font-size: 1.1rem;
+    }
+    
+    .logo {
+      width: 32px; height: 32px;
+      background: black;
+      border: 1px solid var(--acid);
+      box-shadow: 0 0 10px var(--acid-glow);
+      display: grid; place-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .logo::after {
+      content: ''; position: absolute; width: 150%; height: 10px;
+      background: var(--acid);
+      transform: rotate(45deg);
+      animation: logoScan 3s infinite linear;
+      opacity: 0.5;
+    }
+    @keyframes logoScan { 0% { top: -100%; } 100% { top: 200%; } }
 
-    .brand b { color: var(--acid); text-shadow: 0 0 12px var(--acid); }
-    
-    .nav-links { display: flex; gap: 4px; }
-    .nav-a {
-      color: var(--fg); text-decoration: none;
-      font-size: 0.9rem; font-weight: 600;
-      padding: 8px 16px;
-      border: 1px solid transparent;
-      border-radius: 4px;
-      transition: all 0.3s var(--ease-out);
-      position: relative;
-      overflow: hidden;
-    }
-    .nav-a:hover {
-      border-color: var(--acid);
-      background: var(--acid-dim);
-      box-shadow: 0 0 15px var(--acid-dim);
-      text-shadow: 0 0 8px var(--acid);
-    }
-    
-    /* BURGER */
-    .burger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
-    .burger span { width: 24px; height: 2px; background: var(--acid); box-shadow: 0 0 5px var(--acid); transition: 0.3s; }
+    .brand b { color: var(--acid); text-shadow: 0 0 12px var(--acid); }
+    
+    .nav-links { display: flex; gap: 4px; }
+    .nav-a {
+      color: var(--fg); text-decoration: none;
+      font-size: 0.9rem; font-weight: 600;
+      padding: 8px 16px;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      transition: all 0.3s var(--ease-out);
+      position: relative;
+      overflow: hidden;
+    }
+    .nav-a:hover {
+      border-color: var(--acid);
+      background: var(--acid-dim);
+      box-shadow: 0 0 15px var(--acid-dim);
+      text-shadow: 0 0 8px var(--acid);
+    }
+    
+    /* BURGER */
+    .burger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .burger span { width: 24px; height: 2px; background: var(--acid); box-shadow: 0 0 5px var(--acid); transition: 0.3s; }
 
-    @media (max-width: 880px) {
-      .burger { display: flex; }
-      .nav-links {
-        position: fixed; top: 64px; right: 0; left: 0;
-        background: black; border-bottom: 1px solid var(--acid);
-        flex-direction: column; padding: 20px;
-        clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
-        transition: clip-path 0.4s var(--ease-out);
-      }
-      .nav-links.open { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
-      .nav-a { width: 100%; text-align: center; border: 1px solid var(--border); margin-bottom: 8px; }
-    }
+    @media (max-width: 880px) {
+      .burger { display: flex; }
+      .nav-links {
+        position: fixed; top: 64px; right: 0; left: 0;
+        background: black; border-bottom: 1px solid var(--acid);
+        flex-direction: column; padding: 20px;
+        clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+        transition: clip-path 0.4s var(--ease-out);
+      }
+      .nav-links.open { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+      .nav-a { width: 100%; text-align: center; border: 1px solid var(--border); margin-bottom: 8px; }
+    }
 
-    /* TYPOGRAPHY */
-    h1, h2, h3 { font-family: var(--font-tech); margin: 0; text-transform: uppercase; }
-    h1 {
-      font-size: clamp(40px, 6vw, 80px);
-      line-height: 0.9;
-      color: white;
-      text-shadow: 0 4px 20px rgba(0,0,0,0.8);
-      position: relative;
-    }
-    h1 span.highlight { color: var(--acid); text-shadow: 0 0 30px var(--acid-glow); }
-    
-    .eyebrow {
-      font-family: var(--font-code);
-      color: var(--acid);
-      font-size: 0.85rem;
-      letter-spacing: 2px;
-      margin-bottom: 16px;
-      display: inline-block;
-      border: 1px solid var(--acid);
-      padding: 4px 12px;
-      background: var(--acid-dim);
-    }
+    /* TYPOGRAPHY */
+    h1, h2, h3 { font-family: var(--font-tech); margin: 0; text-transform: uppercase; }
+    h1 {
+      font-size: clamp(40px, 6vw, 80px);
+      line-height: 0.9;
+      color: white;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.8);
+      position: relative;
+    }
+    h1 span.highlight { color: var(--acid); text-shadow: 0 0 30px var(--acid-glow); }
+    
+    .eyebrow {
+      font-family: var(--font-code);
+      color: var(--acid);
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+      display: inline-block;
+      border: 1px solid var(--acid);
+      padding: 4px 12px;
+      background: var(--acid-dim);
+    }
 
-    p { line-height: 1.6; color: #b0c4b0; }
+    p { line-height: 1.6; color: #b0c4b0; }
 
-    /* BUTTONS */
-    .cyber-btn {
-      position: relative;
-      display: inline-flex; justify-content: center; align-items: center;
-      padding: 14px 28px;
-      font-family: var(--font-tech);
-      font-weight: 700;
-      text-decoration: none;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: black;
-      background: var(--acid);
-      clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
-      transition: all 0.3s;
-      cursor: none;
-      border: none;
-    }
-    .cyber-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 0 30px var(--acid-glow);
-    }
-    .cyber-btn::before {
-      content: ''; position: absolute; inset: 0;
-      background: white; mix-blend-mode: overlay;
-      transform: translateX(-100%); transition: 0.3s;
-    }
-    .cyber-btn:hover::before { transform: translateX(0); }
+    /* BUTTONS */
+    .cyber-btn {
+      position: relative;
+      display: inline-flex; justify-content: center; align-items: center;
+      padding: 14px 28px;
+      font-family: var(--font-tech);
+      font-weight: 700;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: black;
+      background: var(--acid);
+      clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+      transition: all 0.3s;
+      cursor: none;
+      border: none;
+    }
+    .cyber-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 30px var(--acid-glow);
+    }
+    .cyber-btn::before {
+      content: ''; position: absolute; inset: 0;
+      background: white; mix-blend-mode: overlay;
+      transform: translateX(-100%); transition: 0.3s;
+    }
+    .cyber-btn:hover::before { transform: translateX(0); }
 
-    .cyber-btn.ghost {
-      background: transparent;
-      color: var(--acid);
-      box-shadow: inset 0 0 0 2px var(--acid);
-    }
-    .cyber-btn.ghost:hover {
-      background: var(--acid);
-      color: black;
-    }
+    .cyber-btn.ghost {
+      background: transparent;
+      color: var(--acid);
+      box-shadow: inset 0 0 0 2px var(--acid);
+    }
+    .cyber-btn.ghost:hover {
+      background: var(--acid);
+      color: black;
+    }
 
-    /* --- MARQUEE --- */
-    .marquee-container {
-      background: var(--acid);
-      color: black;
-      font-family: var(--font-tech);
-      font-weight: 800;
-      padding: 10px 0;
-      overflow: hidden;
-      position: relative;
-      border-top: 1px solid black;
-      border-bottom: 1px solid black;
-      display: flex;
-      align-items: center;
-    }
-    .marquee-track {
-      display: flex;
-      white-space: nowrap;
-      animation: marqueeScroll 15s linear infinite;
-    }
-    .marquee-item {
-      padding: 0 40px;
-      text-transform: uppercase;
-      font-size: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    @keyframes marqueeScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+    /* --- MARQUEE --- */
+    .marquee-container {
+      background: var(--acid);
+      color: black;
+      font-family: var(--font-tech);
+      font-weight: 800;
+      padding: 10px 0;
+      overflow: hidden;
+      position: relative;
+      border-top: 1px solid black;
+      border-bottom: 1px solid black;
+      display: flex;
+      align-items: center;
+    }
+    .marquee-track {
+      display: flex;
+      white-space: nowrap;
+      animation: marqueeScroll 15s linear infinite;
+    }
+    .marquee-item {
+      padding: 0 40px;
+      text-transform: uppercase;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    @keyframes marqueeScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-    /* --- HERO COMPLEX --- */
-    .hero {
-      min-height: 90vh;
-      display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
-      align-items: center;
-      padding: 60px clamp(20px, 5vw, 50px);
-      max-width: 1400px; margin: 0 auto;
-      perspective: 1500px;
-      overflow: visible;
-    }
-    .hero-content { z-index: 5; position: relative; }
-    
-    .hero-scene {
-      position: relative;
-      width: 100%; height: 600px;
-      display: grid; place-items: center;
-      transform-style: preserve-3d;
-    }
+    /* --- HERO COMPLEX --- */
+    .hero {
+      min-height: 90vh;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
+      align-items: center;
+      padding: 60px clamp(20px, 5vw, 50px);
+      max-width: 1400px; margin: 0 auto;
+      perspective: 1500px;
+      overflow: visible;
+    }
+    .hero-content { z-index: 5; position: relative; }
+    
+    .hero-scene {
+      position: relative;
+      width: 100%; height: 600px;
+      display: grid; place-items: center;
+      transform-style: preserve-3d;
+    }
 
-    /* CYBER GLOBE */
-    .globe-wrapper {
-      position: absolute;
-      width: 500px; height: 500px;
-      border-radius: 50%;
-      border: 1px solid rgba(0, 255, 102, 0.1);
-      background: radial-gradient(circle at 30% 30%, rgba(0,255,102,0.05), transparent 60%);
-      transform-style: preserve-3d;
-      animation: globeSpin 20s linear infinite;
-      z-index: 0;
-    }
-    .globe-grid {
-      position: absolute; inset: 0; border-radius: 50%;
-      background: 
-        repeating-linear-gradient(0deg, transparent 0, transparent 49px, rgba(0,255,102,0.1) 50px),
-        repeating-linear-gradient(90deg, transparent 0, transparent 49px, rgba(0,255,102,0.1) 50px);
-      background-size: 100% 100%;
-      box-shadow: 0 0 50px rgba(0,255,102,0.05) inset;
-      opacity: 0.5;
-    }
-    .orbit-ring {
-      position: absolute; top: 50%; left: 50%;
-      width: 700px; height: 700px;
-      border: 1px dashed rgba(0,255,102,0.2);
-      border-radius: 50%;
-      transform: translate(-50%, -50%) rotateX(70deg);
-      animation: orbitPulse 4s ease-in-out infinite alternate;
-    }
-    @keyframes globeSpin { 0% { transform: rotateY(0); } 100% { transform: rotateY(360deg); } }
-    @keyframes orbitPulse { 0% { opacity: 0.3; transform: translate(-50%, -50%) rotateX(70deg) scale(0.95); } 100% { opacity: 0.8; transform: translate(-50%, -50%) rotateX(70deg) scale(1.05); } }
+    /* CYBER GLOBE */
+    .globe-wrapper {
+      position: absolute;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      border: 1px solid rgba(0, 255, 102, 0.1);
+      background: radial-gradient(circle at 30% 30%, rgba(0,255,102,0.05), transparent 60%);
+      transform-style: preserve-3d;
+      animation: globeSpin 20s linear infinite;
+      z-index: 0;
+    }
+    .globe-grid {
+      position: absolute; inset: 0; border-radius: 50%;
+      background: 
+        repeating-linear-gradient(0deg, transparent 0, transparent 49px, rgba(0,255,102,0.1) 50px),
+        repeating-linear-gradient(90deg, transparent 0, transparent 49px, rgba(0,255,102,0.1) 50px);
+      background-size: 100% 100%;
+      box-shadow: 0 0 50px rgba(0,255,102,0.05) inset;
+      opacity: 0.5;
+    }
+    .orbit-ring {
+      position: absolute; top: 50%; left: 50%;
+      width: 700px; height: 700px;
+      border: 1px dashed rgba(0,255,102,0.2);
+      border-radius: 50%;
+      transform: translate(-50%, -50%) rotateX(70deg);
+      animation: orbitPulse 4s ease-in-out infinite alternate;
+    }
+    @keyframes globeSpin { 0% { transform: rotateY(0); } 100% { transform: rotateY(360deg); } }
+    @keyframes orbitPulse { 0% { opacity: 0.3; transform: translate(-50%, -50%) rotateX(70deg) scale(0.95); } 100% { opacity: 0.8; transform: translate(-50%, -50%) rotateX(70deg) scale(1.05); } }
 
-    /* 3D PHONE */
-    .phone-container {
-      position: relative;
-      width: 280px; height: 560px;
-      transform-style: preserve-3d;
-      animation: phoneFloat 8s ease-in-out infinite;
-      z-index: 10;
-    }
-    @keyframes phoneFloat {
-      0%, 100% { transform: translateY(0) rotateY(-15deg) rotateX(10deg); }
-      50% { transform: translateY(-25px) rotateY(15deg) rotateX(-5deg); }
-    }
+    /* 3D PHONE */
+    .phone-container {
+      position: relative;
+      width: 280px; height: 560px;
+      transform-style: preserve-3d;
+      animation: phoneFloat 8s ease-in-out infinite;
+      z-index: 10;
+      /* Optimization for smooth mobile animation */
+      will-change: transform;
+    }
+    @keyframes phoneFloat {
+      0%, 100% { transform: translateY(0) rotateY(-15deg) rotateX(10deg); }
+      50% { transform: translateY(-25px) rotateY(15deg) rotateX(-5deg); }
+    }
 
-    .iphone-body {
-      position: absolute; inset: 0;
-      background: #000;
-      border: 3px solid var(--acid);
-      border-radius: 40px;
-      box-shadow: 
-        0 0 0 2px #000,
-        0 0 40px rgba(0,255,102,0.3),
-        inset 0 0 20px rgba(0,255,102,0.1);
-      overflow: hidden;
-      display: flex; flex-direction: column;
-    }
-    .iphone-notch {
-      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-      width: 120px; height: 28px;
-      background: #000;
-      border-bottom-left-radius: 14px; border-bottom-right-radius: 14px;
-      z-index: 20; border: 1px solid #111; border-top: none;
-    }
-    
-    /* PHONE INTERFACE */
-    .screen-content {
-      width: 100%; height: 100%;
-      padding-top: 35px; /* clear notch */
-      display: flex; flex-direction: column;
-      background: linear-gradient(180deg, #051005 0%, #000 100%);
-    }
-    .app-header {
-      padding: 0 20px 15px;
-      border-bottom: 1px solid #111;
-      margin-bottom: 15px;
-      display: flex; align-items: center; gap: 10px;
-    }
-    .tiny-logo { width: 12px; height: 12px; background: var(--acid); box-shadow: 0 0 5px var(--acid); }
-    
-    /* The Bordered Video View */
-    .video-frame {
-      margin: 0 15px;
-      height: 250px; /* Constrain video height */
-      border: 1px solid var(--acid);
-      position: relative;
-      background: #000;
-      box-shadow: 0 0 15px rgba(0,255,102,0.1);
-      overflow: hidden;
-      border-radius: 4px;
-    }
-    .phone-video {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      filter: sepia(100%) hue-rotate(90deg) saturate(120%) contrast(1.1);
-      opacity: 0.9;
-    }
-    .scanline {
-      position: absolute; inset: 0;
-      background: linear-gradient(to bottom, transparent 50%, rgba(0, 255, 102, 0.1) 51%, transparent 52%);
-      background-size: 100% 4px;
-      pointer-events: none;
+    .iphone-body {
+      position: absolute; inset: 0;
+      background: #000;
+      border: 3px solid var(--acid);
+      border-radius: 40px;
+      box-shadow: 
+        0 0 0 2px #000,
+        0 0 40px rgba(0,255,102,0.3),
+        inset 0 0 20px rgba(0,255,102,0.1);
+      overflow: hidden;
+      display: flex; flex-direction: column;
+      /* Hardware Acceleration */
+      transform: translateZ(0);
+    }
+    .iphone-notch {
+      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 120px; height: 28px;
+      background: #000;
+      border-bottom-left-radius: 14px; border-bottom-right-radius: 14px;
+      z-index: 20; border: 1px solid #111; border-top: none;
+    }
+    
+    /* PHONE INTERFACE */
+    .screen-content {
+      width: 100%; height: 100%;
+      padding-top: 35px; /* clear notch */
+      display: flex; flex-direction: column;
+      background: linear-gradient(180deg, #051005 0%, #000 100%);
+    }
+    .app-header {
+      padding: 0 20px 15px;
+      border-bottom: 1px solid #111;
+      margin-bottom: 15px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .tiny-logo { width: 12px; height: 12px; background: var(--acid); box-shadow: 0 0 5px var(--acid); }
+    
+    /* The Bordered Video View */
+    .video-frame {
+      margin: 0 15px;
+      height: 250px; /* Constrain video height */
+      border: 1px solid var(--acid);
+      position: relative;
+      background: #000;
+      box-shadow: 0 0 15px rgba(0,255,102,0.1);
+      overflow: hidden;
+      border-radius: 4px;
+    }
+
+    /* New styles for split video */
+    .video-grid {
+        display: flex;
+        width: 100%;
+        height: 100%;
     }
 
-    /* App Controls / Stats */
-    .app-ui {
-      padding: 20px;
-      flex: 1;
-      display: flex; flex-direction: column; gap: 10px;
-    }
-    .stat-row {
-      display: flex; justify-content: space-between;
-      font-family: var(--font-code); font-size: 10px; color: #666;
-    }
-    .stat-bar { width: 100%; height: 4px; background: #111; position: relative; overflow: hidden; border-radius: 2px; }
-    .stat-fill { position: absolute; top:0; left:0; height:100%; background: var(--acid); width: 75%; }
-    
-    .app-btn {
-      margin-top: auto;
-      background: var(--acid); color: black;
-      font-family: var(--font-tech); font-weight: 800;
-      text-align: center; padding: 12px;
-      font-size: 12px;
-      clip-path: polygon(10px 0, 100% 0, 100% 100%, 0 100%, 0 10px);
+    /* Target both videos inside the grid */
+    .phone-video {
+      width: 50%; /* Each video takes half the width */
+      height: 100%;
+      object-fit: cover;
+      filter: sepia(100%) hue-rotate(90deg) saturate(120%) contrast(1.1);
+      opacity: 0.9;
+      /* Hardware Acceleration for both videos */
+      transform: translateZ(0); 
+    }
+
+    /* Optional: Style for the separation between videos */
+    .phone-video:first-child {
+        border-right: 1px solid rgba(0, 255, 102, 0.3); /* Thin dividing line */
     }
 
-    /* 3D ROTATING DEX CUBE */
-    .holo-cube-wrap {
-      position: absolute;
-      top: 50%; right: -60px;
-      width: 80px; height: 80px;
-      transform-style: preserve-3d;
-      animation: cubeOrbit 8s ease-in-out infinite;
-    }
-    .holo-cube {
-      width: 100%; height: 100%;
-      position: relative;
-      transform-style: preserve-3d;
-      animation: cubeSpin 6s linear infinite;
-    }
-    .face {
-      position: absolute; width: 80px; height: 80px;
-      background: rgba(0, 20, 10, 0.85);
-      border: 1px solid var(--acid);
-      display: grid; place-items: center;
-      font-family: var(--font-tech); font-weight: 900; color: var(--acid); font-size: 20px;
-      box-shadow: 0 0 15px var(--acid-glow) inset;
-    }
-    .front  { transform: translateZ(40px); }
-    .back   { transform: rotateY(180deg) translateZ(40px); }
-    .right  { transform: rotateY(90deg) translateZ(40px); }
-    .left   { transform: rotateY(-90deg) translateZ(40px); }
-    .top    { transform: rotateX(90deg) translateZ(40px); }
-    .bottom { transform: rotateX(-90deg) translateZ(40px); }
+    .scanline {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, transparent 50%, rgba(0, 255, 102, 0.1) 51%, transparent 52%);
+      background-size: 100% 4px;
+      pointer-events: none;
+    }
 
-    @keyframes cubeOrbit { 0%, 100% { transform: translateY(-40px); } 50% { transform: translateY(40px); } }
-    @keyframes cubeSpin { 0% { transform: rotateY(0) rotateX(0); } 100% { transform: rotateY(360deg) rotateX(360deg); } }
+    /* App Controls / Stats */
+    .app-ui {
+      padding: 20px;
+      flex: 1;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .stat-row {
+      display: flex; justify-content: space-between;
+      font-family: var(--font-code); font-size: 10px; color: #666;
+    }
+    .stat-bar { width: 100%; height: 4px; background: #111; position: relative; overflow: hidden; border-radius: 2px; }
+    .stat-fill { position: absolute; top:0; left:0; height:100%; background: var(--acid); width: 75%; }
+    
+    .app-btn {
+      margin-top: auto;
+      background: var(--acid); color: black;
+      font-family: var(--font-tech); font-weight: 800;
+      text-align: center; padding: 12px;
+      font-size: 12px;
+      clip-path: polygon(10px 0, 100% 0, 100% 100%, 0 100%, 0 10px);
+    }
 
-    /* Connector Line */
-    .data-line {
-      position: absolute; top: 50%; right: 20px; width: 100px; height: 2px;
-      background: var(--acid); transform-origin: left; transform: rotate(-15deg);
-      box-shadow: 0 0 10px var(--acid); z-index: 5;
-    }
+    /* 3D ROTATING DEX CUBE */
+    .holo-cube-wrap {
+      position: absolute;
+      top: 50%; right: -60px;
+      width: 80px; height: 80px;
+      transform-style: preserve-3d;
+      animation: cubeOrbit 8s ease-in-out infinite;
+    }
+    .holo-cube {
+      width: 100%; height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      animation: cubeSpin 6s linear infinite;
+    }
+    .face {
+      position: absolute; width: 80px; height: 80px;
+      background: rgba(0, 20, 10, 0.85);
+      border: 1px solid var(--acid);
+      display: grid; place-items: center;
+      font-family: var(--font-tech); font-weight: 900; color: var(--acid); font-size: 20px;
+      box-shadow: 0 0 15px var(--acid-glow) inset;
+    }
+    .front  { transform: translateZ(40px); }
+    .back   { transform: rotateY(180deg) translateZ(40px); }
+    .right  { transform: rotateY(90deg) translateZ(40px); }
+    .left   { transform: rotateY(-90deg) translateZ(40px); }
+    .top    { transform: rotateX(90deg) translateZ(40px); }
+    .bottom { transform: rotateX(-90deg) translateZ(40px); }
 
-    @media(max-width: 900px) { 
-      .hero { grid-template-columns: 1fr; text-align: center; height: auto; padding-top: 100px; } 
-      .hero-scene { margin-top: 50px; transform: scale(0.8); }
-      .holo-cube-wrap { right: -20px; }
-      .globe-wrapper { width: 300px; height: 300px; }
-      .orbit-ring { width: 400px; height: 400px; }
-    }
+    @keyframes cubeOrbit { 0%, 100% { transform: translateY(-40px); } 50% { transform: translateY(40px); } }
+    @keyframes cubeSpin { 0% { transform: rotateY(0) rotateX(0); } 100% { transform: rotateY(360deg) rotateX(360deg); } }
 
-    /* SPOTLIGHT CARDS */
-    .spotlight-group {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; padding: 40px 0;
-    }
-    .card {
-      position: relative; background: var(--bg-panel); border: 1px solid var(--border);
-      border-radius: 12px; padding: 30px; overflow: hidden; transition: transform 0.3s;
-    }
-    .spotlight-card { --mouse-x: 50%; --mouse-y: 50%; position: relative; background: #080d08; border: 1px solid transparent; }
-    .spotlight-card::before {
-      content: ""; position: absolute; inset: 0;
-      background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(0, 255, 102, 0.15), transparent 40%);
-      opacity: 0; transition: opacity 0.5s; z-index: 1; pointer-events: none;
-    }
-    .spotlight-card:hover::before { opacity: 1; }
-    .spotlight-card::after {
-      content: ""; position: absolute; inset: -1px; border-radius: inherit;
-      background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(0, 255, 102, 0.6), transparent 40%);
-      z-index: 0; opacity: 0; transition: opacity 0.5s;
-      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none;
-    }
-    .spotlight-card:hover::after { opacity: 1; }
-    .card-content { position: relative; z-index: 2; }
+    /* Connector Line */
+    .data-line {
+      position: absolute; top: 50%; right: 20px; width: 100px; height: 2px;
+      background: var(--acid); transform-origin: left; transform: rotate(-15deg);
+      box-shadow: 0 0 10px var(--acid); z-index: 5;
+    }
 
-    /* TOOLS INTERFACE */
-    .tools-section { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-    .tools-ui {
-      background: rgba(0,0,0,0.6); border: 1px solid var(--border); backdrop-filter: blur(20px);
-      border-radius: 16px; padding: 40px; position: relative; overflow: hidden;
-    }
-    .beam-border { position: absolute; inset: 0; pointer-events: none; }
-    .beam-border rect {
-      fill: none; stroke: var(--acid); stroke-width: 2; stroke-dasharray: 400, 2000;
-      stroke-dashoffset: 0; animation: beamMove 8s linear infinite;
-    }
-    @keyframes beamMove { 100% { stroke-dashoffset: -2400; } }
+    @media(max-width: 900px) { 
+      .hero { grid-template-columns: 1fr; text-align: center; height: auto; padding-top: 100px; } 
+      .hero-scene { margin-top: 50px; transform: scale(0.8); }
+      .holo-cube-wrap { right: -20px; }
+      .globe-wrapper { width: 300px; height: 300px; }
+      .orbit-ring { width: 400px; height: 400px; }
+    }
 
-    .input-group { display: flex; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
-    .cyber-input {
-      flex: 1; min-width: 250px; background: rgba(0, 255, 102, 0.05); border: 1px solid var(--border);
-      color: var(--acid); font-family: var(--font-code); padding: 14px 20px; outline: none; transition: 0.3s;
-    }
-    .cyber-input:focus { background: rgba(0, 255, 102, 0.1); box-shadow: 0 0 20px var(--acid-dim); border-color: var(--acid); }
-    
-    .status-bar { height: 4px; background: #111; margin-top: 20px; position: relative; overflow: hidden; }
-    .status-fill { height: 100%; width: 0%; background: var(--acid); box-shadow: 0 0 10px var(--acid); transition: width 0.2s ease; }
+    /* SPOTLIGHT CARDS */
+    .spotlight-group {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; padding: 40px 0;
+    }
+    .card {
+      position: relative; background: var(--bg-panel); border: 1px solid var(--border);
+      border-radius: 12px; padding: 30px; overflow: hidden; transition: transform 0.3s;
+    }
+    .spotlight-card { --mouse-x: 50%; --mouse-y: 50%; position: relative; background: #080d08; border: 1px solid transparent; }
+    .spotlight-card::before {
+      content: ""; position: absolute; inset: 0;
+      background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(0, 255, 102, 0.15), transparent 40%);
+      opacity: 0; transition: opacity 0.5s; z-index: 1; pointer-events: none;
+    }
+    .spotlight-card:hover::before { opacity: 1; }
+    .spotlight-card::after {
+      content: ""; position: absolute; inset: -1px; border-radius: inherit;
+      background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(0, 255, 102, 0.6), transparent 40%);
+      z-index: 0; opacity: 0; transition: opacity 0.5s;
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none;
+    }
+    .spotlight-card:hover::after { opacity: 1; }
+    .card-content { position: relative; z-index: 2; }
 
-    /* FAQ */
-    .faq-item { border: 1px solid var(--border); margin-bottom: 10px; background: var(--bg-panel); transition: all 0.3s; }
-    .faq-item[open] { border-color: var(--acid); box-shadow: 0 0 15px var(--acid-dim); }
-    .faq-item summary {
-      padding: 16px; cursor: pointer; list-style: none; font-weight: 700; display: flex; align-items: center; justify-content: space-between; color: white;
-    }
-    .faq-item summary::-webkit-details-marker { display: none; }
-    .faq-item summary::after { content: '+'; color: var(--acid); font-size: 1.2rem; }
-    .faq-item[open] summary::after { content: '-'; }
-    .faq-content { padding: 0 16px 16px; color: #999; line-height: 1.6; }
+    /* TOOLS INTERFACE */
+    .tools-section { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+    .tools-ui {
+      background: rgba(0,0,0,0.6); border: 1px solid var(--border); backdrop-filter: blur(20px);
+      border-radius: 16px; padding: 40px; position: relative; overflow: hidden;
+    }
+    .beam-border { position: absolute; inset: 0; pointer-events: none; }
+    .beam-border rect {
+      fill: none; stroke: var(--acid); stroke-width: 2; stroke-dasharray: 400, 2000;
+      stroke-dashoffset: 0; animation: beamMove 8s linear infinite;
+    }
+    @keyframes beamMove { 100% { stroke-dashoffset: -2400; } }
 
-    /* FOOTER */
-    footer { border-top: 1px solid var(--border); padding: 40px; text-align: center; margin-top: 80px; background: black; }
-    footer a { color: var(--acid); text-decoration: none; margin: 0 8px; font-weight: 700; }
-    .hidden { display: none; }
-    .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s var(--ease-out); }
-    .reveal.active { opacity: 1; transform: translateY(0); }
-    ::selection { background: var(--acid); color: black; }
-  </style>
+    .input-group { display: flex; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
+    .cyber-input {
+      flex: 1; min-width: 250px; background: rgba(0, 255, 102, 0.05); border: 1px solid var(--border);
+      color: var(--acid); font-family: var(--font-code); padding: 14px 20px; outline: none; transition: 0.3s;
+    }
+    .cyber-input:focus { background: rgba(0, 255, 102, 0.1); box-shadow: 0 0 20px var(--acid-dim); border-color: var(--acid); }
+    
+    .status-bar { height: 4px; background: #111; margin-top: 20px; position: relative; overflow: hidden; }
+    .status-fill { height: 100%; width: 0%; background: var(--acid); box-shadow: 0 0 10px var(--acid); transition: width 0.2s ease; }
+
+    /* FAQ */
+    .faq-item { border: 1px solid var(--border); margin-bottom: 10px; background: var(--bg-panel); transition: all 0.3s; }
+    .faq-item[open] { border-color: var(--acid); box-shadow: 0 0 15px var(--acid-dim); }
+    .faq-item summary {
+      padding: 16px; cursor: pointer; list-style: none; font-weight: 700; display: flex; align-items: center; justify-content: space-between; color: white;
+    }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after { content: '+'; color: var(--acid); font-size: 1.2rem; }
+    .faq-item[open] summary::after { content: '-'; }
+    .faq-content { padding: 0 16px 16px; color: #999; line-height: 1.6; }
+
+    /* FOOTER */
+    footer { border-top: 1px solid var(--border); padding: 40px; text-align: center; margin-top: 80px; background: black; }
+    footer a { color: var(--acid); text-decoration: none; margin: 0 8px; font-weight: 700; }
+    .hidden { display: none; }
+    .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s var(--ease-out); }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+    ::selection { background: var(--acid); color: black; }
+  </style>
 </head>
 <body>
 
-  <!-- CUSTOM MOUSE CURSOR -->
-  <div id="cursor"></div>
+    <div id="cursor"></div>
 
-  <!-- NAV -->
-  <nav class="nav" id="nav">
-    <div class="brand">
-      <div class="logo"></div>
-      <span>DexTracker <b>Ai</b></span>
-    </div>
-    <div class="burger" id="burger">
-      <span></span><span></span><span></span>
-    </div>
-    <div class="nav-links" id="navlinks">
-      <a href="#home" class="nav-a">Home</a>
-      <a href="#tools" class="nav-a">Tools</a>
-      <a href="#pricing" class="nav-a">Pricing</a>
-      <a href="https://apps.apple.com/us/app/dextracking/id6748963679" class="nav-a" target="_blank" style="color:var(--acid);">iOS App</a>
-    </div>
-  </nav>
+    <nav class="nav" id="nav">
+    <div class="brand">
+      <div class="logo"></div>
+      <span>DexTracker <b>Ai</b></span>
+    </div>
+    <div class="burger" id="burger">
+      <span></span><span></span><span></span>
+    </div>
+    <div class="nav-links" id="navlinks">
+      <a href="#home" class="nav-a">Home</a>
+      <a href="#tools" class="nav-a">Tools</a>
+      <a href="#pricing" class="nav-a">Pricing</a>
+      <a href="https://apps.apple.com/us/app/dextracking/id6748963679" class="nav-a" target="_blank" style="color:var(--acid);">iOS App</a>
+    </div>
+  </nav>
 
-  <!-- MARQUEE BANNER -->
-  <div class="marquee-container">
-    <div class="marquee-track">
-      <div class="marquee-item">/// SYSTEM_LIVE: DEXTRACKER AI ///</div>
-      <div class="marquee-item">AVAILABLE ON APP STORE</div>
-      <div class="marquee-item">RETENTION ANALYSIS</div>
-      <div class="marquee-item">/// DOWNLOAD PROTOCOL INITIATED ///</div>
-      <div class="marquee-item">OPTIMIZE GROWTH</div>
-      <div class="marquee-item">/// SYSTEM_LIVE: DEXTRACKER AI ///</div>
-      <div class="marquee-item">AVAILABLE ON APP STORE</div>
-      <div class="marquee-item">RETENTION ANALYSIS</div>
-      <div class="marquee-item">/// DOWNLOAD PROTOCOL INITIATED ///</div>
-      <div class="marquee-item">OPTIMIZE GROWTH</div>
-    </div>
-  </div>
+    <div class="marquee-container">
+    <div class="marquee-track">
+      <div class="marquee-item">/// SYSTEM_LIVE: DEXTRACKER AI ///</div>
+      <div class="marquee-item">AVAILABLE ON APP STORE</div>
+      <div class="marquee-item">RETENTION ANALYSIS</div>
+      <div class="marquee-item">/// DOWNLOAD PROTOCOL INITIATED ///</div>
+      <div class="marquee-item">OPTIMIZE GROWTH</div>
+      <div class="marquee-item">/// SYSTEM_LIVE: DEXTRACKER AI ///</div>
+      <div class="marquee-item">AVAILABLE ON APP STORE</div>
+      <div class="marquee-item">RETENTION ANALYSIS</div>
+      <div class="marquee-item">/// DOWNLOAD PROTOCOL INITIATED ///</div>
+      <div class="marquee-item">OPTIMIZE GROWTH</div>
+    </div>
+  </div>
 
-  <!-- HERO -->
-  <section class="hero" id="home">
-    <div class="hero-content">
-      <div class="eyebrow">&lt;SYSTEM_READY&gt;</div>
-      <h1>
-        Super-Clean<br>
-        <span class="highlight">Video Intelligence</span>
-      </h1>
-      <p class="lead">
-        Paste your YouTube link, and DexTracker finds the moments that keep people watching.
-        Get instant retention breakdowns and ready-to-post clips — now on iOS and the web.
-      </p>
-      <div style="display: flex; gap: 16px; flex-wrap: wrap;">
-        <a href="https://apps.apple.com/us/app/dextracking/id6748963679" target="_blank" class="cyber-btn">Download iOS App</a>
-        <a href="#tools" class="cyber-btn ghost">Use Web Tools</a>
-      </div>
-    </div>
-    
-    <!-- 3D SCENE: GLOBE + PHONE + CUBE -->
-    <div class="hero-scene reveal">
-      
-      <!-- 1. Background Spinning Globe -->
-      <div class="globe-wrapper">
-        <div class="globe-grid"></div>
-      </div>
-      <div class="orbit-ring"></div>
+    <section class="hero" id="home">
+    <div class="hero-content">
+      <div class="eyebrow">&lt;SYSTEM_READY&gt;</div>
+      <h1>
+        Super-Clean<br>
+        <span class="highlight">Video Intelligence</span>
+      </h1>
+      <p class="lead">
+        Paste your YouTube link, and DexTracker finds the moments that keep people watching.
+        Get instant retention breakdowns and ready-to-post clips — now on iOS and the web.
+      </p>
+      <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+        <a href="https://apps.apple.com/us/app/dextracking/id6748963679" target="_blank" class="cyber-btn">Download iOS App</a>
+        <a href="#tools" class="cyber-btn ghost">Use Web Tools</a>
+      </div>
+    </div>
+    
+        <div class="hero-scene reveal">
+      
+            <div class="globe-wrapper">
+        <div class="globe-grid"></div>
+      </div>
+      <div class="orbit-ring"></div>
 
-      <!-- 2. The Floating iPhone -->
-      <div class="phone-container">
-        <!-- Floating Connector Line -->
-        <div class="data-line"></div>
+            <div class="phone-container">
+                <div class="data-line"></div>
 
-        <div class="iphone-body">
-          <div class="iphone-notch"></div>
-          
-          <!-- Screen Interface -->
-          <div class="screen-content">
-            <!-- App Header -->
-            <div class="app-header">
-              <div class="tiny-logo"></div>
-              <div style="font-family:var(--font-tech); font-size:10px; color:white;">DEXTRACKER</div>
-            </div>
+        <div class="iphone-body">
+          <div class="iphone-notch"></div>
+          
+                    <div class="screen-content">
+                        <div class="app-header">
+              <div class="tiny-logo"></div>
+              <div style="font-family:var(--font-tech); font-size:10px; color:white;">DEXTRACKER</div>
+            </div>
 
-            <!-- Video Frame (Bordered View) -->
-            <div class="video-frame">
-              <div class="scanline"></div>
-              <video 
-                class="phone-video"
-                src="https://github.com/dexclantv/dexclantv.github.io/raw/refs/heads/main/wow.mp4"
-                autoplay muted loop playsinline
-              ></video>
-            </div>
+                        <div class="video-frame">
+              <div class="scanline"></div>
+                <div class="video-grid">
+                  <video 
+                    class="phone-video"
+                    src="https://github.com/dexclantv/dexclantv.github.io/raw/refs/heads/main/wow.mp4"
+                    autoplay muted loop playsinline
+                  ></video>
+                  <video 
+                    class="phone-video"
+                    src="https://github.com/dexclantv/dexclantv.github.io/raw/refs/heads/main/dexad.mp4"
+                    autoplay muted loop playsinline
+                  ></video>
+                </div>
+                            </div>
 
-            <!-- App Controls / Stats -->
-            <div class="app-ui">
-              <div class="stat-row">
-                <span>RETENTION</span>
-                <span style="color:var(--acid)">88%</span>
-              </div>
-              <div class="stat-bar"><div class="stat-fill"></div></div>
-              
-              <div class="stat-row" style="margin-top:5px;">
-                <span>STATUS</span>
-                <span>OPTIMIZED</span>
-              </div>
+                        <div class="app-ui">
+              <div class="stat-row">
+                <span>RETENTION</span>
+                <span style="color:var(--acid)">88%</span>
+              </div>
+              <div class="stat-bar"><div class="stat-fill"></div></div>
+              
+              <div class="stat-row" style="margin-top:5px;">
+                <span>STATUS</span>
+                <span>OPTIMIZED</span>
+              </div>
 
-              <!-- Export Button in Phone -->
-              <div class="app-btn">EXPORT CLIP</div>
-            </div>
-          </div>
-        </div>
+                            <div class="app-btn">EXPORT CLIP</div>
+            </div>
+          </div>
+        </div>
 
-        <!-- 3. Spinning DEX Cube -->
-        <div class="holo-cube-wrap">
-          <div class="holo-cube">
-            <div class="face front">DEX</div>
-            <div class="face back">DEX</div>
-            <div class="face right">AI</div>
-            <div class="face left">AI</div>
-            <div class="face top"></div>
-            <div class="face bottom"></div>
-          </div>
-        </div>
+                <div class="holo-cube-wrap">
+          <div class="holo-cube">
+            <div class="face front">DEX</div>
+            <div class="face back">DEX</div>
+            <div class="face right">AI</div>
+            <div class="face left">AI</div>
+            <div class="face top"></div>
+            <div class="face bottom"></div>
+          </div>
+        </div>
 
-      </div>
-    </div>
-  </section>
+      </div>
+    </div>
+  </section>
 
-  <!-- TOOLS SECTION -->
-  <section id="tools" style="padding: 100px 0;">
-    <div class="tools-section">
-      <div class="eyebrow">/// UTILITIES ///</div>
-      <h2 style="color:white; margin-bottom: 30px;">Creator Console</h2>
-      
-      <div class="tools-ui">
-        <!-- SVG Beam Border -->
-        <svg class="beam-border" width="100%" height="100%">
-          <rect x="0" y="0" width="100%" height="100%" rx="16" ry="16"></rect>
-        </svg>
+    <section id="tools" style="padding: 100px 0;">
+    <div class="tools-section">
+      <div class="eyebrow">/// UTILITIES ///</div>
+      <h2 style="color:white; margin-bottom: 30px;">Creator Console</h2>
+      
+      <div class="tools-ui">
+                <svg class="beam-border" width="100%" height="100%">
+          <rect x="0" y="0" width="100%" height="100%" rx="16" ry="16"></rect>
+        </svg>
 
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-          <p style="margin:0; font-family: var(--font-code);">STATUS: READY FOR A YOUTUBE LINK</p>
-          <button id="simulate-progress" style="background:transparent; border:1px solid #333; color:#666; font-size:10px; padding:4px 8px; cursor:none;">RUN DEMO</button>
-        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <p style="margin:0; font-family: var(--font-code);">STATUS: READY FOR A YOUTUBE LINK</p>
+          <button id="simulate-progress" style="background:transparent; border:1px solid #333; color:#666; font-size:10px; padding:4px 8px; cursor:none;">RUN DEMO</button>
+        </div>
 
-        <div id="handoff" style="display:none; background: rgba(0,255,102,0.1); border: 1px solid var(--acid); padding: 10px; margin-bottom: 15px;">
-           <span style="color:var(--acid)">⚠ LINK RECEIVED:</span> <code id="handoff-id" style="color:white;"></code>
-           <button onclick="this.parentElement.style.display='none'" style="float:right; background:none; border:none; color:var(--acid); cursor:none;">[x]</button>
-        </div>
+        <div id="handoff" style="display:none; background: rgba(0,255,102,0.1); border: 1px solid var(--acid); padding: 10px; margin-bottom: 15px;">
+           <span style="color:var(--acid)">⚠ LINK RECEIVED:</span> <code id="handoff-id" style="color:white;"></code>
+           <button onclick="this.parentElement.style.display='none'" style="float:right; background:none; border:none; color:var(--acid); cursor:none;">[x]</button>
+        </div>
 
-        <div class="input-group">
-          <input id="repurpose-input" class="cyber-input" type="url" placeholder="Paste your YouTube link here..." />
-          <button id="repurpose-run" class="cyber-btn">Generate Clip</button>
-          <button id="clear-input" class="cyber-btn ghost" style="padding: 14px 18px;">Clear</button>
-        </div>
+        <div class="input-group">
+          <input id="repurpose-input" class="cyber-input" type="url" placeholder="Paste your YouTube link here..." />
+          <button id="repurpose-run" class="cyber-btn">Generate Clip</button>
+          <button id="clear-input" class="cyber-btn ghost" style="padding: 14px 18px;">Clear</button>
+        </div>
 
-        <div class="input-group" style="gap:10px;">
-          <button id="list-formats" class="cyber-btn ghost" style="font-size: 0.8rem; padding: 10px 16px;">Scan Video</button>
-          <select id="format-select" class="cyber-input" style="display:none; max-width: 300px;">
-            <option value="">— SELECT QUALITY —</option>
-          </select>
-          <button id="download-format" class="cyber-btn" style="display:none; font-size: 0.8rem; padding: 10px 16px;">Download</button>
-          <button id="get-mp3" class="cyber-btn ghost" style="font-size: 0.8rem; padding: 10px 16px;">Extract Audio</button>
-        </div>
+        <div class="input-group" style="gap:10px;">
+          <button id="list-formats" class="cyber-btn ghost" style="font-size: 0.8rem; padding: 10px 16px;">Scan Video</button>
+          <select id="format-select" class="cyber-input" style="display:none; max-width: 300px;">
+            <option value="">— SELECT QUALITY —</option>
+          </select>
+          <button id="download-format" class="cyber-btn" style="display:none; font-size: 0.8rem; padding: 10px 16px;">Download</button>
+          <button id="get-mp3" class="cyber-btn ghost" style="font-size: 0.8rem; padding: 10px 16px;">Extract Audio</button>
+        </div>
 
-        <div id="format-hint" style="font-size: 12px; color: var(--acid); margin-bottom: 10px; display:none;"></div>
+        <div id="format-hint" style="font-size: 12px; color: var(--acid); margin-bottom: 10px; display:none;"></div>
 
-        <div id="progress-wrap" style="display:none;">
-          <div style="display:flex; justify-content:space-between; font-size:12px; font-family:var(--font-code); margin-bottom:4px;">
-            <span>PROCESSING...</span>
-            <span id="status">0%</span>
-          </div>
-          <div class="status-bar"><div id="progress-fill" class="status-fill"></div></div>
-        </div>
+        <div id="progress-wrap" style="display:none;">
+          <div style="display:flex; justify-content:space-between; font-size:12px; font-family:var(--font-code); margin-bottom:4px;">
+            <span>PROCESSING...</span>
+            <span id="status">0%</span>
+          </div>
+          <div class="status-bar"><div id="progress-fill" class="status-fill"></div></div>
+        </div>
 
-        <div id="tool-result" style="margin-top:20px; display:none; border-top: 1px solid #333; padding-top:20px;"></div>
-      </div>
-    </div>
-  </section>
+        <div id="tool-result" style="margin-top:20px; display:none; border-top: 1px solid #333; padding-top:20px;"></div>
+      </div>
+    </div>
+  </section>
 
-  <!-- HOW IT WORKS -->
-  <section id="how" style="padding: 80px 20px; max-width: 1200px; margin: 0 auto;">
-    <div class="eyebrow">/// WORKFLOW_PROTOCOL</div>
-    <h2 style="color:white; margin-bottom: 40px;">How DexTracker Works</h2>
-    
-    <div class="spotlight-group" id="spotlight-grid">
-      <div class="card spotlight-card reveal">
-        <div class="card-content">
-          <h3 style="color:var(--acid)">01. Set Your Goal</h3>
-          <p>Start with what you need: find the best clips, understand retention, or test new titles and SEO. DexTracker lines up the right tools for the job.</p>
-        </div>
-      </div>
-      <div class="card spotlight-card reveal">
-        <div class="card-content">
-          <h3 style="color:var(--acid)">02. Let AI Analyze</h3>
-          <p>DexTracker reads your retention graph, watch time, and engagement patterns. At the same time, it helps you brainstorm scripts and try better title ideas.</p>
-        </div>
-      </div>
-      <div class="card spotlight-card reveal">
-        <div class="card-content">
-          <h3 style="color:var(--acid)">03. Publish Faster</h3>
-          <p>See where viewers spike or drop off, test new titles and thumbnails, then export MP4 clips ready for Shorts, Reels, and TikTok — straight to your phone.</p>
-        </div>
-      </div>
-    </div>
-  </section>
+    <section id="how" style="padding: 80px 20px; max-width: 1200px; margin: 0 auto;">
+    <div class="eyebrow">/// WORKFLOW_PROTOCOL</div>
+    <h2 style="color:white; margin-bottom: 40px;">How DexTracker Works</h2>
+    
+    <div class="spotlight-group" id="spotlight-grid">
+      <div class="card spotlight-card reveal">
+        <div class="card-content">
+          <h3 style="color:var(--acid)">01. Set Your Goal</h3>
+          <p>Start with what you need: find the best clips, understand retention, or test new titles and SEO. DexTracker lines up the right tools for the job.</p>
+        </div>
+      </div>
+      <div class="card spotlight-card reveal">
+        <div class="card-content">
+          <h3 style="color:var(--acid)">02. Let AI Analyze</h3>
+          <p>DexTracker reads your retention graph, watch time, and engagement patterns. At the same time, it helps you brainstorm scripts and try better title ideas.</p>
+        </div>
+      </div>
+      <div class="card spotlight-card reveal">
+        <div class="card-content">
+          <h3 style="color:var(--acid)">03. Publish Faster</h3>
+          <p>See where viewers spike or drop off, test new titles and thumbnails, then export MP4 clips ready for Shorts, Reels, and TikTok — straight to your phone.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <!-- PRICING -->
-  <section id="pricing" style="padding: 80px 20px; max-width: 1200px; margin: 0 auto;">
-    <div class="eyebrow">/// ACCESS_LEVELS</div>
-    <h2 style="color:white; margin-bottom: 40px;">Select Clearance</h2>
+    <section id="pricing" style="padding: 80px 20px; max-width: 1200px; margin: 0 auto;">
+    <div class="eyebrow">/// ACCESS_LEVELS</div>
+    <h2 style="color:white; margin-bottom: 40px;">Select Clearance</h2>
 
-    <div class="spotlight-group">
-      <!-- Free -->
-      <article class="card spotlight-card reveal">
-        <div class="card-content">
-          <h3>Starter</h3>
-          <div style="font-size: 2.5rem; font-weight: 800; color: white; margin: 10px 0;">$0</div>
-          <p>Try the core tools and manual link entry on the web.</p>
-          <ul style="list-style: none; padding: 0; line-height: 2; color: #999;">
-            <li style="color:var(--acid)">✓ Tools Page Access</li>
-            <li>✓ Paste Any YouTube Link</li>
-            <li>✓ Demo Support</li>
-          </ul>
-          <a href="#tools" class="cyber-btn ghost" style="width:100%; margin-top: 20px;">Start Free</a>
-        </div>
-      </article>
+    <div class="spotlight-group">
+            <article class="card spotlight-card reveal">
+        <div class="card-content">
+          <h3>Starter</h3>
+          <div style="font-size: 2.5rem; font-weight: 800; color: white; margin: 10px 0;">$0</div>
+          <p>Try the core tools and manual link entry on the web.</p>
+          <ul style="list-style: none; padding: 0; line-height: 2; color: #999;">
+            <li style="color:var(--acid)">✓ Tools Page Access</li>
+            <li>✓ Paste Any YouTube Link</li>
+            <li>✓ Demo Support</li>
+          </ul>
+          <a href="#tools" class="cyber-btn ghost" style="width:100%; margin-top: 20px;">Start Free</a>
+        </div>
+      </article>
 
-      <!-- Pro -->
-      <article class="card spotlight-card reveal" style="border-color: var(--acid);">
-        <div style="position: absolute; top: 0; right: 0; background: var(--acid); color: black; padding: 4px 12px; font-weight: 700; font-size: 12px;">RECOMMENDED</div>
-        <div class="card-content">
-          <h3 style="color:var(--acid)">Pro Operative</h3>
-          <div style="font-size: 2.5rem; font-weight: 800; color: white; margin: 10px 0;">$9.99</div>
-          <p>Full automation for clips, retention insights, and SEO testing.</p>
-          <ul style="list-style: none; padding: 0; line-height: 2; color: #999;">
-            <li style="color:var(--acid)">✓ Send Videos From iOS App</li>
-            <li style="color:var(--acid)">✓ Retention Spike Detection</li>
-            <li style="color:var(--acid)">✓ SEO Title Simulator</li>
-            <li>✓ 5 Grok Messages/Day</li>
-          </ul>
-          <a href="https://apps.apple.com/us/app/dextracking/id6748963679" target="_blank" class="cyber-btn" style="width:100%; margin-top: 20px;">Download App</a>
-        </div>
-      </article>
+            <article class="card spotlight-card reveal" style="border-color: var(--acid);">
+        <div style="position: absolute; top: 0; right: 0; background: var(--acid); color: black; padding: 4px 12px; font-weight: 700; font-size: 12px;">RECOMMENDED</div>
+        <div class="card-content">
+          <h3 style="color:var(--acid)">Pro Operative</h3>
+          <div style="font-size: 2.5rem; font-weight: 800; color: white; margin: 10px 0;">$9.99</div>
+          <p>Full automation for clips, retention insights, and SEO testing.</p>
+          <ul style="list-style: none; padding: 0; line-height: 2; color: #999;">
+            <li style="color:var(--acid)">✓ Send Videos From iOS App</li>
+            <li style="color:var(--acid)">✓ Retention Spike Detection</li>
+            <li style="color:var(--acid)">✓ SEO Title Simulator</li>
+            <li>✓ 5 Grok Messages/Day</li>
+          </ul>
+          <a href="https://apps.apple.com/us/app/dextracking/id6748963679" target="_blank" class="cyber-btn" style="width:100%; margin-top: 20px;">Download App</a>
+        </div>
+      </article>
 
-      <!-- Business -->
-      <article class="card spotlight-card reveal">
-        <div class="card-content">
-          <h3>Organization</h3>
-          <div style="font-size: 2.5rem; font-weight: 800; color: white; margin: 10px 0;">Custom</div>
-          <p>Built for agencies and teams managing multiple channels.</p>
-          <ul style="list-style: none; padding: 0; line-height: 2; color: #999;">
-            <li style="color:var(--acid)">✓ Custom Integrations</li>
-            <li>✓ Team Onboarding</li>
-            <li>✓ Priority Support</li>
-          </ul>
-          <a href="mailto:dexclantv@gmail.com" class="cyber-btn ghost" style="width:100%; margin-top: 20px;">Contact HQ</a>
-        </div>
-      </article>
-    </div>
-  </section>
+            <article class="card spotlight-card reveal">
+        <div class="card-content">
+          <h3>Organization</h3>
+          <div style="font-size: 2.5rem; font-weight: 800; color: white; margin: 10px 0;">Custom</div>
+          <p>Built for agencies and teams managing multiple channels.</p>
+          <ul style="list-style: none; padding: 0; line-height: 2; color: #999;">
+            <li style="color:var(--acid)">✓ Custom Integrations</li>
+            <li>✓ Team Onboarding</li>
+            <li>✓ Priority Support</li>
+          </ul>
+          <a href="mailto:dexclantv@gmail.com" class="cyber-btn ghost" style="width:100%; margin-top: 20px;">Contact HQ</a>
+        </div>
+      </article>
+    </div>
+  </section>
 
-  <!-- FAQ -->
-  <section id="faq" style="padding: 80px 20px; max-width: 800px; margin: 0 auto;">
-    <div class="eyebrow">/// KNOWLEDGE_BASE</div>
-    <h2 style="color:white; margin-bottom: 30px;">FAQ</h2>
-    
-    <details class="faq-item reveal">
-      <summary>What is DexTracker?</summary>
-      <div class="faq-content">DexTracker is an AI-powered assistant that helps you grow your YouTube channel by turning retention analytics into clear insights, clips, and better titles — all from your phone.</div>
-    </details>
-    
-    <details class="faq-item reveal">
-      <summary>How does auto-clipping work?</summary>
-      <div class="faq-content">We detect the strongest parts of your video based on watch time and retention, then let you export those moments as vertical clips ready for Shorts, TikTok, and Reels.</div>
-    </details>
-    
-    <details class="faq-item reveal">
-      <summary>Is there a free trial?</summary>
-      <div class="faq-content">Yes. The iOS app includes a 7-day free trial so you can test auto-clipping, retention tools, and SEO features before upgrading.</div>
-    </details>
-  </section>
+    <section id="faq" style="padding: 80px 20px; max-width: 800px; margin: 0 auto;">
+    <div class="eyebrow">/// KNOWLEDGE_BASE</div>
+    <h2 style="color:white; margin-bottom: 30px;">FAQ</h2>
+    
+    <details class="faq-item reveal">
+      <summary>What is DexTracker?</summary>
+      <div class="faq-content">DexTracker is an AI-powered assistant that helps you grow your YouTube channel by turning retention analytics into clear insights, clips, and better titles — all from your phone.</div>
+    </details>
+    
+    <details class="faq-item reveal">
+      <summary>How does auto-clipping work?</summary>
+      <div class="faq-content">We detect the strongest parts of your video based on watch time and retention, then let you export those moments as vertical clips ready for Shorts, TikTok, and Reels.</div>
+    </details>
+    
+    <details class="faq-item reveal">
+      <summary>Is there a free trial?</summary>
+      <div class="faq-content">Yes. The iOS app includes a 7-day free trial so you can test auto-clipping, retention tools, and SEO features before upgrading.</div>
+    </details>
+  </section>
 
-  <footer>
-    <div style="font-family: var(--font-tech); margin-bottom: 20px;">DEXTRACKER AI</div>
-    <div>
-      <a href="https://www.instagram.com/Perry.Glo" target="_blank">INSTAGRAM</a>
-      <a href="https://twitter.com/DexClanTv" target="_blank">TWITTER</a>
-      <a href="https://www.youtube.com/@DexClanTv" target="_blank">YOUTUBE</a>
-    </div>
-    <div style="margin-top: 20px;">
-      <a href="privacy.html">PRIVACY POLICY</a>
-      <a href="terms.html">TERMS OF SERVICE</a>
-    </div>
-    <div style="margin-top: 30px; color: #555; font-size: 12px;">
-      SYSTEM SECURE. NO TRACKING PIXELS DETECTED.<br>
-      © 2025 DEXCLANTV
-    </div>
-  </footer>
+  <footer>
+    <div style="font-family: var(--font-tech); margin-bottom: 20px;">DEXTRACKER AI</div>
+    <div>
+      <a href="https://www.instagram.com/Perry.Glo" target="_blank">INSTAGRAM</a>
+      <a href="https://twitter.com/DexClanTv" target="_blank">TWITTER</a>
+      <a href="https://www.youtube.com/@DexClanTv" target="_blank">YOUTUBE</a>
+    </div>
+    <div style="margin-top: 20px;">
+      <a href="privacy.html">PRIVACY POLICY</a>
+      <a href="terms.html">TERMS OF SERVICE</a>
+    </div>
+    <div style="margin-top: 30px; color: #555; font-size: 12px;">
+      SYSTEM SECURE. NO TRACKING PIXELS DETECTED.<br>
+      © 2025 DEXCLANTV
+    </div>
+  </footer>
 
-  <!-- LOGIC -->
-  <script>
-    // --- CUSTOM CURSOR LOGIC ---
-    const cursor = document.getElementById('cursor');
-    document.addEventListener('mousemove', (e) => {
-      cursor.style.left = e.clientX + 'px';
-      cursor.style.top = e.clientY + 'px';
-    });
-    const interactables = document.querySelectorAll('a, button, input, summary, select');
-    interactables.forEach(el => {
-      el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
-      el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
-    });
+    <script>
+    // --- CUSTOM CURSOR LOGIC ---
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', (e) => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+    const interactables = document.querySelectorAll('a, button, input, summary, select');
+    interactables.forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
+    });
 
-    // --- ANIMATION LOGIC ---
-    document.addEventListener("mousemove", (e) => {
-      const cards = document.querySelectorAll(".spotlight-card");
-      for (const card of cards) {
-        const rect = card.getBoundingClientRect();
-        card.style.setProperty("--mouse-x", `${e.clientX - rect.left}px`);
-        card.style.setProperty("--mouse-y", `${e.clientY - rect.top}px`);
-      }
-    });
+    // --- ANIMATION LOGIC ---
+    document.addEventListener("mousemove", (e) => {
+      const cards = document.querySelectorAll(".spotlight-card");
+      for (const card of cards) {
+        const rect = card.getBoundingClientRect();
+        card.style.setProperty("--mouse-x", `${e.clientX - rect.left}px`);
+        card.style.setProperty("--mouse-y", `${e.clientY - rect.top}px`);
+      }
+    });
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('active');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    const burger = document.getElementById('burger');
-    const links = document.getElementById('navlinks');
-    burger.addEventListener('click', () => {
-      links.classList.toggle('open');
-      burger.classList.toggle('open');
-    });
-    document.querySelectorAll('.nav-a').forEach(link => {
-      link.addEventListener('click', () => links.classList.remove('open'));
-    });
+    const burger = document.getElementById('burger');
+    const links = document.getElementById('navlinks');
+    burger.addEventListener('click', () => {
+      links.classList.toggle('open');
+      burger.classList.toggle('open');
+    });
+    document.querySelectorAll('.nav-a').forEach(link => {
+      link.addEventListener('click', () => links.classList.remove('open'));
+    });
 
-    // --- ORIGINAL APP LOGIC ---
-    function sendProgress(pct) {
-      const v = Math.max(0, Math.min(1, Number(pct)));
-      try { if (window?.webkit?.messageHandlers?.clipper) { window.webkit.messageHandlers.clipper.postMessage({ type: "progress", value: v }); } } catch (e) {}
-    }
-    function sendResult(url) {
-      try { if (url && window?.webkit?.messageHandlers?.clipper) { window.webkit.messageHandlers.clipper.postMessage({ type: "result", url }); } } catch (e) {}
-    }
+    // --- ORIGINAL APP LOGIC ---
+    function sendProgress(pct) {
+      const v = Math.max(0, Math.min(1, Number(pct)));
+      try { if (window?.webkit?.messageHandlers?.clipper) { window.webkit.messageHandlers.clipper.postMessage({ type: "progress", value: v }); } } catch (e) {}
+    }
+    function sendResult(url) {
+      try { if (url && window?.webkit?.messageHandlers?.clipper) { window.webkit.messageHandlers.clipper.postMessage({ type: "result", url }); } } catch (e) {}
+    }
 
-    const API_BASE = new URLSearchParams(location.search).get("api") || "https://dextracker-clips.fly.dev";
+    const API_BASE = new URLSearchParams(location.search).get("api") || "https://dextracker-clips.fly.dev";
 
-    function showHandoff(id){
-      const b = document.getElementById('handoff');
-      const code = document.getElementById('handoff-id');
-      if (b && code){ code.textContent = id; b.style.display = 'block'; }
-    }
-    function setInput(raw){
-      const input = document.getElementById('repurpose-input');
-      if (!input) return;
-      const val = (raw||"").trim();
-      if (!val) return;
-      input.value = val;
-      try { localStorage.setItem('dex_last_url_or_id', val); } catch {}
-      showHandoff(val);
-    }
-    function toWatchUrlFromId(id){
-      const clean = (id||"").trim().replace(/^vid=/,'').replace(/^#/,'');
-      if(!clean) return "";
-      return `https://www.youtube.com/watch?v=${encodeURIComponent(clean)}`;
-    }
-    window.dexSetUrl = function(url){ setInput(url); };
-    window.dexSetVideoId = function(id){ setInput(toWatchUrlFromId(id) || id); };
+    function showHandoff(id){
+      const b = document.getElementById('handoff');
+      const code = document.getElementById('handoff-id');
+      if (b && code){ code.textContent = id; b.style.display = 'block'; }
+    }
+    function setInput(raw){
+      const input = document.getElementById('repurpose-input');
+      if (!input) return;
+      const val = (raw||"").trim();
+      if (!val) return;
+      input.value = val;
+      try { localStorage.setItem('dex_last_url_or_id', val); } catch {}
+      showHandoff(val);
+    }
+    function toWatchUrlFromId(id){
+      const clean = (id||"").trim().replace(/^vid=/,'').replace(/^#/,'');
+      if(!clean) return "";
+      return `https://www.youtube.com/watch?v=${encodeURIComponent(clean)}`;
+    }
+    window.dexSetUrl = function(url){ setInput(url); };
+    window.dexSetVideoId = function(id){ setInput(toWatchUrlFromId(id) || id); };
 
-    window.addEventListener('message', (e)=>{
-      try{
-        const d = e?.data || {};
-        if (d.type === 'dex-url' && d.url) return window.dexSetUrl(d.url);
-        if (d.type === 'dex-video-id' && d.id) return window.dexSetVideoId(d.id);
-      }catch{}
-    });
+    window.addEventListener('message', (e)=>{
+      try{
+        const d = e?.data || {};
+        if (d.type === 'dex-url' && d.url) return window.dexSetUrl(d.url);
+        if (d.type === 'dex-video-id' && d.id) return window.dexSetVideoId(d.id);
+      }catch{}
+    });
 
-    (function bootstrap(){
-      try{
-        const qs = new URLSearchParams(location.search);
-        const urlQ = qs.get('url');
-        const vidQ = qs.get('videoId') || qs.get('v');
-        const stored = localStorage.getItem('dex_last_url_or_id') || '';
-        if (urlQ) setInput(decodeURIComponent(urlQ));
-        else if (vidQ) setInput(toWatchUrlFromId(decodeURIComponent(vidQ)));
-        else if (stored) setInput(stored);
-      }catch{}
-    })();
+    (function bootstrap(){
+      try{
+        const qs = new URLSearchParams(location.search);
+        const urlQ = qs.get('url');
+        const vidQ = qs.get('videoId') || qs.get('v');
+        const stored = localStorage.getItem('dex_last_url_or_id') || '';
+        if (urlQ) setInput(decodeURIComponent(urlQ));
+        else if (vidQ) setInput(toWatchUrlFromId(decodeURIComponent(vidQ)));
+        else if (stored) setInput(stored);
+      }catch{}
+    })();
 
-    function showProgressUI(show){
-      const wrap = document.getElementById('progress-wrap');
-      if(!wrap) return;
-      wrap.style.display = show ? 'block' : 'none';
-    }
-    function setProgress(pct, text){
-      const fill = document.getElementById('progress-fill');
-      const status = document.getElementById('status');
-      if(fill){ fill.style.width = Math.max(0, Math.min(100, pct)) + '%'; }
-      if(status){ status.textContent = text ? Math.round(pct) + "%" : ''; }
-    }
-    
-    function bindTap(id, handler){
-      const el = document.getElementById(id);
-      if(!el) return;
-      el.addEventListener('click', (e) => handler(e));
-    }
+    function showProgressUI(show){
+      const wrap = document.getElementById('progress-wrap');
+      if(!wrap) return;
+      wrap.style.display = show ? 'block' : 'none';
+    }
+    function setProgress(pct, text){
+      const fill = document.getElementById('progress-fill');
+      const status = document.getElementById('status');
+      if(fill){ fill.style.width = Math.max(0, Math.min(100, pct)) + '%'; }
+      if(status){ status.textContent = text ? Math.round(pct) + "%" : ''; }
+    }
+    
+    function bindTap(id, handler){
+      const el = document.getElementById(id);
+      if(!el) return;
+      el.addEventListener('click', (e) => handler(e));
+    }
 
-    function parseFormats(text){
-      const lines = (text || "").split("\n");
-      const rows = [];
-      for (const ln of lines){
-        const m = ln.match(/^\s*([0-9a-zA-Z.-]+)\s+(\S+)\s+(.+?)\s{2,}(.+)?$/);
-        if (!m) continue;
-        rows.push({ id: m[1], ext: m[2], res: m[3], note: (m[4]||"").trim() });
-      }
-      return rows;
-    }
+    function parseFormats(text){
+      const lines = (text || "").split("\n");
+      const rows = [];
+      for (const ln of lines){
+        const m = ln.match(/^\s*([0-9a-zA-Z.-]+)\s+(\S+)\s+(.+?)\s{2,}(.+)?$/);
+        if (!m) continue;
+        rows.push({ id: m[1], ext: m[2], res: m[3], note: (m[4]||"").trim() });
+      }
+      return rows;
+    }
 
-    function fillFormatSelect(rows){
-      const sel = document.getElementById("format-select");
-      const btn = document.getElementById("download-format");
-      const hint = document.getElementById("format-hint");
-      
-      sel.innerHTML = `<option value="">— SELECT QUALITY —</option>`;
-      rows.forEach(r=>{
-        const opt = document.createElement("option");
-        opt.value = r.id;
-        opt.textContent = `${r.id} | ${r.ext} | ${r.res}`;
-        sel.appendChild(opt);
-      });
-      sel.style.display = "inline-block";
-      btn.style.display = "inline-flex";
-      if(hint) { hint.style.display="block"; hint.textContent = "Formats found. Pick the quality you want to download."; }
-    }
+    function fillFormatSelect(rows){
+      const sel = document.getElementById("format-select");
+      const btn = document.getElementById("download-format");
+      const hint = document.getElementById("format-hint");
+      
+      sel.innerHTML = `<option value="">— SELECT QUALITY —</option>`;
+      rows.forEach(r=>{
+        const opt = document.createElement("option");
+        opt.value = r.id;
+        opt.textContent = `${r.id} | ${r.ext} | ${r.res}`;
+        sel.appendChild(opt);
+      });
+      sel.style.display = "inline-block";
+      btn.style.display = "inline-flex";
+      if(hint) { hint.style.display="block"; hint.textContent = "Formats found. Pick the quality you want to download."; }
+    }
 
-    async function pollJob(jobId){
-      return new Promise((resolve, reject)=>{
-        let last = 10;
-        async function tick(){
-          try{
-            const r = await fetch(`${API_BASE}/api/jobs/${jobId}`);
-            const data = await r.json();
-            if (data.status === "running"){
-              last = Math.max(last, Math.round((data.progress||0)*100));
-              setProgress(last, `Processing`);
-              setTimeout(tick, 900);
-            } else if (data.status === "done" && data.url){
-              setProgress(100, "Finished");
-              resolve(`${API_BASE}${data.url}`);
-            } else if (data.status === "error"){
-              reject(new Error(data.error || "merge error"));
-            } else {
-              setTimeout(tick, 1200);
-            }
-          } catch(err) {
-            setTimeout(tick, 1200);
-          }
-        }
-        tick();
-      });
-    }
+    async function pollJob(jobId){
+      return new Promise((resolve, reject)=>{
+        let last = 10;
+        async function tick(){
+          try{
+            const r = await fetch(`${API_BASE}/api/jobs/${jobId}`);
+            const data = await r.json();
+            if (data.status === "running"){
+              last = Math.max(last, Math.round((data.progress||0)*100));
+              setProgress(last, `Processing`);
+              setTimeout(tick, 900);
+            } else if (data.status === "done" && data.url){
+              setProgress(100, "Finished");
+              resolve(`${API_BASE}${data.url}`);
+            } else if (data.status === "error"){
+              reject(new Error(data.error || "merge error"));
+            } else {
+              setTimeout(tick, 1200);
+            }
+          } catch(err) {
+            setTimeout(tick, 1200);
+          }
+        }
+        tick();
+      });
+    }
 
-    bindTap('repurpose-run', async () => {
-      const input = document.getElementById('repurpose-input');
-      const val = input?.value?.trim();
-      if(!val){ alert('Please paste a YouTube link first.'); return; }
+    bindTap('repurpose-run', async () => {
+      const input = document.getElementById('repurpose-input');
+      const val = input?.value?.trim();
+      if(!val){ alert('Please paste a YouTube link first.'); return; }
 
-      showProgressUI(true);
-      setProgress(5, 'Connecting...');
-      sendProgress(0.05);
+      showProgressUI(true);
+      setProgress(5, 'Connecting...');
+      sendProgress(0.05);
 
-      try {
-        const r = await fetch(`${API_BASE}/api/clip`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ url: val })
-        });
+      try {
+        const r = await fetch(`${API_BASE}/api/clip`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: val })
+        });
 
-        if (r.status === 409) {
-            setProgress(15, 'Merging Streams...');
-            const r2 = await fetch(`${API_BASE}/api/jobs`, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ url: val })
-            });
-            const { jobId } = await r2.json();
-            const fileUrl = await pollJob(jobId);
-            showResultLink(fileUrl);
-            return;
-        }
+        if (r.status === 409) {
+            setProgress(15, 'Merging Streams...');
+            const r2 = await fetch(`${API_BASE}/api/jobs`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ url: val })
+            });
+            const { jobId } = await r2.json();
+            const fileUrl = await pollJob(jobId);
+            showResultLink(fileUrl);
+            return;
+        }
 
-        if (!r.ok) throw new Error("API Connection Failed");
+        if (!r.ok) throw new Error("API Connection Failed");
 
-        const data = await r.json();
-        if (!data.directUrl) throw new Error('No clip URL returned');
-        
-        setProgress(100, 'Complete');
-        sendResult(data.directUrl);
-        showResultLink(data.directUrl);
+        const data = await r.json();
+        if (!data.directUrl) throw new Error('No clip URL returned');
+        
+        setProgress(100, 'Complete');
+        sendResult(data.directUrl);
+        showResultLink(data.directUrl);
 
-      } catch (e) {
-        setProgress(0, 'Error');
-        alert('Something went wrong. Please try again.\n\nDetails: ' + e.message);
-      }
-    });
+      } catch (e) {
+        setProgress(0, 'Error');
+        alert('Something went wrong. Please try again.\n\nDetails: ' + e.message);
+      }
+    });
 
-    function showResultLink(url){
-        const result = document.getElementById('tool-result');
-        result.style.display = 'block';
-        result.innerHTML = `
-          <div style="background:var(--bg-panel); padding:15px; border-left:2px solid var(--acid);">
-            <h3 style="color:var(--acid); font-size:14px; margin-bottom:5px;">CLIP READY</h3>
-            <p style="font-size:12px; color:#999; margin-bottom:10px;">Your clip has been generated. Download it and post to Shorts, Reels, or TikTok.</p>
-            <a href="${url}" target="_blank" class="cyber-btn" style="padding:10px 20px; font-size:12px;">DOWNLOAD .MP4</a>
-          </div>`;
-    }
+    function showResultLink(url){
+        const result = document.getElementById('tool-result');
+        result.style.display = 'block';
+        result.innerHTML = `
+          <div style="background:var(--bg-panel); padding:15px; border-left:2px solid var(--acid);">
+            <h3 style="color:var(--acid); font-size:14px; margin-bottom:5px;">CLIP READY</h3>
+            <p style="font-size:12px; color:#999; margin-bottom:10px;">Your clip has been generated. Download it and post to Shorts, Reels, or TikTok.</p>
+            <a href="${url}" target="_blank" class="cyber-btn" style="padding:10px 20px; font-size:12px;">DOWNLOAD .MP4</a>
+          </div>`;
+    }
 
-    bindTap('clear-input', ()=>{
-      document.getElementById('repurpose-input').value = '';
-      document.getElementById('tool-result').style.display = 'none';
-      showProgressUI(false);
-    });
+    bindTap('clear-input', ()=>{
+      document.getElementById('repurpose-input').value = '';
+      document.getElementById('tool-result').style.display = 'none';
+      showProgressUI(false);
+    });
 
-    bindTap('simulate-progress', ()=>{
-      showProgressUI(true);
-      let n = 0;
-      const tick = () => {
-        n += 2;
-        setProgress(Math.min(n, 100), 'Simulating');
-        if (n < 100) requestAnimationFrame(tick);
-      };
-      tick();
-    });
+    bindTap('simulate-progress', ()=>{
+      showProgressUI(true);
+      let n = 0;
+      const tick = () => {
+        n += 2;
+        setProgress(Math.min(n, 100), 'Simulating');
+        if (n < 100) requestAnimationFrame(tick);
+      };
+      tick();
+    });
 
-    bindTap('list-formats', async ()=>{
-      const val = document.getElementById('repurpose-input')?.value?.trim();
-      if(!val){ return alert("Please enter a YouTube URL first."); }
-      showProgressUI(true);
-      setProgress(10, "Scanning...");
-      try{
-        const r = await fetch(`${API_BASE}/api/vb/formats`, {
-          method: "POST",
-          headers: {"content-type":"application/json"},
-          body: JSON.stringify({ url: val })
-        });
-        const data = await r.json();
-        fillFormatSelect(parseFormats(data.formats));
-        setProgress(100, "Done");
-      }catch(e){
-        alert("Scan failed. Please try again.");
-        showProgressUI(false);
-      }
-    });
+    bindTap('list-formats', async ()=>{
+      const val = document.getElementById('repurpose-input')?.value?.trim();
+      if(!val){ return alert("Please enter a YouTube URL first."); }
+      showProgressUI(true);
+      setProgress(10, "Scanning...");
+      try{
+        const r = await fetch(`${API_BASE}/api/vb/formats`, {
+          method: "POST",
+          headers: {"content-type":"application/json"},
+          body: JSON.stringify({ url: val })
+        });
+        const data = await r.json();
+        fillFormatSelect(parseFormats(data.formats));
+        setProgress(100, "Done");
+      }catch(e){
+        alert("Scan failed. Please try again.");
+        showProgressUI(false);
+      }
+    });
 
-    bindTap('download-format', async ()=>{
-        const url = document.getElementById('repurpose-input').value.trim();
-        const format = document.getElementById('format-select').value;
-        if(!url || !format) return alert("Please choose a quality option first.");
-        
-        showProgressUI(true);
-        setProgress(10, "Requesting...");
-        alert("Download started for format: " + format);
-        setProgress(100, "Initiated");
-    });
-    
-    bindTap("get-mp3", async ()=>{
-       alert("Audio extraction is available on the Pro plan inside the app.");
-    });
-  </script>
+    bindTap('download-format', async ()=>{
+        const url = document.getElementById('repurpose-input').value.trim();
+        const format = document.getElementById('format-select').value;
+        if(!url || !format) return alert("Please choose a quality option first.");
+        
+        showProgressUI(true);
+        setProgress(10, "Requesting...");
+        alert("Download started for format: " + format);
+        setProgress(100, "Initiated");
+    });
+    
+    bindTap("get-mp3", async ()=>{
+       alert("Audio extraction is available on the Pro plan inside the app.");
+    });
+  </script>
 </body>
 </html>
